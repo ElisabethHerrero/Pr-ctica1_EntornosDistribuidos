@@ -1,1 +1,1 @@
-# Pr-ctica1_EntornosDistribuidos
+# Práctica1_EntornosDistribuidos
