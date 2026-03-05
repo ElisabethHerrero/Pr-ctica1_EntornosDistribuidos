@@ -1,38 +1,79 @@
+// pacman_roomba_level.cpp
+
 #include <iostream>
 #include <map>
 #include <future>
 #include <vector>
+#include <cmath>
 
 using namespace std;
 
-// Calcula el área multiplicando largo por ancho
-int calcular_area(int largo, int ancho) {
-    return largo * ancho;
+class Vector {
+public:
+    double x;
+    double y;
+    double thresh;
+
+    Vector(double x = 0, double y = 0) : x(x), y(y), thresh(0.000001) {}
+
+    Vector operator+(const Vector& other) const {
+        return Vector(x + other.x, y + other.y);
+    }
+
+    Vector operator-(const Vector& other) const {
+        return Vector(x - other.x, y - other.y);
+    }
+
+    Vector operator*(double scalar) const {
+        return Vector(x * scalar, y * scalar);
+    }
+
+    double magnitude() const {
+        return sqrt(x * x + y * y);
+    }
+
+    double magnitudeSquared() const {
+        return x * x + y * y;
+    }
+
+    int area() const {
+        return x * y;
+    }
+
+    bool equals(const Vector& other) const {
+        return abs(x - other.x) < thresh && abs(y - other.y) < thresh;
+    }
+
+    friend ostream& operator<<(ostream& os, const Vector& v) {
+        os << "<" << v.x << ", " << v.y << ">";
+        return os;
+    }
+};
+
+int calcular_area(Vector v) {
+    return v.area();
 }
 
 int main() {
 
-    // Definición de las zonas con sus dimensiones
-    map<string, pair<int, int>> zonas = {
-        {"Zona 1", {500, 150}},
-        {"Zona 2", {480, 101}},
-        {"Zona 3", {309, 480}},
-        {"Zona 4", {90, 220}}
+    // Zonas representadas como vectores (largo, ancho)
+    map<string, Vector> zonas = {
+        {"Zona 1", Vector(500,150)},
+        {"Zona 2", Vector(480,101)},
+        {"Zona 3", Vector(309,480)},
+        {"Zona 4", Vector(90,220)}
     };
 
-    // Tasa de limpieza (1000 cm²/segundo)
     double tasa_limpieza = 1000.0;
 
     map<string, int> areas;
-
-    // Vector para almacenar futures
     vector<pair<string, future<int>>> tareas;
 
-    // Lanzar cálculos concurrentes
+    // Cálculo concurrente de áreas (estilo Roomba)
     for (auto& zona : zonas) {
         tareas.push_back({
             zona.first,
-            async(launch::async, calcular_area, zona.second.first, zona.second.second)
+            async(launch::async, calcular_area, zona.second)
             });
     }
 
@@ -41,24 +82,27 @@ int main() {
         try {
             int area = tarea.second.get();
             areas[tarea.first] = area;
-            cout << tarea.first << ": " << area << " cm²" << endl;
+
+            cout << tarea.first
+                << " dimensiones " << zonas[tarea.first]
+                << " -> area: " << area << " cm²" << endl;
         }
         catch (exception& e) {
-            cout << tarea.first << " generó una excepción: " << e.what() << endl;
+            cout << "Error en " << tarea.first << ": " << e.what() << endl;
         }
     }
 
-    // Calcular superficie total
     int superficie_total = 0;
+
     for (auto& a : areas) {
         superficie_total += a.second;
     }
 
-    // Tiempo de limpieza
     double tiempo_limpieza = superficie_total / tasa_limpieza;
 
-    cout << "\nSuperficie total a limpiar: " << superficie_total << " cm²" << endl;
-    cout << "Tiempo estimado de limpieza: " << tiempo_limpieza << " segundos" << endl;
+    cout << "\nSuperficie total: " << superficie_total << " cm²" << endl;
+    cout << "Tiempo limpieza: " << tiempo_limpieza << " segundos" << endl;
+    cout << "Tiempo limpieza: " << tiempo_limpieza / 60 << " minutos" << endl;
 
     return 0;
 }
