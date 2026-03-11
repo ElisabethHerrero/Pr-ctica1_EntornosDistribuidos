@@ -1,3 +1,4 @@
+
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <vector>
@@ -17,6 +18,16 @@
 
 using namespace std;
 
+// ======================================================
+// COLORES EXTRA NIVEL 4
+// ======================================================
+const sf::Color COLOR_PINK = sf::Color(255, 100, 150);
+const sf::Color COLOR_TEAL = sf::Color(100, 255, 255);
+const sf::Color COLOR_ORANGE = sf::Color(230, 190, 40);
+
+// ======================================================
+// DIRECCIONES
+// ======================================================
 enum class Direccion {
     STOP,
     UP,
@@ -33,6 +44,9 @@ Direccion direccionOpuesta(Direccion d) {
     return Direccion::STOP;
 }
 
+// ======================================================
+// ZONAS
+// ======================================================
 struct Zona {
     string nombre;
     int largoCm = 0;
@@ -42,6 +56,9 @@ struct Zona {
     unique_ptr<sf::Text> texto;
 };
 
+// ======================================================
+// NODOS
+// ======================================================
 struct Nodo {
     int x = 0;
     int y = 0;
@@ -67,7 +84,6 @@ struct Nodo {
     }
 
     void render(sf::RenderWindow& ventana) {
-        // Dibujamos solo RIGHT y DOWN para no duplicar líneas
         if (vecinos.at(Direccion::RIGHT) != nullptr) {
             sf::Vertex linea[] = {
                 sf::Vertex{getPosicion(), sf::Color::White},
@@ -88,6 +104,9 @@ struct Nodo {
     }
 };
 
+// ======================================================
+// NODEGROUP NIVEL 2
+// ======================================================
 class NodeGroup {
 private:
     vector<vector<char>> data;
@@ -155,7 +174,6 @@ public:
             for (int col = 0; col < static_cast<int>(data[row].size()); col++) {
                 if (contiene(nodeSymbols, data[row][col])) {
                     pair<int, int> key = constructKey(col, row);
-
                     if (nodesLUT.find(key) == nodesLUT.end()) {
                         nodesLUT[key] = make_unique<Nodo>(key.first, key.second);
                     }
@@ -219,22 +237,6 @@ public:
         }
     }
 
-    Nodo* getNodeFromPixels(int xpixel, int ypixel) {
-        pair<int, int> key = { xpixel, ypixel };
-        if (nodesLUT.find(key) != nodesLUT.end()) {
-            return nodesLUT[key].get();
-        }
-        return nullptr;
-    }
-
-    Nodo* getNodeFromTiles(int col, int row) {
-        pair<int, int> key = constructKey(col, row);
-        if (nodesLUT.find(key) != nodesLUT.end()) {
-            return nodesLUT[key].get();
-        }
-        return nullptr;
-    }
-
     Nodo* getStartTempNode() {
         if (nodesLUT.empty()) return nullptr;
         return nodesLUT.begin()->second.get();
@@ -254,6 +256,9 @@ public:
     }
 };
 
+// ======================================================
+// FUNCIONES AUXILIARES
+// ======================================================
 long long calcularArea(int largo, int ancho) {
     if (largo <= 0 || ancho <= 0)
         throw invalid_argument("Dimensiones incorrectas");
@@ -272,12 +277,21 @@ float distancia(const sf::Vector2f& a, const sf::Vector2f& b) {
     return sqrt(dx * dx + dy * dy);
 }
 
+float distanciaCuadrada(const sf::Vector2f& a, const sf::Vector2f& b) {
+    float dx = b.x - a.x;
+    float dy = b.y - a.y;
+    return dx * dx + dy * dy;
+}
+
 sf::Vector2f normalizar(const sf::Vector2f& v) {
     float m = sqrt(v.x * v.x + v.y * v.y);
     if (m == 0.f) return { 0.f, 0.f };
     return { v.x / m, v.y / m };
 }
 
+// ======================================================
+// ENTITY NIVEL 3
+// ======================================================
 class Entity {
 protected:
     string nombre;
@@ -290,23 +304,26 @@ protected:
     Nodo* target;
     sf::Vector2f position;
     bool visible;
+    int tileWidth;
 
 public:
-    Entity(Nodo* nodoInicial, int tileWidth) {
-        nombre = "Entity";
+    Entity(Nodo* nodoInicial, int tileWidth_)
+        : direction(Direccion::STOP),
+        speed(0.f),
+        radius(10.f),
+        color(sf::Color::White),
+        node(nodoInicial),
+        target(nodoInicial),
+        visible(true),
+        tileWidth(tileWidth_) {
+
         directions[Direccion::UP] = sf::Vector2f(0.f, -1.f);
         directions[Direccion::DOWN] = sf::Vector2f(0.f, 1.f);
         directions[Direccion::LEFT] = sf::Vector2f(-1.f, 0.f);
         directions[Direccion::RIGHT] = sf::Vector2f(1.f, 0.f);
         directions[Direccion::STOP] = sf::Vector2f(0.f, 0.f);
 
-        direction = Direccion::STOP;
-        setSpeed(100.f, tileWidth);
-        radius = 10.f;
-        color = sf::Color::White;
-        node = nodoInicial;
-        target = nodoInicial;
-        visible = true;
+        setSpeed(100.f);
         setPosition();
     }
 
@@ -318,13 +335,34 @@ public:
         }
     }
 
+    void setSpeed(float velocidadBase) {
+        speed = velocidadBase * static_cast<float>(tileWidth) / 16.f;
+    }
+
     bool validDirection(Direccion dir) {
         if (dir != Direccion::STOP) {
-            if (node->vecinos[dir] != nullptr) {
-                return true;
-            }
+            return node->vecinos[dir] != nullptr;
         }
         return false;
+    }
+
+    vector<Direccion> validDirections() {
+        vector<Direccion> dirs;
+        for (Direccion dir : {Direccion::UP, Direccion::DOWN, Direccion::LEFT, Direccion::RIGHT}) {
+            if (validDirection(dir)) {
+                if (dir != direccionOpuesta(direction)) {
+                    dirs.push_back(dir);
+                }
+            }
+        }
+        if (dirs.empty()) {
+            dirs.push_back(direccionOpuesta(direction));
+        }
+        return dirs;
+    }
+
+    Direccion randomDirection(const vector<Direccion>& dirs) {
+        return dirs[rand() % dirs.size()];
     }
 
     Nodo* getNewTarget(Direccion dir) {
@@ -347,46 +385,11 @@ public:
         return false;
     }
 
-    void reverseDirection() {
-        direction = direccionOpuesta(direction);
-        Nodo* temp = node;
-        node = target;
-        target = temp;
-    }
-
-    void setSpeed(float velocidadBase, int tileWidth) {
-        speed = velocidadBase * static_cast<float>(tileWidth) / 16.f;
-    }
-
-    vector<Direccion> validDirections() {
-        vector<Direccion> dirs;
-
-        for (Direccion dir : {Direccion::UP, Direccion::DOWN, Direccion::LEFT, Direccion::RIGHT}) {
-            if (validDirection(dir)) {
-                if (dir != direccionOpuesta(direction)) {
-                    dirs.push_back(dir);
-                }
-            }
-        }
-
-        if (dirs.empty()) {
-            dirs.push_back(direccionOpuesta(direction));
-        }
-
-        return dirs;
-    }
-
-    Direccion randomDirection(const vector<Direccion>& dirs) {
-        int index = rand() % dirs.size();
-        return dirs[index];
-    }
-
     virtual void update(float dt) {
         position += directions[direction] * speed * dt;
 
         if (overshotTarget()) {
             node = target;
-
             vector<Direccion> dirs = validDirections();
             Direccion dir = randomDirection(dirs);
 
@@ -404,7 +407,6 @@ public:
 
     virtual void render(sf::RenderWindow& ventana) {
         if (!visible) return;
-
         sf::CircleShape cuerpo(radius);
         cuerpo.setOrigin({ radius, radius });
         cuerpo.setPosition(position);
@@ -414,11 +416,14 @@ public:
         ventana.draw(cuerpo);
     }
 
-    sf::Vector2f getPosition() const {
-        return position;
-    }
+    sf::Vector2f getPosition() const { return position; }
+    Direccion getDirection() const { return direction; }
+    const map<Direccion, sf::Vector2f>& getDirectionsMap() const { return directions; }
 };
 
+// ======================================================
+// ROBOT = PACMAN ADAPTADO
+// ======================================================
 class Robot : public Entity {
 public:
     Robot(Nodo* nodoInicial, int tileWidth) : Entity(nodoInicial, tileWidth) {
@@ -439,7 +444,6 @@ public:
                 if (p == d) return d;
             }
         }
-
         return dirs[0];
     }
 
@@ -465,19 +469,206 @@ public:
     }
 };
 
+// ======================================================
+// GHOST NIVEL 4
+// ======================================================
 class Ghost : public Entity {
+protected:
+    Robot* pacman;
+    Ghost* blinkyRef;
+    sf::Vector2f goal;
+
 public:
-    Ghost(Nodo* nodoInicial, int tileWidth) : Entity(nodoInicial, tileWidth) {
+    Ghost(Nodo* nodoInicial, Robot* pacman_ = nullptr, Ghost* blinky_ = nullptr, int tileW = 45)
+        : Entity(nodoInicial, tileW), pacman(pacman_), blinkyRef(blinky_), goal(0.f, 0.f) {
         nombre = "Ghost";
-        color = sf::Color(255, 105, 180);
+        color = sf::Color::White;
+    }
+
+    virtual void scatter() = 0;
+    virtual void chase() = 0;
+
+    Direccion goalDirection(const vector<Direccion>& dirs) {
+        float minDist = numeric_limits<float>::max();
+        Direccion mejor = dirs[0];
+
+        for (Direccion dir : dirs) {
+            Nodo* vecino = node->vecinos[dir];
+            if (vecino != nullptr) {
+                float d = distanciaCuadrada(vecino->getPosicion(), goal);
+                if (d < minDist) {
+                    minDist = d;
+                    mejor = dir;
+                }
+            }
+        }
+        return mejor;
+    }
+
+    void update(float dt) override {
+        position += directions[direction] * speed * dt;
+
+        if (overshotTarget()) {
+            node = target;
+
+            vector<Direccion> dirs = validDirections();
+
+            // En esta versión hacemos siempre "chase"
+            chase();
+            Direccion dir = goalDirection(dirs);
+
+            target = getNewTarget(dir);
+            if (target != node) {
+                direction = dir;
+            }
+            else {
+                target = getNewTarget(direction);
+            }
+
+            setPosition();
+        }
     }
 };
 
+class Blinky : public Ghost {
+public:
+    Blinky(Nodo* nodoInicial, Robot* pacman_ = nullptr, Ghost* blinky_ = nullptr, int tileW = 45)
+        : Ghost(nodoInicial, pacman_, blinky_, tileW) {
+        nombre = "Blinky";
+        color = sf::Color::Red;
+    }
+
+    void scatter() override {
+        goal = sf::Vector2f(2000.f, 0.f);
+    }
+
+    void chase() override {
+        if (pacman != nullptr) {
+            goal = pacman->getPosition();
+        }
+    }
+};
+
+class Pinky : public Ghost {
+public:
+    Pinky(Nodo* nodoInicial, Robot* pacman_ = nullptr, Ghost* blinky_ = nullptr, int tileW = 45)
+        : Ghost(nodoInicial, pacman_, blinky_, tileW) {
+        nombre = "Pinky";
+        color = COLOR_PINK;
+    }
+
+    void scatter() override {
+        goal = sf::Vector2f(0.f, 0.f);
+    }
+
+    void chase() override {
+        if (pacman != nullptr) {
+            sf::Vector2f ahead = pacman->getDirectionsMap().at(pacman->getDirection()) * (4.f * tileWidth);
+            goal = pacman->getPosition() + ahead;
+        }
+    }
+};
+
+class Inky : public Ghost {
+public:
+    Inky(Nodo* nodoInicial, Robot* pacman_ = nullptr, Ghost* blinky_ = nullptr, int tileW = 45)
+        : Ghost(nodoInicial, pacman_, blinky_, tileW) {
+        nombre = "Inky";
+        color = COLOR_TEAL;
+    }
+
+    void scatter() override {
+        goal = sf::Vector2f(2000.f, 2000.f);
+    }
+
+    void chase() override {
+        if (pacman != nullptr && blinkyRef != nullptr) {
+            sf::Vector2f vec1 = pacman->getPosition() +
+                pacman->getDirectionsMap().at(pacman->getDirection()) * (2.f * tileWidth);
+            sf::Vector2f vec2 = (vec1 - blinkyRef->getPosition()) * 2.f;
+            goal = blinkyRef->getPosition() + vec2;
+        }
+    }
+};
+
+class Clyde : public Ghost {
+public:
+    Clyde(Nodo* nodoInicial, Robot* pacman_ = nullptr, Ghost* blinky_ = nullptr, int tileW = 45)
+        : Ghost(nodoInicial, pacman_, blinky_, tileW) {
+        nombre = "Clyde";
+        color = COLOR_ORANGE;
+    }
+
+    void scatter() override {
+        goal = sf::Vector2f(0.f, 2000.f);
+    }
+
+    void chase() override {
+        if (pacman != nullptr) {
+            float ds = distanciaCuadrada(position, pacman->getPosition());
+            float limite = static_cast<float>((tileWidth * 8) * (tileWidth * 8));
+
+            if (ds <= limite) {
+                scatter();
+            }
+            else {
+                sf::Vector2f ahead = pacman->getDirectionsMap().at(pacman->getDirection()) * (4.f * tileWidth);
+                goal = pacman->getPosition() + ahead;
+            }
+        }
+    }
+};
+
+// ======================================================
+// GHOSTGROUP NIVEL 4
+// ======================================================
+class GhostGroup {
+private:
+    unique_ptr<Blinky> blinky;
+    unique_ptr<Pinky> pinky;
+    unique_ptr<Inky> inky;
+    unique_ptr<Clyde> clyde;
+    vector<Ghost*> ghosts;
+
+public:
+    GhostGroup(Nodo* nodoBase, Robot* pacman, NodeGroup& nodes, int tileWidth) {
+        Nodo* nodoBlinky = nodoBase;
+        Nodo* nodoPinky = nodes.getNthNode(1) ? nodes.getNthNode(1) : nodoBase;
+        Nodo* nodoInky = nodes.getNthNode(2) ? nodes.getNthNode(2) : nodoBase;
+        Nodo* nodoClyde = nodes.getNthNode(3) ? nodes.getNthNode(3) : nodoBase;
+
+        blinky = make_unique<Blinky>(nodoBlinky, pacman, nullptr, tileWidth);
+        pinky = make_unique<Pinky>(nodoPinky, pacman, nullptr, tileWidth);
+        inky = make_unique<Inky>(nodoInky, pacman, blinky.get(), tileWidth);
+        clyde = make_unique<Clyde>(nodoClyde, pacman, nullptr, tileWidth);
+
+        ghosts = { blinky.get(), pinky.get(), inky.get(), clyde.get() };
+    }
+
+    vector<Ghost*>::iterator begin() { return ghosts.begin(); }
+    vector<Ghost*>::iterator end() { return ghosts.end(); }
+
+    void update(float dt) {
+        for (Ghost* ghost : ghosts) {
+            ghost->update(dt);
+        }
+    }
+
+    void render(sf::RenderWindow& ventana) {
+        for (Ghost* ghost : ghosts) {
+            ghost->render(ventana);
+        }
+    }
+};
+
+// ======================================================
+// MAIN
+// ======================================================
 int main() {
     srand(static_cast<unsigned>(time(nullptr)));
 
     try {
-        sf::RenderWindow ventana(sf::VideoMode({ 1100u, 700u }), "Robot Aspirador");
+        sf::RenderWindow ventana(sf::VideoMode({ 1100u,700u }), "Robot Aspirador");
         ventana.setFramerateLimit(60);
 
         sf::Font fuente;
@@ -498,7 +689,7 @@ int main() {
         fondoHabitacion.setOutlineThickness(8.f);
         fondoHabitacion.setOutlineColor(sf::Color(90, 90, 90));
 
-        sf::RectangleShape mueble({ 90.f * escala, 260.f * escala });
+        sf::RectangleShape mueble({ 90.f * escala,260.f * escala });
         mueble.setPosition({ offsetX + 101.f * escala, offsetY + 150.f * escala });
         mueble.setFillColor(sf::Color(120, 80, 40));
         mueble.setOutlineThickness(2.f);
@@ -509,8 +700,8 @@ int main() {
         zonas[0].nombre = "Zona 1";
         zonas[0].largoCm = 500;
         zonas[0].anchoCm = 150;
-        zonas[0].forma.setSize({ 500.f * escala, 150.f * escala });
-        zonas[0].forma.setPosition({ offsetX, offsetY });
+        zonas[0].forma.setSize({ 500.f * escala,150.f * escala });
+        zonas[0].forma.setPosition({ offsetX,offsetY });
         zonas[0].forma.setFillColor(sf::Color(255, 200, 200, 180));
         zonas[0].forma.setOutlineThickness(2.f);
         zonas[0].forma.setOutlineColor(sf::Color::Red);
@@ -518,8 +709,8 @@ int main() {
         zonas[1].nombre = "Zona 2";
         zonas[1].largoCm = 480;
         zonas[1].anchoCm = 101;
-        zonas[1].forma.setSize({ 101.f * escala, 480.f * escala });
-        zonas[1].forma.setPosition({ offsetX, offsetY + 150.f * escala });
+        zonas[1].forma.setSize({ 101.f * escala,480.f * escala });
+        zonas[1].forma.setPosition({ offsetX,offsetY + 150.f * escala });
         zonas[1].forma.setFillColor(sf::Color(200, 255, 200, 180));
         zonas[1].forma.setOutlineThickness(2.f);
         zonas[1].forma.setOutlineColor(sf::Color::Green);
@@ -527,8 +718,8 @@ int main() {
         zonas[2].nombre = "Zona 3";
         zonas[2].largoCm = 309;
         zonas[2].anchoCm = 480;
-        zonas[2].forma.setSize({ 309.f * escala, 480.f * escala });
-        zonas[2].forma.setPosition({ offsetX + 191.f * escala, offsetY + 150.f * escala });
+        zonas[2].forma.setSize({ 309.f * escala,480.f * escala });
+        zonas[2].forma.setPosition({ offsetX + 191.f * escala,offsetY + 150.f * escala });
         zonas[2].forma.setFillColor(sf::Color(200, 200, 255, 180));
         zonas[2].forma.setOutlineThickness(2.f);
         zonas[2].forma.setOutlineColor(sf::Color::Blue);
@@ -536,20 +727,18 @@ int main() {
         zonas[3].nombre = "Zona 4";
         zonas[3].largoCm = 90;
         zonas[3].anchoCm = 220;
-        zonas[3].forma.setSize({ 90.f * escala, 220.f * escala });
-        zonas[3].forma.setPosition({ offsetX + 101.f * escala, offsetY + 410.f * escala });
+        zonas[3].forma.setSize({ 90.f * escala,220.f * escala });
+        zonas[3].forma.setPosition({ offsetX + 101.f * escala,offsetY + 410.f * escala });
         zonas[3].forma.setFillColor(sf::Color(255, 255, 180, 180));
         zonas[3].forma.setOutlineThickness(2.f);
         zonas[3].forma.setOutlineColor(sf::Color(180, 140, 0));
 
         vector<future<long long>> tareas;
-
         for (const auto& z : zonas) {
             tareas.push_back(async(launch::async, calcularArea, z.largoCm, z.anchoCm));
         }
 
         long long superficieTotal = 0;
-
         for (size_t i = 0; i < zonas.size(); i++) {
             zonas[i].areaCm2 = tareas[i].get();
             superficieTotal += zonas[i].areaCm2;
@@ -560,9 +749,6 @@ int main() {
         double tiempoSegundos = superficieTotal / tasaLimpieza;
         int minutos = static_cast<int>(tiempoSegundos) / 60;
         int segundos = static_cast<int>(tiempoSegundos) % 60;
-
-        cout << "Superficie total: " << superficieTotal << " cm2" << endl;
-        cout << "Tiempo estimado: " << tiempoSegundos << " s" << endl;
 
         for (auto& z : zonas) {
             string textoZona = z.nombre + "\n\n" + to_string(z.areaCm2) + " cm2";
@@ -587,18 +773,17 @@ int main() {
         info << "Tasa limpieza: " << tasaLimpieza << " cm2/s\n\n";
         info << "Tiempo estimado: " << formatearDecimal(tiempoSegundos) << " s\n\n";
         info << "Tiempo aprox: " << minutos << " min " << segundos << " s\n\n";
-        info << "Nivel 3:\n\n";
-        info << "Robot = entidad\n\n";
-        info << "Ghost = enemigo\n\n";
-        info << "Ghost se mueve solo\n\n";
-        info << "Controles:\n\n";
+        info << "Nivel 4:\n\n";
+        info << "Blinky = rojo\n\n";
+        info << "Pinky = rosa\n\n";
+        info << "Inky = cyan\n\n";
+        info << "Clyde = naranja\n\n";
         info << "ESC -> salir";
 
         sf::Text textoInfo(fuente, info.str(), 12);
         textoInfo.setFillColor(sf::Color::Black);
         textoInfo.setPosition({ 650.f, 90.f });
 
-        // Laberinto del nivel 2
         NodeGroup nodes("mazetest.txt", 45, 45,
             static_cast<int>(offsetX + 30),
             static_cast<int>(offsetY + 30));
@@ -608,13 +793,8 @@ int main() {
             throw runtime_error("No hay nodos en el laberinto.");
         }
 
-        Nodo* nodoInicioGhost = nodes.getNthNode(2);
-        if (nodoInicioGhost == nullptr) {
-            nodoInicioGhost = nodoInicioRobot;
-        }
-
         Robot robot(nodoInicioRobot, 45);
-        Ghost ghost(nodoInicioGhost, 45);
+        GhostGroup ghosts(nodoInicioRobot, &robot, nodes, 45);
 
         while (ventana.isOpen()) {
             float dt = 1.f / 60.f;
@@ -630,7 +810,7 @@ int main() {
             }
 
             robot.update(dt);
-            ghost.update(dt);
+            ghosts.update(dt);
 
             ventana.clear(sf::Color(210, 210, 210));
 
@@ -657,7 +837,7 @@ int main() {
             }
 
             robot.render(ventana);
-            ghost.render(ventana);
+            ghosts.render(ventana);
 
             ventana.draw(panel);
             ventana.draw(titulo);
@@ -673,3 +853,6 @@ int main() {
 
     return 0;
 }
+
+
+
