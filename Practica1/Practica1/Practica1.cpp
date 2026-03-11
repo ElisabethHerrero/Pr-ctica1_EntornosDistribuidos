@@ -12,26 +12,15 @@
 #include <fstream>
 #include <map>
 #include <algorithm>
-#include <ctime>
-#include <cstdlib>
 
 using namespace std;
 
 enum class Direccion {
-    STOP,
     UP,
     DOWN,
     LEFT,
     RIGHT
 };
-
-Direccion direccionOpuesta(Direccion d) {
-    if (d == Direccion::UP) return Direccion::DOWN;
-    if (d == Direccion::DOWN) return Direccion::UP;
-    if (d == Direccion::LEFT) return Direccion::RIGHT;
-    if (d == Direccion::RIGHT) return Direccion::LEFT;
-    return Direccion::STOP;
-}
 
 struct Zona {
     string nombre;
@@ -67,23 +56,15 @@ struct Nodo {
     }
 
     void render(sf::RenderWindow& ventana) {
-        // Dibujamos solo RIGHT y DOWN para no duplicar líneas
-        if (vecinos.at(Direccion::RIGHT) != nullptr) {
-            sf::Vertex linea[] = {
-                sf::Vertex{getPosicion(), sf::Color::White},
-                sf::Vertex{vecinos.at(Direccion::RIGHT)->getPosicion(), sf::Color::White}
-            };
-            ventana.draw(linea, 2, sf::PrimitiveType::Lines);
+        for (const auto& par : vecinos) {
+            if (par.second != nullptr) {
+                sf::Vertex linea[] = {
+                    sf::Vertex{getPosicion(), sf::Color::White},
+                    sf::Vertex{par.second->getPosicion(), sf::Color::White}
+                };
+                ventana.draw(linea, 2, sf::PrimitiveType::Lines);
+            }
         }
-
-        if (vecinos.at(Direccion::DOWN) != nullptr) {
-            sf::Vertex linea[] = {
-                sf::Vertex{getPosicion(), sf::Color::White},
-                sf::Vertex{vecinos.at(Direccion::DOWN)->getPosicion(), sf::Color::White}
-            };
-            ventana.draw(linea, 2, sf::PrimitiveType::Lines);
-        }
-
         ventana.draw(forma);
     }
 };
@@ -240,13 +221,6 @@ public:
         return nodesLUT.begin()->second.get();
     }
 
-    Nodo* getNthNode(size_t index) {
-        if (index >= nodesLUT.size()) return nullptr;
-        auto it = nodesLUT.begin();
-        advance(it, index);
-        return it->second.get();
-    }
-
     void render(sf::RenderWindow& ventana) {
         for (auto& par : nodesLUT) {
             par.second->render(ventana);
@@ -257,6 +231,7 @@ public:
 long long calcularArea(int largo, int ancho) {
     if (largo <= 0 || ancho <= 0)
         throw invalid_argument("Dimensiones incorrectas");
+
     return static_cast<long long>(largo) * ancho;
 }
 
@@ -278,206 +253,45 @@ sf::Vector2f normalizar(const sf::Vector2f& v) {
     return { v.x / m, v.y / m };
 }
 
-class Entity {
-protected:
-    string nombre;
-    map<Direccion, sf::Vector2f> directions;
-    Direccion direction;
-    float speed;
-    float radius;
-    sf::Color color;
-    Nodo* node;
-    Nodo* target;
-    sf::Vector2f position;
-    bool visible;
+Direccion direccionOpuesta(Direccion d) {
+    if (d == Direccion::UP) return Direccion::DOWN;
+    if (d == Direccion::DOWN) return Direccion::UP;
+    if (d == Direccion::LEFT) return Direccion::RIGHT;
+    return Direccion::LEFT;
+}
 
-public:
-    Entity(Nodo* nodoInicial, int tileWidth) {
-        nombre = "Entity";
-        directions[Direccion::UP] = sf::Vector2f(0.f, -1.f);
-        directions[Direccion::DOWN] = sf::Vector2f(0.f, 1.f);
-        directions[Direccion::LEFT] = sf::Vector2f(-1.f, 0.f);
-        directions[Direccion::RIGHT] = sf::Vector2f(1.f, 0.f);
-        directions[Direccion::STOP] = sf::Vector2f(0.f, 0.f);
+Direccion elegirSiguienteDireccion(Nodo* nodoActual, Direccion direccionActual) {
+    if (nodoActual == nullptr) return Direccion::RIGHT;
 
-        direction = Direccion::STOP;
-        setSpeed(100.f, tileWidth);
-        radius = 10.f;
-        color = sf::Color::White;
-        node = nodoInicial;
-        target = nodoInicial;
-        visible = true;
-        setPosition();
+    if (nodoActual->vecinos[direccionActual] != nullptr) {
+        return direccionActual;
     }
 
-    virtual ~Entity() = default;
+    vector<Direccion> prioridad = {
+        Direccion::RIGHT,
+        Direccion::DOWN,
+        Direccion::LEFT,
+        Direccion::UP
+    };
 
-    void setPosition() {
-        if (node != nullptr) {
-            position = node->getPosicion();
+    for (Direccion d : prioridad) {
+        if (d != direccionOpuesta(direccionActual) && nodoActual->vecinos[d] != nullptr) {
+            return d;
         }
     }
 
-    bool validDirection(Direccion dir) {
-        if (dir != Direccion::STOP) {
-            if (node->vecinos[dir] != nullptr) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    Nodo* getNewTarget(Direccion dir) {
-        if (validDirection(dir)) {
-            return node->vecinos[dir];
-        }
-        return node;
-    }
-
-    bool overshotTarget() {
-        if (target != nullptr) {
-            sf::Vector2f vec1 = target->getPosicion() - node->getPosicion();
-            sf::Vector2f vec2 = position - node->getPosicion();
-
-            float nodo2Target = vec1.x * vec1.x + vec1.y * vec1.y;
-            float nodo2Self = vec2.x * vec2.x + vec2.y * vec2.y;
-
-            return nodo2Self >= nodo2Target;
-        }
-        return false;
-    }
-
-    void reverseDirection() {
-        direction = direccionOpuesta(direction);
-        Nodo* temp = node;
-        node = target;
-        target = temp;
-    }
-
-    void setSpeed(float velocidadBase, int tileWidth) {
-        speed = velocidadBase * static_cast<float>(tileWidth) / 16.f;
-    }
-
-    vector<Direccion> validDirections() {
-        vector<Direccion> dirs;
-
-        for (Direccion dir : {Direccion::UP, Direccion::DOWN, Direccion::LEFT, Direccion::RIGHT}) {
-            if (validDirection(dir)) {
-                if (dir != direccionOpuesta(direction)) {
-                    dirs.push_back(dir);
-                }
-            }
-        }
-
-        if (dirs.empty()) {
-            dirs.push_back(direccionOpuesta(direction));
-        }
-
-        return dirs;
-    }
-
-    Direccion randomDirection(const vector<Direccion>& dirs) {
-        int index = rand() % dirs.size();
-        return dirs[index];
-    }
-
-    virtual void update(float dt) {
-        position += directions[direction] * speed * dt;
-
-        if (overshotTarget()) {
-            node = target;
-
-            vector<Direccion> dirs = validDirections();
-            Direccion dir = randomDirection(dirs);
-
-            target = getNewTarget(dir);
-            if (target != node) {
-                direction = dir;
-            }
-            else {
-                target = getNewTarget(direction);
-            }
-
-            setPosition();
+    for (Direccion d : prioridad) {
+        if (nodoActual->vecinos[d] != nullptr) {
+            return d;
         }
     }
 
-    virtual void render(sf::RenderWindow& ventana) {
-        if (!visible) return;
-
-        sf::CircleShape cuerpo(radius);
-        cuerpo.setOrigin({ radius, radius });
-        cuerpo.setPosition(position);
-        cuerpo.setFillColor(color);
-        cuerpo.setOutlineThickness(2.f);
-        cuerpo.setOutlineColor(sf::Color::Black);
-        ventana.draw(cuerpo);
-    }
-
-    sf::Vector2f getPosition() const {
-        return position;
-    }
-};
-
-class Robot : public Entity {
-public:
-    Robot(Nodo* nodoInicial, int tileWidth) : Entity(nodoInicial, tileWidth) {
-        nombre = "Robot";
-        color = sf::Color::Yellow;
-    }
-
-    Direccion chooseDirection(const vector<Direccion>& dirs) {
-        vector<Direccion> prioridad = {
-            Direccion::RIGHT,
-            Direccion::DOWN,
-            Direccion::LEFT,
-            Direccion::UP
-        };
-
-        for (Direccion p : prioridad) {
-            for (Direccion d : dirs) {
-                if (p == d) return d;
-            }
-        }
-
-        return dirs[0];
-    }
-
-    void update(float dt) override {
-        position += directions[direction] * speed * dt;
-
-        if (overshotTarget()) {
-            node = target;
-
-            vector<Direccion> dirs = validDirections();
-            Direccion dir = chooseDirection(dirs);
-
-            target = getNewTarget(dir);
-            if (target != node) {
-                direction = dir;
-            }
-            else {
-                target = getNewTarget(direction);
-            }
-
-            setPosition();
-        }
-    }
-};
-
-class Ghost : public Entity {
-public:
-    Ghost(Nodo* nodoInicial, int tileWidth) : Entity(nodoInicial, tileWidth) {
-        nombre = "Ghost";
-        color = sf::Color(255, 105, 180);
-    }
-};
+    return direccionActual;
+}
 
 int main() {
-    srand(static_cast<unsigned>(time(nullptr)));
-
     try {
-        sf::RenderWindow ventana(sf::VideoMode({ 1100u, 700u }), "Robot Aspirador");
+        sf::RenderWindow ventana(sf::VideoMode({ 1100u,700u }), "Robot Aspirador");
         ventana.setFramerateLimit(60);
 
         sf::Font fuente;
@@ -498,7 +312,7 @@ int main() {
         fondoHabitacion.setOutlineThickness(8.f);
         fondoHabitacion.setOutlineColor(sf::Color(90, 90, 90));
 
-        sf::RectangleShape mueble({ 90.f * escala, 260.f * escala });
+        sf::RectangleShape mueble({ 90.f * escala,260.f * escala });
         mueble.setPosition({ offsetX + 101.f * escala, offsetY + 150.f * escala });
         mueble.setFillColor(sf::Color(120, 80, 40));
         mueble.setOutlineThickness(2.f);
@@ -509,8 +323,8 @@ int main() {
         zonas[0].nombre = "Zona 1";
         zonas[0].largoCm = 500;
         zonas[0].anchoCm = 150;
-        zonas[0].forma.setSize({ 500.f * escala, 150.f * escala });
-        zonas[0].forma.setPosition({ offsetX, offsetY });
+        zonas[0].forma.setSize({ 500.f * escala,150.f * escala });
+        zonas[0].forma.setPosition({ offsetX,offsetY });
         zonas[0].forma.setFillColor(sf::Color(255, 200, 200, 180));
         zonas[0].forma.setOutlineThickness(2.f);
         zonas[0].forma.setOutlineColor(sf::Color::Red);
@@ -518,8 +332,8 @@ int main() {
         zonas[1].nombre = "Zona 2";
         zonas[1].largoCm = 480;
         zonas[1].anchoCm = 101;
-        zonas[1].forma.setSize({ 101.f * escala, 480.f * escala });
-        zonas[1].forma.setPosition({ offsetX, offsetY + 150.f * escala });
+        zonas[1].forma.setSize({ 101.f * escala,480.f * escala });
+        zonas[1].forma.setPosition({ offsetX,offsetY + 150.f * escala });
         zonas[1].forma.setFillColor(sf::Color(200, 255, 200, 180));
         zonas[1].forma.setOutlineThickness(2.f);
         zonas[1].forma.setOutlineColor(sf::Color::Green);
@@ -527,8 +341,8 @@ int main() {
         zonas[2].nombre = "Zona 3";
         zonas[2].largoCm = 309;
         zonas[2].anchoCm = 480;
-        zonas[2].forma.setSize({ 309.f * escala, 480.f * escala });
-        zonas[2].forma.setPosition({ offsetX + 191.f * escala, offsetY + 150.f * escala });
+        zonas[2].forma.setSize({ 309.f * escala,480.f * escala });
+        zonas[2].forma.setPosition({ offsetX + 191.f * escala,offsetY + 150.f * escala });
         zonas[2].forma.setFillColor(sf::Color(200, 200, 255, 180));
         zonas[2].forma.setOutlineThickness(2.f);
         zonas[2].forma.setOutlineColor(sf::Color::Blue);
@@ -536,8 +350,8 @@ int main() {
         zonas[3].nombre = "Zona 4";
         zonas[3].largoCm = 90;
         zonas[3].anchoCm = 220;
-        zonas[3].forma.setSize({ 90.f * escala, 220.f * escala });
-        zonas[3].forma.setPosition({ offsetX + 101.f * escala, offsetY + 410.f * escala });
+        zonas[3].forma.setSize({ 90.f * escala,220.f * escala });
+        zonas[3].forma.setPosition({ offsetX + 101.f * escala,offsetY + 410.f * escala });
         zonas[3].forma.setFillColor(sf::Color(255, 255, 180, 180));
         zonas[3].forma.setOutlineThickness(2.f);
         zonas[3].forma.setOutlineColor(sf::Color(180, 140, 0));
@@ -587,37 +401,48 @@ int main() {
         info << "Tasa limpieza: " << tasaLimpieza << " cm2/s\n\n";
         info << "Tiempo estimado: " << formatearDecimal(tiempoSegundos) << " s\n\n";
         info << "Tiempo aprox: " << minutos << " min " << segundos << " s\n\n";
-        info << "Nivel 3:\n\n";
-        info << "Robot = entidad\n\n";
-        info << "Ghost = enemigo\n\n";
-        info << "Ghost se mueve solo\n\n";
+        info << "Laberinto:\n\n";
+        info << "+ = nodo\n\n";
+        info << ". = camino\n\n";
+        info << "X = vacio\n\n";
         info << "Controles:\n\n";
+        info << "R -> reiniciar robot\n\n";
         info << "ESC -> salir";
 
         sf::Text textoInfo(fuente, info.str(), 12);
         textoInfo.setFillColor(sf::Color::Black);
         textoInfo.setPosition({ 650.f, 90.f });
 
-        // Laberinto del nivel 2
-        NodeGroup nodes("mazetest.txt", 45, 45,
-            static_cast<int>(offsetX + 30),
-            static_cast<int>(offsetY + 30));
+        // NIVEL 2 APLICADO
+        NodeGroup nodes("mazetest.txt", 45, 45, static_cast<int>(offsetX + 30), static_cast<int>(offsetY + 30));
 
-        Nodo* nodoInicioRobot = nodes.getStartTempNode();
-        if (nodoInicioRobot == nullptr) {
+        Nodo* nodoActual = nodes.getStartTempNode();
+        if (nodoActual == nullptr) {
             throw runtime_error("No hay nodos en el laberinto.");
         }
 
-        Nodo* nodoInicioGhost = nodes.getNthNode(2);
-        if (nodoInicioGhost == nullptr) {
-            nodoInicioGhost = nodoInicioRobot;
+        Direccion direccionActual = Direccion::RIGHT;
+        Nodo* nodoObjetivo = nodoActual->vecinos[direccionActual];
+
+        if (nodoObjetivo == nullptr) {
+            direccionActual = elegirSiguienteDireccion(nodoActual, direccionActual);
+            nodoObjetivo = nodoActual->vecinos[direccionActual];
         }
 
-        Robot robot(nodoInicioRobot, 45);
-        Ghost ghost(nodoInicioGhost, 45);
+        sf::CircleShape robot(10.f);
+        robot.setOrigin({ 10.f,10.f });
+        robot.setFillColor(sf::Color::Yellow);
+        robot.setOutlineThickness(2.f);
+        robot.setOutlineColor(sf::Color::Black);
+
+        sf::Vector2f posRobot = nodoActual->getPosicion();
+        robot.setPosition(posRobot);
+
+        float velocidad = 80.f;
+        sf::Clock reloj;
 
         while (ventana.isOpen()) {
-            float dt = 1.f / 60.f;
+            float dt = reloj.restart().asSeconds();
 
             while (auto evento = ventana.pollEvent()) {
                 if (evento->is<sf::Event::Closed>()) {
@@ -629,8 +454,36 @@ int main() {
                 ventana.close();
             }
 
-            robot.update(dt);
-            ghost.update(dt);
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::R)) {
+                nodoActual = nodes.getStartTempNode();
+                direccionActual = Direccion::RIGHT;
+                nodoObjetivo = nodoActual->vecinos[direccionActual];
+
+                if (nodoObjetivo == nullptr) {
+                    direccionActual = elegirSiguienteDireccion(nodoActual, direccionActual);
+                    nodoObjetivo = nodoActual->vecinos[direccionActual];
+                }
+
+                posRobot = nodoActual->getPosicion();
+            }
+
+            if (nodoObjetivo != nullptr) {
+                sf::Vector2f destino = nodoObjetivo->getPosicion();
+                sf::Vector2f dir = destino - posRobot;
+                float dist = distancia(posRobot, destino);
+
+                if (dist < 2.f) {
+                    posRobot = destino;
+                    nodoActual = nodoObjetivo;
+                    direccionActual = elegirSiguienteDireccion(nodoActual, direccionActual);
+                    nodoObjetivo = nodoActual->vecinos[direccionActual];
+                }
+                else {
+                    posRobot += normalizar(dir) * velocidad * dt;
+                }
+            }
+
+            robot.setPosition(posRobot);
 
             ventana.clear(sf::Color(210, 210, 210));
 
@@ -656,8 +509,7 @@ int main() {
                 }
             }
 
-            robot.render(ventana);
-            ghost.render(ventana);
+            ventana.draw(robot);
 
             ventana.draw(panel);
             ventana.draw(titulo);
