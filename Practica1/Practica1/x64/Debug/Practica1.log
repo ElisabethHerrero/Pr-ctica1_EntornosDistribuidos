@@ -1,2 +1,5 @@
-﻿  Practica1.cpp
-C:\Users\Admin\source\repos\Pr-ctica1_EntornosDistribuidos\Practica1\Practica1\Practica1.cpp(2,10): error C1083: No se puede abrir el archivo incluir: 'SFML/Graphics.hpp': No such file or directory
+﻿  ScreenManager.cpp
+C:\Users\maria\source\repos\Pr-ctica1_EntornosDistribuidos-8\Practica1\Practica1\ScreenManager.cpp(354,17): warning C4267: 'inicializando': conversión de 'size_t' a 'int'; posible pérdida de datos
+  main.cpp
+  Generando código...
+  Practica1.vcxproj -> C:\Users\maria\Source\Repos\Pr-ctica1_EntornosDistribuidos-8\Practica1\x64\Debug\Practica1.exe

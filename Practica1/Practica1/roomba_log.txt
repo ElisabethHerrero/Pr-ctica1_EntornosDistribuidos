@@ -1,0 +1,77 @@
+
+=== Nueva sesión: 2026-04-08 23:25:11 ===
+[2026-04-08 23:25:11] Zonas cargadas: 4 - Area total: 291600 cm2
+[2026-04-08 23:25:11]   > Zona 1 - Sala Principal: 75000 cm2 (3 obstaculos)
+[2026-04-08 23:25:11]   > Zona 2 - Pasillo: 48480 cm2 (2 obstaculos)
+[2026-04-08 23:25:11]   > Zona 3 - Comedor: 148320 cm2 (4 obstaculos)
+[2026-04-08 23:25:11]   > Zona 4 - Entrada: 19800 cm2 (2 obstaculos)
+[2026-04-08 23:25:11] 
+[2026-04-08 23:25:11] ========================================
+[2026-04-08 23:25:11]   SISTEMA DISTRIBUIDO ROOMBA v1.0
+[2026-04-08 23:25:11] ========================================
+[2026-04-08 23:25:11] 
+[2026-04-08 23:25:11] Configure las Roombas y presione Iniciar
+
+=== Nueva sesion: 2026-04-08 23:33:15 ===
+[2026-04-08 23:33:15] Zonas cargadas: 4 - Area total: 291600 cm2
+[2026-04-08 23:33:15]   > Zona 1 - Sala Principal: 75000 cm2 (3 obstaculos)
+[2026-04-08 23:33:15]   > Zona 2 - Pasillo: 48480 cm2 (2 obstaculos)
+[2026-04-08 23:33:15]   > Zona 3 - Comedor: 148320 cm2 (4 obstaculos)
+[2026-04-08 23:33:15]   > Zona 4 - Entrada: 19800 cm2 (2 obstaculos)
+[2026-04-08 23:33:15] 
+[2026-04-08 23:33:15] ========================================
+[2026-04-08 23:33:15]   SISTEMA DISTRIBUIDO ROOMBA v1.0
+[2026-04-08 23:33:15] ========================================
+[2026-04-08 23:33:15] 
+[2026-04-08 23:33:15] Configure las Roombas y presione Iniciar
+[2026-04-08 23:33:24] Configuradas 3 Roombas tipo Avanzada (1200 cm2/s)
+[2026-04-08 23:33:29] Roomba #1 inicio: Zona 1 - Sala Principal
+[2026-04-08 23:33:29] Roomba #2 inicio: Zona 1 - Sala Principal
+[2026-04-08 23:33:29] Roomba #3 inicio: Zona 1 - Sala Principal
+[2026-04-08 23:33:29] 
+[2026-04-08 23:33:29] ========================================
+[2026-04-08 23:33:29]     SESION DE LIMPIEZA INICIADA
+[2026-04-08 23:33:29] ========================================
+[2026-04-08 23:33:29] Roombas activas: 3
+
+=== Nueva sesion: 2026-04-08 23:34:58 ===
+[2026-04-08 23:34:58] Zonas cargadas: 4 - Area total: 291600 cm2
+[2026-04-08 23:34:58]   > Zona 1 - Sala Principal: 75000 cm2 (3 obstaculos)
+[2026-04-08 23:34:58]   > Zona 2 - Pasillo: 48480 cm2 (2 obstaculos)
+[2026-04-08 23:34:58]   > Zona 3 - Comedor: 148320 cm2 (4 obstaculos)
+[2026-04-08 23:34:58]   > Zona 4 - Entrada: 19800 cm2 (2 obstaculos)
+[2026-04-08 23:34:58] 
+[2026-04-08 23:34:58] ========================================
+[2026-04-08 23:34:58]   SISTEMA DISTRIBUIDO ROOMBA v1.0
+[2026-04-08 23:34:58] ========================================
+[2026-04-08 23:34:58] 
+[2026-04-08 23:34:58] Configure las Roombas y presione Iniciar
+
+=== Nueva sesion: 2026-04-08 23:42:52 ===
+[2026-04-08 23:42:58] Configuradas 3 Roombas tipo Avanzada
+[2026-04-08 23:42:58] Iniciando limpieza...
+
+=== Nueva sesion: 2026-04-08 23:53:47 ===
+[2026-04-08 23:53:53] Roombas configuradas: 3
+[2026-04-08 23:53:53] Iniciando limpieza...
+
+=== Nueva sesion: 2026-04-08 23:57:35 ===
+[2026-04-08 23:57:35] Sistema iniciado correctamente
+[2026-04-08 23:57:36] Configuradas 3 Roombas
+[2026-04-08 23:57:36] Iniciando limpieza...
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas
+Iniciando limpieza...
+Configuradas 3 Roombas
+Limpieza reiniciada
+Configuradas 3 Roombas
+Limpieza reiniciada
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas
+Iniciando limpieza...
+Configuradas 3 Roombas
+Limpieza reiniciada
