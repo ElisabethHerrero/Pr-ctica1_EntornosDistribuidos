@@ -131,7 +131,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="Practica1.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="event_bus.h" />
+    <ClInclude Include="models.h" />
+    <ClInclude Include="repository.h" />
+    <ClInclude Include="services.h" />
+    <ClInclude Include="Visualizer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
