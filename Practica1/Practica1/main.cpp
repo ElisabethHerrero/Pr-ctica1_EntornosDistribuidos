@@ -4,7 +4,6 @@
 
 #include <windows.h>
 #include "ScreenManager.h"
-
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
     ScreenManager app;
 

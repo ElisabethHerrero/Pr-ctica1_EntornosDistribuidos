@@ -50,16 +50,20 @@ public:
     }
 
     void publishLog(const wchar_t* msg) {
-        if (msg) publish(msg);
+        if (msg) {
+            publish(msg);
+        }
     }
 
 private:
     EventService() = default;
+
     std::vector<EventCallback> callbacks_;
     std::mutex mutex_;
 
     void publish(const wchar_t* message) {
         if (!message) return;
+
         std::lock_guard<std::mutex> lock(mutex_);
         for (auto& callback : callbacks_) {
             if (callback) {

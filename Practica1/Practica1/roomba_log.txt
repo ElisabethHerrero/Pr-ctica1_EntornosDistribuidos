@@ -2802,3 +2802,32 @@ Roomba #2 asignada a Pasillo
 Roomba #3 asignada a Comedor
 Roomba #2 completa Pasillo (zona finalizada)
 Roomba #2 asignada a Entrada
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas de tipo Premium
+Iniciando limpieza...
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Pasillo
+Roomba #3 asignada a Comedor
+Roomba #2 completa Pasillo (zona finalizada)
+Roomba #2 asignada a Entrada
+Roomba #2 completa Entrada (zona finalizada)
+Roomba #1 completa Sala Principal (zona finalizada)
+Roomba #3 completa Comedor (zona finalizada)
+Todas las zonas completadas
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas de tipo Premium
+Iniciando limpieza...
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Pasillo
+Roomba #3 asignada a Comedor
+Roomba #2 completa Pasillo (zona finalizada)
+Roomba #2 asignada a Entrada
+Roomba #2 completa Entrada (zona finalizada)
+Roomba #1 recolocada en Sala Principal por recuperacion de ruta
+Roomba #1 completa Sala Principal (zona finalizada)
+Roomba #3 completa Comedor (zona finalizada)
+Todas las zonas completadas

@@ -1,9 +1,2 @@
-﻿  main.cpp
-C:\Users\maria.raserorodrigue\source\repos\Pr-ctica1_EntornosDistribuidos_2\Practica1\Practica1\ScreenManager.h(5,10): error C1014: hay demasiados archivos de inclusión: nivel = 1024
-  (compilando archivo de origen "main.cpp")
-  
-  ScreenManager.cpp
-C:\Users\maria.raserorodrigue\source\repos\Pr-ctica1_EntornosDistribuidos_2\Practica1\Practica1\ScreenManager.h(5,10): error C1014: hay demasiados archivos de inclusión: nivel = 1024
-  (compilando archivo de origen "ScreenManager.cpp")
-  
-  Generando código...
+﻿  ScreenManager.cpp
+  Practica1.vcxproj -> C:\Users\maria.raserorodrigue\Source\Repos\Pr-ctica1_EntornosDistribuidos_2\Practica1\x64\Debug\Practica1.exe

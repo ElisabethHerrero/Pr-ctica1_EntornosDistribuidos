@@ -3,12 +3,19 @@
 #endif
 
 #include "ScreenManager.h"
+#include "CleaningService.h"
+#include "Zone.h"
+#include "Roomba.h"
+#include "Database.h"
+#include "EventService.h"
+
 #include <windowsx.h>
 #include <commctrl.h>
 #include <random>
 #include <cmath>
 #include <algorithm>
 #include <cwchar>
+#include <queue>
 
 #pragma comment(lib, "comctl32.lib")
 #pragma comment(lib, "msimg32.lib")
@@ -31,16 +38,180 @@
 #define M_PI 3.14159265358979323846
 #endif
 
+namespace {
+    struct RectD {
+        double x;
+        double y;
+        double w;
+        double h;
+    };
+
+    static RectD inflateRect(const RectD& r, double margin) {
+        return {
+            r.x - margin,
+            r.y - margin,
+            r.w + margin * 2.0,
+            r.h + margin * 2.0
+        };
+    }
+
+    static bool rectsIntersect(const RectD& a, const RectD& b) {
+        return a.x < b.x + b.w &&
+            a.x + a.w > b.x &&
+            a.y < b.y + b.h &&
+            a.y + a.h > b.y;
+    }
+
+    static bool collidesExpanded(double px, double py, const RectD& r, double radius) {
+        return px + radius >= r.x &&
+            px - radius <= r.x + r.w &&
+            py + radius >= r.y &&
+            py - radius <= r.y + r.h;
+    }
+
+    static bool isValidObstaclePlacement(
+        double zoneLength,
+        double zoneWidth,
+        const std::vector<std::shared_ptr<Obstacle>>& existing,
+        const RectD& candidate,
+        double robotRadius,
+        double cellSize
+    ) {
+        const double wallClearance = robotRadius + 6.0;
+        const double obstacleClearance = robotRadius + 6.0;
+
+        if (candidate.x < wallClearance || candidate.y < wallClearance) {
+            return false;
+        }
+
+        if (candidate.x + candidate.w > zoneLength - wallClearance ||
+            candidate.y + candidate.h > zoneWidth - wallClearance) {
+            return false;
+        }
+
+        RectD expandedCandidate = inflateRect(candidate, obstacleClearance);
+
+        for (const auto& obs : existing) {
+            if (!obs) continue;
+
+            RectD other{
+                obs->getX(),
+                obs->getY(),
+                obs->getWidth(),
+                obs->getHeight()
+            };
+
+            RectD expandedOther = inflateRect(other, obstacleClearance);
+            if (rectsIntersect(expandedCandidate, expandedOther)) {
+                return false;
+            }
+        }
+
+        const int cols = std::max(1, static_cast<int>(std::ceil(zoneLength / cellSize)));
+        const int rows = std::max(1, static_cast<int>(std::ceil(zoneWidth / cellSize)));
+
+        std::vector<std::vector<bool>> freeGrid(rows, std::vector<bool>(cols, true));
+
+        for (int r = 0; r < rows; ++r) {
+            for (int c = 0; c < cols; ++c) {
+                double px = (c + 0.5) * cellSize;
+                double py = (r + 0.5) * cellSize;
+
+                bool walkable = true;
+
+                if (px < robotRadius || py < robotRadius ||
+                    px > zoneLength - robotRadius || py > zoneWidth - robotRadius) {
+                    walkable = false;
+                }
+
+                if (walkable) {
+                    for (const auto& obs : existing) {
+                        if (!obs) continue;
+
+                        RectD other{
+                            obs->getX(),
+                            obs->getY(),
+                            obs->getWidth(),
+                            obs->getHeight()
+                        };
+
+                        if (collidesExpanded(px, py, other, robotRadius)) {
+                            walkable = false;
+                            break;
+                        }
+                    }
+                }
+
+                if (walkable && collidesExpanded(px, py, candidate, robotRadius)) {
+                    walkable = false;
+                }
+
+                freeGrid[r][c] = walkable;
+            }
+        }
+
+        int startRow = -1;
+        int startCol = -1;
+        int freeCount = 0;
+
+        for (int r = 0; r < rows; ++r) {
+            for (int c = 0; c < cols; ++c) {
+                if (freeGrid[r][c]) {
+                    freeCount++;
+                    if (startRow == -1) {
+                        startRow = r;
+                        startCol = c;
+                    }
+                }
+            }
+        }
+
+        if (freeCount == 0) {
+            return false;
+        }
+
+        std::vector<std::vector<bool>> visited(rows, std::vector<bool>(cols, false));
+        std::queue<std::pair<int, int>> q;
+        q.push({ startRow, startCol });
+        visited[startRow][startCol] = true;
+
+        int visitedCount = 0;
+        const int dr[4] = { -1, 1, 0, 0 };
+        const int dc[4] = { 0, 0, -1, 1 };
+
+        while (!q.empty()) {
+            auto cur = q.front();
+            q.pop();
+            visitedCount++;
+
+            for (int i = 0; i < 4; ++i) {
+                int nr = cur.first + dr[i];
+                int nc = cur.second + dc[i];
+
+                if (nr < 0 || nc < 0 || nr >= rows || nc >= cols) continue;
+                if (visited[nr][nc]) continue;
+                if (!freeGrid[nr][nc]) continue;
+
+                visited[nr][nc] = true;
+                q.push({ nr, nc });
+            }
+        }
+
+        return visitedCount == freeCount;
+    }
+}
+
 ScreenManager::ScreenManager()
     : hwnd_(nullptr),
     hInstance_(nullptr),
     currentScreen_(SCREEN_START),
+    cleaningService_(std::make_unique<CleaningService>()),
     roombaCount_(3),
     roombaType_(Roomba::ADVANCED) {
 }
 
 ScreenManager::~ScreenManager() {
-    cleaningService_.stopCleaning();
+    cleaningService_->stopCleaning();
     EventService::getInstance().clearSubscriptions();
 }
 
@@ -72,15 +243,23 @@ bool ScreenManager::initialize() {
     int winH = 900;
 
     hwnd_ = CreateWindowEx(
-        0, CLASS_NAME,
+        0,
+        CLASS_NAME,
         L"Sistema Distribuido Roomba",
         WS_OVERLAPPEDWINDOW,
-        (screenW - winW) / 2, (screenH - winH) / 2,
-        winW, winH,
-        nullptr, nullptr, hInstance_, this
+        (screenW - winW) / 2,
+        (screenH - winH) / 2,
+        winW,
+        winH,
+        nullptr,
+        nullptr,
+        hInstance_,
+        this
     );
 
-    if (!hwnd_) return false;
+    if (!hwnd_) {
+        return false;
+    }
 
     Database::getInstance().initialize();
 
@@ -91,8 +270,8 @@ bool ScreenManager::initialize() {
 
     initializeZones();
 
-    cleaningService_.setZones(&zones_);
-    cleaningService_.setRoombas(&roombas_);
+    cleaningService_->setZones(&zones_);
+    cleaningService_->setRoombas(&roombas_);
 
     SetTimer(hwnd_, ID_TIMER_PAINT, 33, nullptr);
 
@@ -123,62 +302,99 @@ void ScreenManager::initializeZones() {
     std::random_device rd;
     std::mt19937 gen(rd());
 
-    for (size_t i = 0; i < zones_.size(); i++) {
+    const double maxRobotRadius = 12.0;
+    const double navCellSize = 10.0;
+
+    for (size_t i = 0; i < zones_.size(); ++i) {
         auto& zone = zones_[i];
         if (!zone) continue;
 
-        double zoneLength = zone->getLength();
-        double zoneWidth = zone->getWidth();
+        const double zoneLength = zone->getLength();
+        const double zoneWidth = zone->getWidth();
+        const double minDimension = std::min(zoneLength, zoneWidth);
 
         int numObs = (zone->getArea() > 50000.0) ? 2 : 1;
 
-        std::uniform_real_distribution<double> disW(22.0, 42.0);
-        std::uniform_real_distribution<double> disH(22.0, 42.0);
+        if (minDimension <= 120.0) {
+            numObs = 1;
+        }
+        if (minDimension <= 95.0) {
+            numObs = 0;
+        }
+
+        double minObsW = 22.0;
+        double maxObsW = 42.0;
+        double minObsH = 22.0;
+        double maxObsH = 42.0;
+
+        if (minDimension <= 140.0) {
+            minObsW = 16.0;
+            maxObsW = 26.0;
+            minObsH = 16.0;
+            maxObsH = 32.0;
+        }
+
+        if (minDimension <= 110.0) {
+            minObsW = 14.0;
+            maxObsW = 20.0;
+            minObsH = 14.0;
+            maxObsH = 24.0;
+        }
+
+        std::uniform_real_distribution<double> disW(minObsW, maxObsW);
+        std::uniform_real_distribution<double> disH(minObsH, maxObsH);
 
         int created = 0;
         int attempts = 0;
+        const int maxAttempts = 250;
 
-        while (created < numObs && attempts < 100) {
+        while (created < numObs && attempts < maxAttempts) {
             attempts++;
 
             double ow = disW(gen);
             double oh = disH(gen);
 
-            if (zoneLength - ow - 20.0 <= 20.0 || zoneWidth - oh - 20.0 <= 20.0) {
+            const double wallClearance = maxRobotRadius + 8.0;
+
+            if (zoneLength - ow - wallClearance * 2.0 <= 0.0 ||
+                zoneWidth - oh - wallClearance * 2.0 <= 0.0) {
                 continue;
             }
 
-            std::uniform_real_distribution<double> disX(20.0, zoneLength - ow - 20.0);
-            std::uniform_real_distribution<double> disY(20.0, zoneWidth - oh - 20.0);
+            std::uniform_real_distribution<double> disX(
+                wallClearance,
+                zoneLength - ow - wallClearance
+            );
+            std::uniform_real_distribution<double> disY(
+                wallClearance,
+                zoneWidth - oh - wallClearance
+            );
 
-            double ox = disX(gen);
-            double oy = disY(gen);
+            RectD candidate{
+                disX(gen),
+                disY(gen),
+                ow,
+                oh
+            };
 
-            bool overlaps = false;
-
-            for (const auto& existing : zone->getObstacles()) {
-                if (!existing) continue;
-
-                double margin = 12.0;
-
-                bool intersect =
-                    ox < existing->getX() + existing->getWidth() + margin &&
-                    ox + ow + margin > existing->getX() &&
-                    oy < existing->getY() + existing->getHeight() + margin &&
-                    oy + oh + margin > existing->getY();
-
-                if (intersect) {
-                    overlaps = true;
-                    break;
-                }
+            if (!isValidObstaclePlacement(
+                zoneLength,
+                zoneWidth,
+                zone->getObstacles(),
+                candidate,
+                maxRobotRadius,
+                navCellSize)) {
+                continue;
             }
 
-            if (!overlaps) {
-                zone->addObstacle(std::make_shared<Obstacle>(
-                    ox, oy, ow, oh, Obstacle::FURNITURE
-                ));
-                created++;
-            }
+            zone->addObstacle(std::make_shared<Obstacle>(
+                candidate.x,
+                candidate.y,
+                candidate.w,
+                candidate.h,
+                Obstacle::FURNITURE
+            ));
+            created++;
         }
     }
 }
@@ -192,12 +408,12 @@ void ScreenManager::resetZones() {
 }
 
 void ScreenManager::initializeRoombas() {
-    cleaningService_.stopCleaning();
+    cleaningService_->stopCleaning();
     roombas_.clear();
     resetZones();
 
     for (int i = 1; i <= roombaCount_; i++) {
-        auto roomba = std::make_shared<Roomba>(i, roombaType_);
+        auto roomba = std::make_shared<Roomba>(i, static_cast<Roomba::Type>(roombaType_));
         roomba->setCurrentZone(nullptr);
         roomba->setState(Roomba::IDLE);
         roomba->setPosition(10.0, 10.0);
@@ -206,8 +422,12 @@ void ScreenManager::initializeRoombas() {
     }
 
     wchar_t msg[128];
-    swprintf_s(msg, L"Configuradas %d Roombas de tipo %s", roombaCount_,
-        roombas_.empty() ? L"N/A" : roombas_[0]->getTypeName());
+    swprintf_s(
+        msg,
+        L"Configuradas %d Roombas de tipo %s",
+        roombaCount_,
+        roombas_.empty() ? L"N/A" : roombas_[0]->getTypeName()
+    );
     addLog(msg);
 }
 
@@ -235,13 +455,18 @@ LRESULT CALLBACK ScreenManager::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, 
         CREATESTRUCT* pCreate = reinterpret_cast<CREATESTRUCT*>(lParam);
         mgr = reinterpret_cast<ScreenManager*>(pCreate->lpCreateParams);
         SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(mgr));
-        if (mgr) mgr->hwnd_ = hwnd;
+        if (mgr) {
+            mgr->hwnd_ = hwnd;
+        }
     }
     else {
         mgr = reinterpret_cast<ScreenManager*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
     }
 
-    if (mgr) return mgr->handleMessage(uMsg, wParam, lParam);
+    if (mgr) {
+        return mgr->handleMessage(uMsg, wParam, lParam);
+    }
+
     return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }
 
@@ -280,13 +505,15 @@ LRESULT ScreenManager::handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) {
         int x = GET_X_LPARAM(lParam);
         int y = GET_Y_LPARAM(lParam);
         int btnId = hitTestButton(x, y);
-        if (btnId > 0) handleButtonClick(btnId);
+        if (btnId > 0) {
+            handleButtonClick(btnId);
+        }
         return 0;
     }
 
     case WM_DESTROY:
         KillTimer(hwnd_, ID_TIMER_PAINT);
-        cleaningService_.stopCleaning();
+        cleaningService_->stopCleaning();
         PostQuitMessage(0);
         return 0;
     }
@@ -384,7 +611,7 @@ void ScreenManager::paintConfigScreen(HDC hdc, RECT& rect) {
         auto& zone = zones_[i];
         if (!zone) continue;
 
-        int zy = 425 + (int)i * 28;
+        int zy = 425 + static_cast<int>(i) * 28;
 
         HBRUSH zb = CreateSolidBrush(zoneColors[i]);
         RECT zr = { centerX - 295, zy + 2, centerX - 278, zy + 19 };
@@ -420,8 +647,8 @@ void ScreenManager::paintCleaningScreen(HDC hdc, RECT& rect) {
         auto& zone = zones_[i];
         if (!zone) continue;
 
-        int col = (int)(i % 2);
-        int row = (int)(i / 2);
+        int col = static_cast<int>(i % 2);
+        int row = static_cast<int>(i / 2);
         int x = startX + col * (zoneW + gap);
         int y = startY + row * (zoneH + gap);
 
@@ -443,13 +670,17 @@ void ScreenManager::paintCleaningScreen(HDC hdc, RECT& rect) {
 
     drawRoundRect(hdc, panelX, panelY, panelW, panelH, 12, COLOR_BG_LIGHT, COLOR_TEXT_DIM);
 
-    bool isRunning = cleaningService_.isRunning();
+    bool isRunning = cleaningService_->isRunning();
     drawText(hdc, L"Estado:", panelX + 15, panelY + 15, COLOR_TEXT, 16, true);
-    drawText(hdc,
+    drawText(
+        hdc,
         isRunning ? L"LIMPIANDO" : L"DETENIDO",
-        panelX + 92, panelY + 15,
+        panelX + 92,
+        panelY + 15,
         isRunning ? COLOR_SUCCESS : COLOR_WARNING,
-        16, true);
+        16,
+        true
+    );
 
     double totalProg = 0.0;
     int validZones = 0;
@@ -459,7 +690,9 @@ void ScreenManager::paintCleaningScreen(HDC hdc, RECT& rect) {
             validZones++;
         }
     }
-    if (validZones > 0) totalProg /= validZones;
+    if (validZones > 0) {
+        totalProg /= validZones;
+    }
 
     drawText(hdc, L"Progreso Total:", panelX + 15, panelY + 50, COLOR_TEXT, 14, false);
     drawProgressBar(hdc, panelX + 15, panelY + 72, panelW - 30, 22, totalProg, COLOR_SUCCESS);
@@ -473,12 +706,12 @@ void ScreenManager::paintCleaningScreen(HDC hdc, RECT& rect) {
         auto& z = zones_[i];
         if (!z) continue;
 
-        int zy = panelY + 138 + (int)i * 42;
+        int zy = panelY + 138 + static_cast<int>(i) * 42;
         drawText(hdc, z->getName(), panelX + 15, zy, COLOR_TEXT, 12, false);
         drawProgressBar(hdc, panelX + 15, zy + 17, panelW - 30, 15, z->getCleanedPercentage(), zoneColors[i]);
 
         wchar_t pctStr[16];
-        swprintf_s(pctStr, L"%.0f%%", z->getCleanedPercentage());
+        swprintf_s(pctStr, L"%.1f%%", z->getCleanedPercentage());
         drawText(hdc, pctStr, panelX + panelW - 58, zy - 1, zoneColors[i], 12, true);
     }
 
@@ -487,7 +720,7 @@ void ScreenManager::paintCleaningScreen(HDC hdc, RECT& rect) {
         auto& r = roombas_[i];
         if (!r) continue;
 
-        int ry = panelY + 346 + (int)i * 28;
+        int ry = panelY + 346 + static_cast<int>(i) * 28;
 
         COLORREF dotColor = r->getColor();
         if (r->getStuckCounter() > 10) {
@@ -516,14 +749,20 @@ void ScreenManager::paintCleaningScreen(HDC hdc, RECT& rect) {
         std::lock_guard<std::mutex> lock(logMutex_);
         int logY = panelY + 498;
         int cnt = 0;
-        for (int idx = (int)logs_.size() - 1; idx >= 0 && cnt < 7; idx--, cnt++) {
+        for (int idx = static_cast<int>(logs_.size()) - 1; idx >= 0 && cnt < 7; idx--, cnt++) {
             drawText(hdc, logs_[idx].c_str(), panelX + 15, logY + cnt * 16, COLOR_TEXT_DIM, 10, false);
         }
     }
 
-    addButton(ID_BTN_STOP, panelX + 15, panelY + 580, 160, 40,
+    addButton(
+        ID_BTN_STOP,
+        panelX + 15,
+        panelY + 580,
+        160,
+        40,
         isRunning ? L"DETENER" : L"REINICIAR",
-        isRunning ? COLOR_DANGER : COLOR_SUCCESS);
+        isRunning ? COLOR_DANGER : COLOR_SUCCESS
+    );
     addButton(ID_BTN_MENU, panelX + panelW - 175, panelY + 580, 160, 40, L"MENU", COLOR_TEXT_DIM);
 
     for (size_t i = 0; i < buttons_.size(); i++) {
@@ -531,7 +770,16 @@ void ScreenManager::paintCleaningScreen(HDC hdc, RECT& rect) {
     }
 }
 
-void ScreenManager::drawZoneMiniMap(HDC hdc, std::shared_ptr<Zone> zone, int x, int y, int w, int h, COLORREF accentColor, size_t zoneIndex) {
+void ScreenManager::drawZoneMiniMap(
+    HDC hdc,
+    std::shared_ptr<Zone> zone,
+    int x,
+    int y,
+    int w,
+    int h,
+    COLORREF accentColor,
+    size_t zoneIndex
+) {
     if (!zone) return;
 
     HBRUSH zoneBg = CreateSolidBrush(RGB(35, 37, 50));
@@ -548,7 +796,7 @@ void ScreenManager::drawZoneMiniMap(HDC hdc, std::shared_ptr<Zone> zone, int x, 
     drawText(hdc, zone->getName(), x + 12, y + 8, accentColor, 13, true);
 
     wchar_t pct[20];
-    swprintf_s(pct, L"%.0f%%", zone->getCleanedPercentage());
+    swprintf_s(pct, L"%.1f%%", zone->getCleanedPercentage());
     drawText(hdc, pct, x + w - 58, y + 8, accentColor, 13, true);
 
     int innerX = x + 10;
@@ -572,10 +820,10 @@ void ScreenManager::drawZoneMiniMap(HDC hdc, std::shared_ptr<Zone> zone, int x, 
         for (size_t col = 0; col < cleanedGrid[row].size(); ++col) {
             if (!cleanedGrid[row][col]) continue;
 
-            int cx = innerX + (int)(col * cellSize * scaleX);
-            int cy = innerY + (int)(row * cellSize * scaleY);
-            int cw = std::max(2, (int)std::ceil(cellSize * scaleX));
-            int ch = std::max(2, (int)std::ceil(cellSize * scaleY));
+            int cx = innerX + static_cast<int>(col * cellSize * scaleX);
+            int cy = innerY + static_cast<int>(row * cellSize * scaleY);
+            int cw = std::max(2, static_cast<int>(std::ceil(cellSize * scaleX)));
+            int ch = std::max(2, static_cast<int>(std::ceil(cellSize * scaleY)));
 
             HBRUSH cb = CreateSolidBrush(cleanColor);
             RECT cellRect = { cx, cy, cx + cw, cy + ch };
@@ -599,10 +847,10 @@ void ScreenManager::drawZoneMiniMap(HDC hdc, std::shared_ptr<Zone> zone, int x, 
         auto& obs = zone->getObstacles()[oi];
         if (!obs) continue;
 
-        int ox = innerX + (int)(obs->getX() * scaleX);
-        int oy = innerY + (int)(obs->getY() * scaleY);
-        int ow = std::max(6, (int)(obs->getWidth() * scaleX));
-        int oh = std::max(6, (int)(obs->getHeight() * scaleY));
+        int ox = innerX + static_cast<int>(obs->getX() * scaleX);
+        int oy = innerY + static_cast<int>(obs->getY() * scaleY);
+        int ow = std::max(6, static_cast<int>(obs->getWidth() * scaleX));
+        int oh = std::max(6, static_cast<int>(obs->getHeight() * scaleY));
 
         HBRUSH obsBr = CreateSolidBrush(RGB(92, 95, 120));
         HPEN obsPen = CreatePen(PS_SOLID, 1, RGB(135, 140, 170));
@@ -619,8 +867,8 @@ void ScreenManager::drawZoneMiniMap(HDC hdc, std::shared_ptr<Zone> zone, int x, 
     for (size_t j = start; j < trail.size(); j++) {
         auto& pt = trail[j];
 
-        int px = innerX + (int)(pt.x * scaleX);
-        int py = innerY + (int)(pt.y * scaleY);
+        int px = innerX + static_cast<int>(pt.x * scaleX);
+        int py = innerY + static_cast<int>(pt.y * scaleY);
 
         COLORREF trailColor = lightenColor(accentColor, 8);
         HBRUSH tb = CreateSolidBrush(trailColor);
@@ -641,8 +889,15 @@ void ScreenManager::drawZoneMiniMap(HDC hdc, std::shared_ptr<Zone> zone, int x, 
     drawText(hdc, info, x + 12, y + h - 22, COLOR_TEXT_DIM, 11, false);
 }
 
-void ScreenManager::drawRoombaOnZone(HDC hdc, std::shared_ptr<Roomba> roomba, std::shared_ptr<Zone> zone,
-    int zoneX, int zoneY, int zoneW, int zoneH) {
+void ScreenManager::drawRoombaOnZone(
+    HDC hdc,
+    std::shared_ptr<Roomba> roomba,
+    std::shared_ptr<Zone> zone,
+    int zoneX,
+    int zoneY,
+    int zoneW,
+    int zoneH
+) {
     if (!roomba || !zone) return;
 
     int innerX = zoneX + 10;
@@ -653,8 +908,8 @@ void ScreenManager::drawRoombaOnZone(HDC hdc, std::shared_ptr<Roomba> roomba, st
     double scaleX = innerW / zone->getLength();
     double scaleY = innerH / zone->getWidth();
 
-    int rx = innerX + (int)(roomba->getX() * scaleX);
-    int ry = innerY + (int)(roomba->getY() * scaleY);
+    int rx = innerX + static_cast<int>(roomba->getX() * scaleX);
+    int ry = innerY + static_cast<int>(roomba->getY() * scaleY);
 
     HBRUSH shadow = CreateSolidBrush(RGB(15, 16, 20));
     SelectObject(hdc, shadow);
@@ -690,7 +945,7 @@ void ScreenManager::drawRoombaOnZone(HDC hdc, std::shared_ptr<Roomba> roomba, st
     HPEN dirPen = CreatePen(PS_SOLID, 2, RGB(255, 255, 255));
     SelectObject(hdc, dirPen);
     MoveToEx(hdc, rx, ry, nullptr);
-    LineTo(hdc, rx + (int)(std::cos(ang) * 11), ry + (int)(std::sin(ang) * 11));
+    LineTo(hdc, rx + static_cast<int>(std::cos(ang) * 11), ry + static_cast<int>(std::sin(ang) * 11));
     DeleteObject(dirPen);
 
     wchar_t idStr[8];
@@ -712,9 +967,14 @@ void ScreenManager::drawText(HDC hdc, const wchar_t* text, int x, int y, COLORRE
     if (!text) return;
 
     HFONT font = CreateFont(
-        size, 0, 0, 0,
+        size,
+        0,
+        0,
+        0,
         bold ? FW_BOLD : FW_NORMAL,
-        FALSE, FALSE, FALSE,
+        FALSE,
+        FALSE,
+        FALSE,
         DEFAULT_CHARSET,
         OUT_DEFAULT_PRECIS,
         CLIP_DEFAULT_PRECIS,
@@ -726,7 +986,7 @@ void ScreenManager::drawText(HDC hdc, const wchar_t* text, int x, int y, COLORRE
     HFONT oldFont = (HFONT)SelectObject(hdc, font);
     SetTextColor(hdc, color);
     SetBkMode(hdc, TRANSPARENT);
-    TextOut(hdc, x, y, text, (int)wcslen(text));
+    TextOut(hdc, x, y, text, static_cast<int>(wcslen(text)));
     SelectObject(hdc, oldFont);
     DeleteObject(font);
 }
@@ -739,9 +999,11 @@ void ScreenManager::drawButton(HDC hdc, const Button& btn) {
 
     COLORREF textColor = COLOR_BG_DARK;
     int brightness = GetRValue(btn.color) + GetGValue(btn.color) + GetBValue(btn.color);
-    if (brightness < 400) textColor = COLOR_TEXT;
+    if (brightness < 400) {
+        textColor = COLOR_TEXT;
+    }
 
-    int textLen = (int)btn.text.length();
+    int textLen = static_cast<int>(btn.text.length());
     int textX = btn.rect.left + w / 2 - textLen * 4;
     int textY = btn.rect.top + h / 2 - 8;
     drawText(hdc, btn.text.c_str(), textX, textY, textColor, 16, true);
@@ -754,7 +1016,7 @@ void ScreenManager::drawProgressBar(HDC hdc, int x, int y, int w, int h, double 
     DeleteObject(bgBrush);
 
     if (progress > 0.0) {
-        int fillW = (int)(w * progress / 100.0);
+        int fillW = static_cast<int>(w * progress / 100.0);
         if (fillW > w) fillW = w;
         if (fillW < 0) fillW = 0;
 
@@ -804,7 +1066,7 @@ void ScreenManager::handleButtonClick(int id) {
     case ID_BTN_START:
         initializeRoombas();
         addLog(L"Iniciando limpieza...");
-        cleaningService_.startCleaning();
+        cleaningService_->startCleaning();
         changeScreen(SCREEN_CLEANING);
         break;
 
@@ -813,16 +1075,20 @@ void ScreenManager::handleButtonClick(int id) {
         break;
 
     case ID_BTN_EXIT:
-        cleaningService_.stopCleaning();
+        cleaningService_->stopCleaning();
         DestroyWindow(hwnd_);
         break;
 
     case ID_BTN_MINUS:
-        if (roombaCount_ > 1) roombaCount_--;
+        if (roombaCount_ > 1) {
+            roombaCount_--;
+        }
         break;
 
     case ID_BTN_PLUS:
-        if (roombaCount_ < 10) roombaCount_++;
+        if (roombaCount_ < 10) {
+            roombaCount_++;
+        }
         break;
 
     case ID_BTN_BASIC:
@@ -844,24 +1110,24 @@ void ScreenManager::handleButtonClick(int id) {
     case ID_BTN_BEGIN:
         initializeRoombas();
         addLog(L"Iniciando limpieza...");
-        cleaningService_.startCleaning();
+        cleaningService_->startCleaning();
         changeScreen(SCREEN_CLEANING);
         break;
 
     case ID_BTN_STOP:
-        if (cleaningService_.isRunning()) {
-            cleaningService_.stopCleaning();
+        if (cleaningService_->isRunning()) {
+            cleaningService_->stopCleaning();
             addLog(L"Limpieza detenida");
         }
         else {
             initializeRoombas();
-            cleaningService_.startCleaning();
+            cleaningService_->startCleaning();
             addLog(L"Limpieza reiniciada");
         }
         break;
 
     case ID_BTN_MENU:
-        cleaningService_.stopCleaning();
+        cleaningService_->stopCleaning();
         resetZones();
         roombas_.clear();
         changeScreen(SCREEN_START);
@@ -870,8 +1136,8 @@ void ScreenManager::handleButtonClick(int id) {
 }
 
 COLORREF ScreenManager::lightenColor(COLORREF color, int amount) {
-    int r = std::min(255, (int)GetRValue(color) + amount);
-    int g = std::min(255, (int)GetGValue(color) + amount);
-    int b = std::min(255, (int)GetBValue(color) + amount);
+    int r = std::min(255, static_cast<int>(GetRValue(color)) + amount);
+    int g = std::min(255, static_cast<int>(GetGValue(color)) + amount);
+    int b = std::min(255, static_cast<int>(GetBValue(color)) + amount);
     return RGB(r, g, b);
 }

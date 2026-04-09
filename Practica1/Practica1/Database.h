@@ -34,7 +34,9 @@ public:
 
     ~Database() {
         try {
-            if (logFile_.is_open()) logFile_.close();
+            if (logFile_.is_open()) {
+                logFile_.close();
+            }
         }
         catch (...) {}
     }

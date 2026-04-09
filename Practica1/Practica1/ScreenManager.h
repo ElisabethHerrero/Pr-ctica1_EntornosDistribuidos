@@ -9,9 +9,10 @@
 #include <vector>
 #include <string>
 #include <mutex>
-#include "CleaningService.h"
-#include "Database.h"
-#include "EventService.h"
+
+class CleaningService;
+class Zone;
+class Roomba;
 
 #define SCREEN_START 0
 #define SCREEN_CONFIG 1
@@ -45,14 +46,14 @@ private:
     HINSTANCE hInstance_;
     int currentScreen_;
 
-    CleaningService cleaningService_;
+    std::unique_ptr<CleaningService> cleaningService_;
     std::vector<std::shared_ptr<Zone>> zones_;
     std::vector<std::shared_ptr<Roomba>> roombas_;
     std::vector<std::wstring> logs_;
     std::mutex logMutex_;
 
     int roombaCount_;
-    Roomba::Type roombaType_;
+    int roombaType_;
 
     struct Button {
         int id;
@@ -81,8 +82,15 @@ private:
     void drawButton(HDC hdc, const Button& btn);
     void drawProgressBar(HDC hdc, int x, int y, int w, int h, double progress, COLORREF color);
     void drawZoneMiniMap(HDC hdc, std::shared_ptr<Zone> zone, int x, int y, int w, int h, COLORREF accentColor, size_t zoneIndex);
-    void drawRoombaOnZone(HDC hdc, std::shared_ptr<Roomba> roomba, std::shared_ptr<Zone> zone,
-        int zoneX, int zoneY, int zoneW, int zoneH);
+    void drawRoombaOnZone(
+        HDC hdc,
+        std::shared_ptr<Roomba> roomba,
+        std::shared_ptr<Zone> zone,
+        int zoneX,
+        int zoneY,
+        int zoneW,
+        int zoneH
+    );
 
     void addButton(int id, int x, int y, int w, int h, const wchar_t* text, COLORREF color);
     void clearButtons();
