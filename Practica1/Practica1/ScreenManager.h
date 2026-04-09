@@ -11,6 +11,7 @@
 #include <mutex>
 #include "CleaningService.h"
 #include "Database.h"
+#include "EventService.h"
 
 #define SCREEN_START 0
 #define SCREEN_CONFIG 1
@@ -18,6 +19,7 @@
 
 #define COLOR_BG_DARK      RGB(30, 30, 46)
 #define COLOR_BG_LIGHT     RGB(49, 50, 68)
+#define COLOR_PANEL        RGB(39, 40, 58)
 #define COLOR_PRIMARY      RGB(137, 180, 250)
 #define COLOR_SECONDARY    RGB(166, 227, 161)
 #define COLOR_TEXT         RGB(205, 214, 244)
@@ -65,6 +67,7 @@ private:
 
     void initializeZones();
     void initializeRoombas();
+    void resetZones();
     void changeScreen(int screenId);
     void addLog(const wchar_t* msg);
 
@@ -77,9 +80,14 @@ private:
     void drawText(HDC hdc, const wchar_t* text, int x, int y, COLORREF color, int size, bool bold);
     void drawButton(HDC hdc, const Button& btn);
     void drawProgressBar(HDC hdc, int x, int y, int w, int h, double progress, COLORREF color);
+    void drawZoneMiniMap(HDC hdc, std::shared_ptr<Zone> zone, int x, int y, int w, int h, COLORREF accentColor, size_t zoneIndex);
+    void drawRoombaOnZone(HDC hdc, std::shared_ptr<Roomba> roomba, std::shared_ptr<Zone> zone,
+        int zoneX, int zoneY, int zoneW, int zoneH);
 
     void addButton(int id, int x, int y, int w, int h, const wchar_t* text, COLORREF color);
     void clearButtons();
     int hitTestButton(int x, int y);
     void handleButtonClick(int id);
+
+    COLORREF lightenColor(COLORREF color, int amount);
 };

@@ -7,6 +7,8 @@
 #include <commctrl.h>
 #include <random>
 #include <cmath>
+#include <algorithm>
+#include <cwchar>
 
 #pragma comment(lib, "comctl32.lib")
 #pragma comment(lib, "msimg32.lib")
@@ -30,12 +32,16 @@
 #endif
 
 ScreenManager::ScreenManager()
-    : hwnd_(nullptr), hInstance_(nullptr), currentScreen_(SCREEN_START),
-    roombaCount_(3), roombaType_(Roomba::ADVANCED) {
+    : hwnd_(nullptr),
+    hInstance_(nullptr),
+    currentScreen_(SCREEN_START),
+    roombaCount_(3),
+    roombaType_(Roomba::ADVANCED) {
 }
 
 ScreenManager::~ScreenManager() {
     cleaningService_.stopCleaning();
+    EventService::getInstance().clearSubscriptions();
 }
 
 bool ScreenManager::initialize() {
@@ -77,6 +83,12 @@ bool ScreenManager::initialize() {
     if (!hwnd_) return false;
 
     Database::getInstance().initialize();
+
+    EventService::getInstance().clearSubscriptions();
+    EventService::getInstance().subscribe([this](const wchar_t* msg) {
+        this->addLog(msg);
+        });
+
     initializeZones();
 
     cleaningService_.setZones(&zones_);
@@ -115,22 +127,66 @@ void ScreenManager::initializeZones() {
         auto& zone = zones_[i];
         if (!zone) continue;
 
-        double maxX = zone->getLength() * 0.5;
-        double maxY = zone->getWidth() * 0.5;
+        double zoneLength = zone->getLength();
+        double zoneWidth = zone->getWidth();
 
-        if (maxX > 40 && maxY > 40) {
-            std::uniform_real_distribution<double> disX(30.0, maxX);
-            std::uniform_real_distribution<double> disY(30.0, maxY);
-            std::uniform_real_distribution<double> disSize(25.0, 45.0);
+        int numObs = (zone->getArea() > 50000.0) ? 2 : 1;
 
-            int numObs = (zone->getArea() > 50000) ? 2 : 1;
+        std::uniform_real_distribution<double> disW(22.0, 42.0);
+        std::uniform_real_distribution<double> disH(22.0, 42.0);
 
-            for (int j = 0; j < numObs; j++) {
-                auto obs = std::make_shared<Obstacle>(
-                    disX(gen), disY(gen), disSize(gen), disSize(gen), Obstacle::FURNITURE
-                );
-                zone->addObstacle(obs);
+        int created = 0;
+        int attempts = 0;
+
+        while (created < numObs && attempts < 100) {
+            attempts++;
+
+            double ow = disW(gen);
+            double oh = disH(gen);
+
+            if (zoneLength - ow - 20.0 <= 20.0 || zoneWidth - oh - 20.0 <= 20.0) {
+                continue;
             }
+
+            std::uniform_real_distribution<double> disX(20.0, zoneLength - ow - 20.0);
+            std::uniform_real_distribution<double> disY(20.0, zoneWidth - oh - 20.0);
+
+            double ox = disX(gen);
+            double oy = disY(gen);
+
+            bool overlaps = false;
+
+            for (const auto& existing : zone->getObstacles()) {
+                if (!existing) continue;
+
+                double margin = 12.0;
+
+                bool intersect =
+                    ox < existing->getX() + existing->getWidth() + margin &&
+                    ox + ow + margin > existing->getX() &&
+                    oy < existing->getY() + existing->getHeight() + margin &&
+                    oy + oh + margin > existing->getY();
+
+                if (intersect) {
+                    overlaps = true;
+                    break;
+                }
+            }
+
+            if (!overlaps) {
+                zone->addObstacle(std::make_shared<Obstacle>(
+                    ox, oy, ow, oh, Obstacle::FURNITURE
+                ));
+                created++;
+            }
+        }
+    }
+}
+
+void ScreenManager::resetZones() {
+    for (size_t i = 0; i < zones_.size(); i++) {
+        if (zones_[i]) {
+            zones_[i]->resetCleaning();
         }
     }
 }
@@ -138,20 +194,20 @@ void ScreenManager::initializeZones() {
 void ScreenManager::initializeRoombas() {
     cleaningService_.stopCleaning();
     roombas_.clear();
-
-    for (size_t i = 0; i < zones_.size(); i++) {
-        if (zones_[i]) {
-            zones_[i]->setCleanedPercentage(0.0);
-            zones_[i]->clearTrail();
-        }
-    }
+    resetZones();
 
     for (int i = 1; i <= roombaCount_; i++) {
-        roombas_.push_back(std::make_shared<Roomba>(i, roombaType_));
+        auto roomba = std::make_shared<Roomba>(i, roombaType_);
+        roomba->setCurrentZone(nullptr);
+        roomba->setState(Roomba::IDLE);
+        roomba->setPosition(10.0, 10.0);
+        roomba->setAngle(0.0);
+        roombas_.push_back(roomba);
     }
 
     wchar_t msg[128];
-    wsprintf(msg, L"Configuradas %d Roombas", roombaCount_);
+    swprintf_s(msg, L"Configuradas %d Roombas de tipo %s", roombaCount_,
+        roombas_.empty() ? L"N/A" : roombas_[0]->getTypeName());
     addLog(msg);
 }
 
@@ -163,9 +219,10 @@ void ScreenManager::changeScreen(int screenId) {
 
 void ScreenManager::addLog(const wchar_t* msg) {
     if (!msg) return;
+
     std::lock_guard<std::mutex> lock(logMutex_);
     logs_.push_back(std::wstring(msg));
-    if (logs_.size() > 30) {
+    if (logs_.size() > 40) {
         logs_.erase(logs_.begin());
     }
     Database::getInstance().logEvent(msg);
@@ -245,9 +302,15 @@ void ScreenManager::paintScreen(HDC hdc, RECT& rect) {
     clearButtons();
 
     switch (currentScreen_) {
-    case SCREEN_START: paintStartScreen(hdc, rect); break;
-    case SCREEN_CONFIG: paintConfigScreen(hdc, rect); break;
-    case SCREEN_CLEANING: paintCleaningScreen(hdc, rect); break;
+    case SCREEN_START:
+        paintStartScreen(hdc, rect);
+        break;
+    case SCREEN_CONFIG:
+        paintConfigScreen(hdc, rect);
+        break;
+    case SCREEN_CLEANING:
+        paintCleaningScreen(hdc, rect);
+        break;
     }
 }
 
@@ -255,82 +318,87 @@ void ScreenManager::paintStartScreen(HDC hdc, RECT& rect) {
     int centerX = rect.right / 2;
     int centerY = rect.bottom / 2;
 
-    drawText(hdc, L"SISTEMA DISTRIBUIDO", centerX - 180, centerY - 200, COLOR_TEXT, 32, true);
-    drawText(hdc, L"ROOMBA", centerX - 80, centerY - 140, COLOR_PRIMARY, 48, true);
-    drawText(hdc, L"Programacion en Entornos Distribuidos", centerX - 180, centerY - 80, COLOR_TEXT_DIM, 16, false);
+    drawText(hdc, L"SISTEMA DISTRIBUIDO", centerX - 200, centerY - 220, COLOR_TEXT, 34, true);
+    drawText(hdc, L"ROOMBA", centerX - 95, centerY - 155, COLOR_PRIMARY, 54, true);
+    drawText(hdc, L"Programacion en Entornos Distribuidos", centerX - 190, centerY - 90, COLOR_TEXT_DIM, 16, false);
 
-    HBRUSH roomBrush = CreateSolidBrush(COLOR_PRIMARY);
-    HPEN roomPen = CreatePen(PS_SOLID, 3, COLOR_SECONDARY);
-    SelectObject(hdc, roomBrush);
-    SelectObject(hdc, roomPen);
-    Ellipse(hdc, centerX - 50, centerY - 30, centerX + 50, centerY + 70);
-    DeleteObject(roomBrush);
-    DeleteObject(roomPen);
+    drawRoundRect(hdc, centerX - 140, centerY - 20, 280, 95, 25, COLOR_PANEL, COLOR_PRIMARY);
+
+    HBRUSH robotBrush = CreateSolidBrush(COLOR_PRIMARY);
+    HPEN robotPen = CreatePen(PS_SOLID, 3, COLOR_SECONDARY);
+    SelectObject(hdc, robotBrush);
+    SelectObject(hdc, robotPen);
+    Ellipse(hdc, centerX - 45, centerY - 5, centerX + 45, centerY + 85);
+    DeleteObject(robotBrush);
+    DeleteObject(robotPen);
 
     HBRUSH eyeBrush = CreateSolidBrush(COLOR_BG_DARK);
     SelectObject(hdc, eyeBrush);
     SelectObject(hdc, GetStockObject(NULL_PEN));
-    Ellipse(hdc, centerX - 25, centerY + 5, centerX - 10, centerY + 20);
-    Ellipse(hdc, centerX + 10, centerY + 5, centerX + 25, centerY + 20);
+    Ellipse(hdc, centerX - 22, centerY + 26, centerX - 9, centerY + 39);
+    Ellipse(hdc, centerX + 9, centerY + 26, centerX + 22, centerY + 39);
     DeleteObject(eyeBrush);
 
-    int btnY = centerY + 120;
-    addButton(ID_BTN_START, centerX - 140, btnY, 280, 55, L"INICIAR", COLOR_SUCCESS);
-    addButton(ID_BTN_CONFIG, centerX - 140, btnY + 70, 280, 55, L"CONFIGURAR", COLOR_PRIMARY);
-    addButton(ID_BTN_EXIT, centerX - 140, btnY + 140, 280, 55, L"SALIR", COLOR_DANGER);
+    int btnY = centerY + 130;
+    addButton(ID_BTN_START, centerX - 150, btnY, 300, 58, L"INICIAR", COLOR_SUCCESS);
+    addButton(ID_BTN_CONFIG, centerX - 150, btnY + 72, 300, 58, L"CONFIGURAR", COLOR_PRIMARY);
+    addButton(ID_BTN_EXIT, centerX - 150, btnY + 144, 300, 58, L"SALIR", COLOR_DANGER);
 
     for (size_t i = 0; i < buttons_.size(); i++) {
         drawButton(hdc, buttons_[i]);
     }
 
-    drawText(hdc, L"v2.0", rect.right - 60, rect.bottom - 30, COLOR_TEXT_DIM, 12, false);
+    drawText(hdc, L"Visualizacion sincronizada con limpieza real", centerX - 170, rect.bottom - 55, COLOR_TEXT_DIM, 14, false);
+    drawText(hdc, L"v2.1", rect.right - 60, rect.bottom - 30, COLOR_TEXT_DIM, 12, false);
 }
 
 void ScreenManager::paintConfigScreen(HDC hdc, RECT& rect) {
     int centerX = rect.right / 2;
 
-    drawText(hdc, L"CONFIGURACION", centerX - 100, 30, COLOR_TEXT, 28, true);
-    drawRoundRect(hdc, centerX - 320, 80, 640, 500, 15, COLOR_BG_LIGHT, COLOR_TEXT_DIM);
+    drawText(hdc, L"CONFIGURACION", centerX - 115, 30, COLOR_TEXT, 28, true);
+    drawRoundRect(hdc, centerX - 340, 80, 680, 530, 16, COLOR_BG_LIGHT, COLOR_TEXT_DIM);
 
-    drawText(hdc, L"Numero de Roombas:", centerX - 280, 120, COLOR_TEXT, 18, true);
-    addButton(ID_BTN_MINUS, centerX - 80, 155, 50, 50, L"-", COLOR_DANGER);
+    drawText(hdc, L"Numero de Roombas:", centerX - 295, 120, COLOR_TEXT, 18, true);
+    addButton(ID_BTN_MINUS, centerX - 90, 155, 52, 52, L"-", COLOR_DANGER);
 
     wchar_t countStr[8];
-    wsprintf(countStr, L"%d", roombaCount_);
-    drawText(hdc, countStr, centerX - 8, 167, COLOR_PRIMARY, 28, true);
+    swprintf_s(countStr, L"%d", roombaCount_);
+    drawText(hdc, countStr, centerX - 8, 168, COLOR_PRIMARY, 28, true);
 
-    addButton(ID_BTN_PLUS, centerX + 30, 155, 50, 50, L"+", COLOR_SUCCESS);
+    addButton(ID_BTN_PLUS, centerX + 38, 155, 52, 52, L"+", COLOR_SUCCESS);
 
-    drawText(hdc, L"Tipo de Roomba:", centerX - 280, 240, COLOR_TEXT, 18, true);
+    drawText(hdc, L"Tipo de Roomba:", centerX - 295, 245, COLOR_TEXT, 18, true);
 
     COLORREF c1 = (roombaType_ == Roomba::BASIC) ? COLOR_PRIMARY : RGB(70, 70, 90);
     COLORREF c2 = (roombaType_ == Roomba::ADVANCED) ? COLOR_SUCCESS : RGB(70, 70, 90);
     COLORREF c3 = (roombaType_ == Roomba::PREMIUM) ? COLOR_DANGER : RGB(70, 70, 90);
 
-    addButton(ID_BTN_BASIC, centerX - 280, 280, 180, 65, L"BASICA", c1);
-    addButton(ID_BTN_ADVANCED, centerX - 90, 280, 180, 65, L"AVANZADA", c2);
-    addButton(ID_BTN_PREMIUM, centerX + 100, 280, 180, 65, L"PREMIUM", c3);
+    addButton(ID_BTN_BASIC, centerX - 295, 285, 190, 65, L"BASICA", c1);
+    addButton(ID_BTN_ADVANCED, centerX - 95, 285, 190, 65, L"AVANZADA", c2);
+    addButton(ID_BTN_PREMIUM, centerX + 105, 285, 190, 65, L"PREMIUM", c3);
 
-    drawText(hdc, L"Zonas:", centerX - 280, 380, COLOR_TEXT, 16, true);
+    drawText(hdc, L"Zonas disponibles:", centerX - 295, 390, COLOR_TEXT, 16, true);
 
     COLORREF zoneColors[] = { COLOR_ZONE1, COLOR_ZONE2, COLOR_ZONE3, COLOR_ZONE4 };
     for (size_t i = 0; i < zones_.size(); i++) {
         auto& zone = zones_[i];
         if (!zone) continue;
 
-        int zy = 410 + (int)i * 22;
+        int zy = 425 + (int)i * 28;
+
         HBRUSH zb = CreateSolidBrush(zoneColors[i]);
-        RECT zr = { centerX - 280, zy, centerX - 265, zy + 15 };
+        RECT zr = { centerX - 295, zy + 2, centerX - 278, zy + 19 };
         FillRect(hdc, &zr, zb);
         DeleteObject(zb);
 
-        wchar_t info[128];
-        wsprintf(info, L"%s - %d cm2", zone->getName(), (int)zone->getArea());
-        drawText(hdc, info, centerX - 255, zy, COLOR_TEXT, 12, false);
+        wchar_t info[160];
+        swprintf_s(info, L"%s - %.0f cm x %.0f cm (%.0f cm2)",
+            zone->getName(), zone->getLength(), zone->getWidth(), zone->getArea());
+        drawText(hdc, info, centerX - 270, zy, COLOR_TEXT, 12, false);
     }
 
-    addButton(ID_BTN_BACK, centerX - 280, 530, 180, 45, L"VOLVER", COLOR_TEXT_DIM);
-    addButton(ID_BTN_BEGIN, centerX + 100, 530, 180, 45, L"COMENZAR", COLOR_SUCCESS);
+    addButton(ID_BTN_BACK, centerX - 295, 548, 190, 46, L"VOLVER", COLOR_TEXT_DIM);
+    addButton(ID_BTN_BEGIN, centerX + 105, 548, 190, 46, L"COMENZAR", COLOR_SUCCESS);
 
     for (size_t i = 0; i < buttons_.size(); i++) {
         drawButton(hdc, buttons_[i]);
@@ -340,171 +408,294 @@ void ScreenManager::paintConfigScreen(HDC hdc, RECT& rect) {
 void ScreenManager::paintCleaningScreen(HDC hdc, RECT& rect) {
     drawText(hdc, L"LIMPIEZA EN PROGRESO", 20, 12, COLOR_TEXT, 22, true);
 
-    int zoneW = 400, zoneH = 280, gap = 15;
-    int startX = 20, startY = 50;
+    int zoneW = 400;
+    int zoneH = 280;
+    int gap = 15;
+    int startX = 20;
+    int startY = 50;
 
     COLORREF zoneColors[] = { COLOR_ZONE1, COLOR_ZONE2, COLOR_ZONE3, COLOR_ZONE4 };
-    COLORREF trailColors[] = { RGB(100, 150, 220), RGB(100, 200, 130), RGB(220, 200, 100), RGB(220, 120, 130) };
 
     for (size_t i = 0; i < zones_.size(); i++) {
         auto& zone = zones_[i];
         if (!zone) continue;
 
-        int col = i % 2;
-        int row = i / 2;
+        int col = (int)(i % 2);
+        int row = (int)(i / 2);
         int x = startX + col * (zoneW + gap);
         int y = startY + row * (zoneH + gap);
 
-        HBRUSH zoneBg = CreateSolidBrush(RGB(35, 37, 50));
-        RECT zoneRect = { x, y, x + zoneW, y + zoneH };
-        FillRect(hdc, &zoneRect, zoneBg);
-        DeleteObject(zoneBg);
-
-        HPEN borderPen = CreatePen(PS_SOLID, 2, zoneColors[i]);
-        SelectObject(hdc, borderPen);
-        SelectObject(hdc, GetStockObject(NULL_BRUSH));
-        RoundRect(hdc, x, y, x + zoneW, y + zoneH, 8, 8);
-        DeleteObject(borderPen);
-
-        drawText(hdc, zone->getName(), x + 10, y + 5, zoneColors[i], 13, true);
-
-        wchar_t pct[16];
-        wsprintf(pct, L"%.0f%%", zone->getCleanedPercentage());
-        drawText(hdc, pct, x + zoneW - 50, y + 5, zoneColors[i], 13, true);
-
-        double scaleX = (zoneW - 20.0) / zone->getLength();
-        double scaleY = (zoneH - 35.0) / zone->getWidth();
-        int contentY = y + 25;
-
-        auto trail = zone->getTrailPointsCopy();
-        size_t start = (trail.size() > 500) ? trail.size() - 500 : 0;
-        for (size_t j = start; j < trail.size(); j++) {
-            auto& pt = trail[j];
-            int px = x + 10 + (int)(pt.x * scaleX);
-            int py = contentY + (int)(pt.y * scaleY);
-
-            int colorIdx = (pt.roombaId - 1) % 4;
-            if (colorIdx < 0) colorIdx = 0;
-
-            HBRUSH tb = CreateSolidBrush(trailColors[colorIdx]);
-            SelectObject(hdc, tb);
-            SelectObject(hdc, GetStockObject(NULL_PEN));
-            Ellipse(hdc, px - 2, py - 2, px + 2, py + 2);
-            DeleteObject(tb);
-        }
-
-        for (size_t oi = 0; oi < zone->getObstacles().size(); oi++) {
-            auto& obs = zone->getObstacles()[oi];
-            if (!obs) continue;
-            int ox = x + 10 + (int)(obs->getX() * scaleX);
-            int oy = contentY + (int)(obs->getY() * scaleY);
-            int ow = (int)(obs->getWidth() * scaleX);
-            int oh = (int)(obs->getHeight() * scaleY);
-
-            HBRUSH obsBr = CreateSolidBrush(RGB(70, 70, 90));
-            RECT obsRect = { ox, oy, ox + ow, oy + oh };
-            FillRect(hdc, &obsRect, obsBr);
-            DeleteObject(obsBr);
-        }
+        drawZoneMiniMap(hdc, zone, x, y, zoneW, zoneH, zoneColors[i], i);
 
         for (size_t ri = 0; ri < roombas_.size(); ri++) {
             auto& roomba = roombas_[ri];
             if (!roomba) continue;
             if (roomba->getCurrentZone() != zone) continue;
-            if (roomba->getState() != Roomba::CLEANING) continue;
 
-            int rx = x + 10 + (int)(roomba->getX() * scaleX);
-            int ry = contentY + (int)(roomba->getY() * scaleY);
-
-            HBRUSH shadow = CreateSolidBrush(RGB(0, 0, 0));
-            SelectObject(hdc, shadow);
-            Ellipse(hdc, rx - 8, ry - 8, rx + 12, ry + 12);
-            DeleteObject(shadow);
-
-            HBRUSH body = CreateSolidBrush(roomba->getColor());
-            HPEN bodyPen = CreatePen(PS_SOLID, 2, RGB(255, 255, 255));
-            SelectObject(hdc, body);
-            SelectObject(hdc, bodyPen);
-            Ellipse(hdc, rx - 10, ry - 10, rx + 10, ry + 10);
-            DeleteObject(body);
-            DeleteObject(bodyPen);
-
-            double ang = roomba->getAngle();
-            HPEN dirPen = CreatePen(PS_SOLID, 2, RGB(255, 255, 255));
-            SelectObject(hdc, dirPen);
-            MoveToEx(hdc, rx, ry, nullptr);
-            LineTo(hdc, rx + (int)(cos(ang) * 10), ry + (int)(sin(ang) * 10));
-            DeleteObject(dirPen);
-
-            wchar_t idStr[8];
-            wsprintf(idStr, L"%d", roomba->getId());
-            drawText(hdc, idStr, rx - 4, ry - 6, RGB(255, 255, 255), 10, true);
+            drawRoombaOnZone(hdc, roomba, zone, x, y, zoneW, zoneH);
         }
     }
 
-    int panelX = 855, panelY = 50, panelW = 520;
-    drawRoundRect(hdc, panelX, panelY, panelW, 620, 12, COLOR_BG_LIGHT, COLOR_TEXT_DIM);
+    int panelX = 855;
+    int panelY = 50;
+    int panelW = 520;
+    int panelH = 625;
+
+    drawRoundRect(hdc, panelX, panelY, panelW, panelH, 12, COLOR_BG_LIGHT, COLOR_TEXT_DIM);
 
     bool isRunning = cleaningService_.isRunning();
     drawText(hdc, L"Estado:", panelX + 15, panelY + 15, COLOR_TEXT, 16, true);
-    drawText(hdc, isRunning ? L"LIMPIANDO" : L"DETENIDO", panelX + 90, panelY + 15,
-        isRunning ? COLOR_SUCCESS : COLOR_WARNING, 16, true);
+    drawText(hdc,
+        isRunning ? L"LIMPIANDO" : L"DETENIDO",
+        panelX + 92, panelY + 15,
+        isRunning ? COLOR_SUCCESS : COLOR_WARNING,
+        16, true);
 
-    double totalProg = 0;
+    double totalProg = 0.0;
+    int validZones = 0;
     for (size_t i = 0; i < zones_.size(); i++) {
-        if (zones_[i]) totalProg += zones_[i]->getCleanedPercentage();
+        if (zones_[i]) {
+            totalProg += zones_[i]->getCleanedPercentage();
+            validZones++;
+        }
     }
-    if (!zones_.empty()) totalProg /= zones_.size();
+    if (validZones > 0) totalProg /= validZones;
 
     drawText(hdc, L"Progreso Total:", panelX + 15, panelY + 50, COLOR_TEXT, 14, false);
     drawProgressBar(hdc, panelX + 15, panelY + 72, panelW - 30, 22, totalProg, COLOR_SUCCESS);
 
-    wchar_t progStr[16];
-    wsprintf(progStr, L"%.1f%%", totalProg);
-    drawText(hdc, progStr, panelX + panelW / 2 - 25, panelY + 74, COLOR_BG_DARK, 12, true);
+    wchar_t progStr[24];
+    swprintf_s(progStr, L"%.1f%%", totalProg);
+    drawText(hdc, progStr, panelX + panelW / 2 - 24, panelY + 74, COLOR_BG_DARK, 12, true);
 
-    drawText(hdc, L"Por Zona:", panelX + 15, panelY + 110, COLOR_TEXT, 14, true);
+    drawText(hdc, L"Por Zona:", panelX + 15, panelY + 112, COLOR_TEXT, 14, true);
     for (size_t i = 0; i < zones_.size(); i++) {
         auto& z = zones_[i];
         if (!z) continue;
-        int zy = panelY + 135 + (int)i * 38;
+
+        int zy = panelY + 138 + (int)i * 42;
         drawText(hdc, z->getName(), panelX + 15, zy, COLOR_TEXT, 12, false);
-        drawProgressBar(hdc, panelX + 15, zy + 16, panelW - 30, 14, z->getCleanedPercentage(), zoneColors[i]);
+        drawProgressBar(hdc, panelX + 15, zy + 17, panelW - 30, 15, z->getCleanedPercentage(), zoneColors[i]);
+
+        wchar_t pctStr[16];
+        swprintf_s(pctStr, L"%.0f%%", z->getCleanedPercentage());
+        drawText(hdc, pctStr, panelX + panelW - 58, zy - 1, zoneColors[i], 12, true);
     }
 
-    drawText(hdc, L"Roombas:", panelX + 15, panelY + 300, COLOR_TEXT, 14, true);
+    drawText(hdc, L"Roombas:", panelX + 15, panelY + 320, COLOR_TEXT, 14, true);
     for (size_t i = 0; i < roombas_.size(); i++) {
         auto& r = roombas_[i];
         if (!r) continue;
-        int ry = panelY + 325 + (int)i * 24;
 
-        HBRUSH rb = CreateSolidBrush(r->getColor());
+        int ry = panelY + 346 + (int)i * 28;
+
+        COLORREF dotColor = r->getColor();
+        if (r->getStuckCounter() > 10) {
+            dotColor = RGB(255, 140, 0);
+        }
+
+        HBRUSH rb = CreateSolidBrush(dotColor);
         SelectObject(hdc, rb);
-        Ellipse(hdc, panelX + 15, ry, panelX + 28, ry + 13);
+        SelectObject(hdc, GetStockObject(NULL_PEN));
+        Ellipse(hdc, panelX + 15, ry, panelX + 30, ry + 15);
         DeleteObject(rb);
 
-        wchar_t info[64];
-        wsprintf(info, L"#%d - %s", r->getId(), r->getStateName());
-        drawText(hdc, info, panelX + 35, ry, COLOR_TEXT, 11, false);
+        wchar_t info[128];
+        auto zone = r->getCurrentZone();
+        if (zone) {
+            swprintf_s(info, L"#%d - %s - %s", r->getId(), r->getStateName(), zone->getName());
+        }
+        else {
+            swprintf_s(info, L"#%d - %s", r->getId(), r->getStateName());
+        }
+        drawText(hdc, info, panelX + 38, ry, COLOR_TEXT, 11, false);
     }
 
-    drawText(hdc, L"Log:", panelX + 15, panelY + 480, COLOR_TEXT, 14, true);
+    drawText(hdc, L"Log:", panelX + 15, panelY + 470, COLOR_TEXT, 14, true);
     {
         std::lock_guard<std::mutex> lock(logMutex_);
-        int logY = panelY + 505;
+        int logY = panelY + 498;
         int cnt = 0;
-        for (int idx = (int)logs_.size() - 1; idx >= 0 && cnt < 5; idx--, cnt++) {
-            drawText(hdc, logs_[idx].c_str(), panelX + 15, logY + cnt * 15, COLOR_TEXT_DIM, 10, false);
+        for (int idx = (int)logs_.size() - 1; idx >= 0 && cnt < 7; idx--, cnt++) {
+            drawText(hdc, logs_[idx].c_str(), panelX + 15, logY + cnt * 16, COLOR_TEXT_DIM, 10, false);
         }
     }
 
-    addButton(ID_BTN_STOP, panelX + 15, panelY + 590, 150, 40, isRunning ? L"DETENER" : L"REINICIAR",
+    addButton(ID_BTN_STOP, panelX + 15, panelY + 580, 160, 40,
+        isRunning ? L"DETENER" : L"REINICIAR",
         isRunning ? COLOR_DANGER : COLOR_SUCCESS);
-    addButton(ID_BTN_MENU, panelX + panelW - 165, panelY + 590, 150, 40, L"MENU", COLOR_TEXT_DIM);
+    addButton(ID_BTN_MENU, panelX + panelW - 175, panelY + 580, 160, 40, L"MENU", COLOR_TEXT_DIM);
 
     for (size_t i = 0; i < buttons_.size(); i++) {
         drawButton(hdc, buttons_[i]);
     }
+}
+
+void ScreenManager::drawZoneMiniMap(HDC hdc, std::shared_ptr<Zone> zone, int x, int y, int w, int h, COLORREF accentColor, size_t zoneIndex) {
+    if (!zone) return;
+
+    HBRUSH zoneBg = CreateSolidBrush(RGB(35, 37, 50));
+    RECT zoneRect = { x, y, x + w, y + h };
+    FillRect(hdc, &zoneRect, zoneBg);
+    DeleteObject(zoneBg);
+
+    HPEN borderPen = CreatePen(PS_SOLID, 2, accentColor);
+    SelectObject(hdc, borderPen);
+    SelectObject(hdc, GetStockObject(NULL_BRUSH));
+    RoundRect(hdc, x, y, x + w, y + h, 10, 10);
+    DeleteObject(borderPen);
+
+    drawText(hdc, zone->getName(), x + 12, y + 8, accentColor, 13, true);
+
+    wchar_t pct[20];
+    swprintf_s(pct, L"%.0f%%", zone->getCleanedPercentage());
+    drawText(hdc, pct, x + w - 58, y + 8, accentColor, 13, true);
+
+    int innerX = x + 10;
+    int innerY = y + 30;
+    int innerW = w - 20;
+    int innerH = h - 40;
+
+    HBRUSH floorBrush = CreateSolidBrush(RGB(44, 46, 65));
+    RECT floorRect = { innerX, innerY, innerX + innerW, innerY + innerH };
+    FillRect(hdc, &floorRect, floorBrush);
+    DeleteObject(floorBrush);
+
+    double scaleX = innerW / zone->getLength();
+    double scaleY = innerH / zone->getWidth();
+
+    auto cleanedGrid = zone->getGrid();
+    double cellSize = zone->getCellSize();
+    COLORREF cleanColor = lightenColor(accentColor, 30);
+
+    for (size_t row = 0; row < cleanedGrid.size(); ++row) {
+        for (size_t col = 0; col < cleanedGrid[row].size(); ++col) {
+            if (!cleanedGrid[row][col]) continue;
+
+            int cx = innerX + (int)(col * cellSize * scaleX);
+            int cy = innerY + (int)(row * cellSize * scaleY);
+            int cw = std::max(2, (int)std::ceil(cellSize * scaleX));
+            int ch = std::max(2, (int)std::ceil(cellSize * scaleY));
+
+            HBRUSH cb = CreateSolidBrush(cleanColor);
+            RECT cellRect = { cx, cy, cx + cw, cy + ch };
+            FillRect(hdc, &cellRect, cb);
+            DeleteObject(cb);
+        }
+    }
+
+    HBRUSH gridBrush = CreateSolidBrush(RGB(58, 60, 82));
+    for (int gx = innerX; gx < innerX + innerW; gx += 28) {
+        RECT lineRect = { gx, innerY, gx + 1, innerY + innerH };
+        FillRect(hdc, &lineRect, gridBrush);
+    }
+    for (int gy = innerY; gy < innerY + innerH; gy += 28) {
+        RECT lineRect = { innerX, gy, innerX + innerW, gy + 1 };
+        FillRect(hdc, &lineRect, gridBrush);
+    }
+    DeleteObject(gridBrush);
+
+    for (size_t oi = 0; oi < zone->getObstacles().size(); oi++) {
+        auto& obs = zone->getObstacles()[oi];
+        if (!obs) continue;
+
+        int ox = innerX + (int)(obs->getX() * scaleX);
+        int oy = innerY + (int)(obs->getY() * scaleY);
+        int ow = std::max(6, (int)(obs->getWidth() * scaleX));
+        int oh = std::max(6, (int)(obs->getHeight() * scaleY));
+
+        HBRUSH obsBr = CreateSolidBrush(RGB(92, 95, 120));
+        HPEN obsPen = CreatePen(PS_SOLID, 1, RGB(135, 140, 170));
+        SelectObject(hdc, obsBr);
+        SelectObject(hdc, obsPen);
+        RoundRect(hdc, ox, oy, ox + ow, oy + oh, 6, 6);
+        DeleteObject(obsBr);
+        DeleteObject(obsPen);
+    }
+
+    auto trail = zone->getTrail();
+    size_t start = (trail.size() > 700) ? trail.size() - 700 : 0;
+
+    for (size_t j = start; j < trail.size(); j++) {
+        auto& pt = trail[j];
+
+        int px = innerX + (int)(pt.x * scaleX);
+        int py = innerY + (int)(pt.y * scaleY);
+
+        COLORREF trailColor = lightenColor(accentColor, 8);
+        HBRUSH tb = CreateSolidBrush(trailColor);
+        SelectObject(hdc, tb);
+        SelectObject(hdc, GetStockObject(NULL_PEN));
+        Ellipse(hdc, px - 4, py - 4, px + 4, py + 4);
+        DeleteObject(tb);
+    }
+
+    HPEN framePen = CreatePen(PS_SOLID, 1, RGB(90, 94, 120));
+    SelectObject(hdc, framePen);
+    SelectObject(hdc, GetStockObject(NULL_BRUSH));
+    Rectangle(hdc, innerX, innerY, innerX + innerW, innerY + innerH);
+    DeleteObject(framePen);
+
+    wchar_t info[96];
+    swprintf_s(info, L"Area: %.0f cm2", zone->getArea());
+    drawText(hdc, info, x + 12, y + h - 22, COLOR_TEXT_DIM, 11, false);
+}
+
+void ScreenManager::drawRoombaOnZone(HDC hdc, std::shared_ptr<Roomba> roomba, std::shared_ptr<Zone> zone,
+    int zoneX, int zoneY, int zoneW, int zoneH) {
+    if (!roomba || !zone) return;
+
+    int innerX = zoneX + 10;
+    int innerY = zoneY + 30;
+    int innerW = zoneW - 20;
+    int innerH = zoneH - 40;
+
+    double scaleX = innerW / zone->getLength();
+    double scaleY = innerH / zone->getWidth();
+
+    int rx = innerX + (int)(roomba->getX() * scaleX);
+    int ry = innerY + (int)(roomba->getY() * scaleY);
+
+    HBRUSH shadow = CreateSolidBrush(RGB(15, 16, 20));
+    SelectObject(hdc, shadow);
+    SelectObject(hdc, GetStockObject(NULL_PEN));
+    Ellipse(hdc, rx - 10, ry - 10, rx + 14, ry + 14);
+    DeleteObject(shadow);
+
+    COLORREF auraColor = lightenColor(roomba->getColor(), 35);
+    if (roomba->getStuckCounter() > 10) {
+        auraColor = RGB(255, 190, 120);
+    }
+
+    HBRUSH aura = CreateSolidBrush(auraColor);
+    SelectObject(hdc, aura);
+    SelectObject(hdc, GetStockObject(NULL_PEN));
+    Ellipse(hdc, rx - 15, ry - 15, rx + 15, ry + 15);
+    DeleteObject(aura);
+
+    COLORREF bodyColor = roomba->getColor();
+    if (roomba->getStuckCounter() > 10) {
+        bodyColor = RGB(255, 140, 0);
+    }
+
+    HBRUSH body = CreateSolidBrush(bodyColor);
+    HPEN bodyPen = CreatePen(PS_SOLID, 2, RGB(255, 255, 255));
+    SelectObject(hdc, body);
+    SelectObject(hdc, bodyPen);
+    Ellipse(hdc, rx - 12, ry - 12, rx + 12, ry + 12);
+    DeleteObject(body);
+    DeleteObject(bodyPen);
+
+    double ang = roomba->getAngle();
+    HPEN dirPen = CreatePen(PS_SOLID, 2, RGB(255, 255, 255));
+    SelectObject(hdc, dirPen);
+    MoveToEx(hdc, rx, ry, nullptr);
+    LineTo(hdc, rx + (int)(std::cos(ang) * 11), ry + (int)(std::sin(ang) * 11));
+    DeleteObject(dirPen);
+
+    wchar_t idStr[8];
+    swprintf_s(idStr, L"%d", roomba->getId());
+    drawText(hdc, idStr, rx - 4, ry - 7, RGB(255, 255, 255), 10, true);
 }
 
 void ScreenManager::drawRoundRect(HDC hdc, int x, int y, int w, int h, int r, COLORREF fill, COLORREF border) {
@@ -519,9 +710,19 @@ void ScreenManager::drawRoundRect(HDC hdc, int x, int y, int w, int h, int r, CO
 
 void ScreenManager::drawText(HDC hdc, const wchar_t* text, int x, int y, COLORREF color, int size, bool bold) {
     if (!text) return;
-    HFONT font = CreateFont(size, 0, 0, 0, bold ? FW_BOLD : FW_NORMAL, FALSE, FALSE, FALSE,
-        DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-        CLEARTYPE_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Segoe UI");
+
+    HFONT font = CreateFont(
+        size, 0, 0, 0,
+        bold ? FW_BOLD : FW_NORMAL,
+        FALSE, FALSE, FALSE,
+        DEFAULT_CHARSET,
+        OUT_DEFAULT_PRECIS,
+        CLIP_DEFAULT_PRECIS,
+        CLEARTYPE_QUALITY,
+        DEFAULT_PITCH | FF_DONTCARE,
+        L"Segoe UI"
+    );
+
     HFONT oldFont = (HFONT)SelectObject(hdc, font);
     SetTextColor(hdc, color);
     SetBkMode(hdc, TRANSPARENT);
@@ -533,6 +734,7 @@ void ScreenManager::drawText(HDC hdc, const wchar_t* text, int x, int y, COLORRE
 void ScreenManager::drawButton(HDC hdc, const Button& btn) {
     int w = btn.rect.right - btn.rect.left;
     int h = btn.rect.bottom - btn.rect.top;
+
     drawRoundRect(hdc, btn.rect.left, btn.rect.top, w, h, 8, btn.color, btn.color);
 
     COLORREF textColor = COLOR_BG_DARK;
@@ -551,9 +753,11 @@ void ScreenManager::drawProgressBar(HDC hdc, int x, int y, int w, int h, double 
     FillRect(hdc, &bgRect, bgBrush);
     DeleteObject(bgBrush);
 
-    if (progress > 0) {
+    if (progress > 0.0) {
         int fillW = (int)(w * progress / 100.0);
         if (fillW > w) fillW = w;
+        if (fillW < 0) fillW = 0;
+
         if (fillW > 0) {
             HBRUSH fillBrush = CreateSolidBrush(color);
             RECT fillRect = { x, y, x + fillW, y + h };
@@ -561,6 +765,12 @@ void ScreenManager::drawProgressBar(HDC hdc, int x, int y, int w, int h, double 
             DeleteObject(fillBrush);
         }
     }
+
+    HPEN borderPen = CreatePen(PS_SOLID, 1, RGB(85, 88, 110));
+    SelectObject(hdc, GetStockObject(NULL_BRUSH));
+    SelectObject(hdc, borderPen);
+    Rectangle(hdc, x, y, x + w, y + h);
+    DeleteObject(borderPen);
 }
 
 void ScreenManager::addButton(int id, int x, int y, int w, int h, const wchar_t* text, COLORREF color) {
@@ -644,12 +854,6 @@ void ScreenManager::handleButtonClick(int id) {
             addLog(L"Limpieza detenida");
         }
         else {
-            for (size_t i = 0; i < zones_.size(); i++) {
-                if (zones_[i]) {
-                    zones_[i]->setCleanedPercentage(0.0);
-                    zones_[i]->clearTrail();
-                }
-            }
             initializeRoombas();
             cleaningService_.startCleaning();
             addLog(L"Limpieza reiniciada");
@@ -658,14 +862,16 @@ void ScreenManager::handleButtonClick(int id) {
 
     case ID_BTN_MENU:
         cleaningService_.stopCleaning();
-        for (size_t i = 0; i < zones_.size(); i++) {
-            if (zones_[i]) {
-                zones_[i]->setCleanedPercentage(0.0);
-                zones_[i]->clearTrail();
-            }
-        }
+        resetZones();
         roombas_.clear();
         changeScreen(SCREEN_START);
         break;
     }
+}
+
+COLORREF ScreenManager::lightenColor(COLORREF color, int amount) {
+    int r = std::min(255, (int)GetRValue(color) + amount);
+    int g = std::min(255, (int)GetGValue(color) + amount);
+    int b = std::min(255, (int)GetBValue(color) + amount);
+    return RGB(r, g, b);
 }

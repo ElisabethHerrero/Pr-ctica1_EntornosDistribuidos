@@ -1,5 +1,4 @@
 ﻿  ScreenManager.cpp
-C:\Users\maria\source\repos\Pr-ctica1_EntornosDistribuidos-8\Practica1\Practica1\ScreenManager.cpp(354,17): warning C4267: 'inicializando': conversión de 'size_t' a 'int'; posible pérdida de datos
   main.cpp
   Generando código...
-  Practica1.vcxproj -> C:\Users\maria\Source\Repos\Pr-ctica1_EntornosDistribuidos-8\Practica1\x64\Debug\Practica1.exe
+  Practica1.vcxproj -> C:\Users\maria\Source\Repos\Pr-ctica1_EntornosDistribuidos_2\Practica1\x64\Debug\Practica1.exe
