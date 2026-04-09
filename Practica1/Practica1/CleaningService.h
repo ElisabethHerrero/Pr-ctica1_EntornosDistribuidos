@@ -69,13 +69,15 @@ private:
         return dx * dx + dy * dy;
     }
 
-    bool collidesWithObstacle(std::shared_ptr<Zone> zone, double x, double y, double radius) {
+    bool collidesWithObstacle(const std::shared_ptr<Zone>& zone, double x, double y, double radius) {
         if (!zone) return false;
+
         for (const auto& obs : zone->getObstacles()) {
             if (obs && obs->collidesWith(x, y, radius)) {
                 return true;
             }
         }
+
         return false;
     }
 
@@ -97,7 +99,9 @@ private:
                 }
             }
 
-            if (!assigned) return zone;
+            if (!assigned) {
+                return zone;
+            }
         }
 
         return nullptr;
@@ -111,25 +115,67 @@ private:
                 return false;
             }
         }
+
         return true;
+    }
+
+    void releaseRoombaFromZone(std::shared_ptr<Roomba>& roomba,
+        const std::shared_ptr<Zone>& zone,
+        const wchar_t* reason) {
+        if (!roomba) return;
+
+        if (zone && reason) {
+            wchar_t msg[256];
+            swprintf_s(msg, L"Roomba #%d completa %s (%s)", roomba->getId(), zone->getName(), reason);
+            EventService::getInstance().publishLog(msg);
+        }
+
+        roomba->setState(Roomba::IDLE);
+        roomba->setCurrentZone(nullptr);
+        roomba->resetStuckCounter();
+        roomba->resetFailedMoves();
+        roomba->clearPath();
+    }
+
+    bool zoneHasRemainingWork(const std::shared_ptr<Zone>& zone, double robotRadius) {
+        if (!zone) return false;
+        if (zone->isFullyCleaned()) return false;
+        return zone->hasDirtyWalkableCell(robotRadius);
+    }
+
+    bool zoneHasReachableWork(const std::shared_ptr<Zone>& zone,
+        const std::shared_ptr<Roomba>& roomba,
+        double robotRadius) {
+        if (!zone || !roomba) return false;
+        if (zone->isFullyCleaned()) return false;
+        return zone->hasReachableDirtyCell(roomba->getX(), roomba->getY(), robotRadius);
     }
 
     void assignZoneToRoomba(std::shared_ptr<Roomba>& roomba, std::shared_ptr<Zone>& zone) {
         if (!roomba || !zone) return;
 
-        double start = std::max(20.0, roomba->getCleaningRadius() * 1.5);
+        const double cleanRadius = roomba->getCleaningRadius();
+        const double robotRadius = std::max(8.0, cleanRadius * 0.6);
+
+        double startX = std::max(robotRadius, 20.0);
+        double startY = std::max(robotRadius, 20.0);
+
+        if (!zone->findAnyDirtyCell(robotRadius, startX, startY)) {
+            startX = clampValue(startX, robotRadius, zone->getLength() - robotRadius);
+            startY = clampValue(startY, robotRadius, zone->getWidth() - robotRadius);
+        }
 
         roomba->setCurrentZone(zone);
         roomba->setState(Roomba::CLEANING);
-        roomba->setPosition(start, start);
+        roomba->setPosition(startX, startY);
         roomba->setAngle(0.0);
         roomba->resetStuckCounter();
         roomba->resetFailedMoves();
         roomba->clearPath();
-        roomba->updateLastSuccessful(start, start);
+        roomba->updateLastSuccessful(startX, startY);
 
-        zone->markClean(start, start, roomba->getCleaningRadius());
-        zone->addTrail(start, start, roomba->getId());
+        zone->markClean(startX, startY, cleanRadius);
+        zone->addTrail(startX, startY, roomba->getId());
 
         wchar_t msg[256];
         swprintf_s(msg, L"Roomba #%d asignada a %s", roomba->getId(), zone->getName());
@@ -138,7 +184,8 @@ private:
 
     bool tryMoveTo(std::shared_ptr<Roomba>& roomba,
         std::shared_ptr<Zone>& zone,
-        double x, double y,
+        double x,
+        double y,
         double robotRadius,
         double cleanRadius) {
         if (!zone || !roomba) return false;
@@ -182,7 +229,8 @@ private:
 
         auto nextCell = path.front();
 
-        double tx, ty;
+        double tx = 0.0;
+        double ty = 0.0;
         zone->cellToWorldCenter(nextCell.row, nextCell.col, tx, ty);
 
         double x = roomba->getX();
@@ -192,12 +240,7 @@ private:
         double dy = ty - y;
         double dist = std::sqrt(dx * dx + dy * dy);
 
-        if (dist <= cleanRadius * 0.6) {
-            roomba->popPathFront();
-            return true;
-        }
-
-        if (dist < 0.001) {
+        if (dist <= cleanRadius * 0.6 || dist < 0.001) {
             roomba->popPathFront();
             return true;
         }
@@ -213,7 +256,9 @@ private:
         return false;
     }
 
-    void recomputePath(std::shared_ptr<Roomba>& roomba, std::shared_ptr<Zone>& zone, double robotRadius) {
+    bool recomputePath(std::shared_ptr<Roomba>& roomba,
+        std::shared_ptr<Zone>& zone,
+        double robotRadius) {
         std::vector<Zone::GridCell> zonePath;
 
         if (zone->findPathToNearestDirtyCell(roomba->getX(), roomba->getY(), robotRadius, zonePath)) {
@@ -226,10 +271,46 @@ private:
 
             roomba->setPath(roombaPath);
             roomba->resetStuckCounter();
+            return true;
         }
-        else {
-            roomba->clearPath();
+
+        roomba->clearPath();
+        return false;
+    }
+
+    bool tryRelocateToDirtyCell(std::shared_ptr<Roomba>& roomba,
+        std::shared_ptr<Zone>& zone,
+        double robotRadius,
+        double cleanRadius) {
+        if (!roomba || !zone) return false;
+
+        double targetX = 0.0;
+        double targetY = 0.0;
+
+        if (!zone->findAnyDirtyCell(robotRadius, targetX, targetY)) {
+            return false;
         }
+
+        if (collidesWithObstacle(zone, targetX, targetY, robotRadius)) {
+            return false;
+        }
+
+        roomba->setPosition(targetX, targetY);
+        roomba->setAngle(0.0);
+        roomba->updateLastSuccessful(targetX, targetY);
+        roomba->resetStuckCounter();
+        roomba->resetFailedMoves();
+        roomba->clearPath();
+
+        zone->markClean(targetX, targetY, cleanRadius);
+        zone->addTrail(targetX, targetY, roomba->getId());
+
+        wchar_t msg[256];
+        swprintf_s(msg, L"Roomba #%d recolocada en %s por recuperacion de ruta",
+            roomba->getId(), zone->getName());
+        EventService::getInstance().publishLog(msg);
+
+        return true;
     }
 
     void loop() {
@@ -244,17 +325,11 @@ private:
                 if (!roomba) continue;
 
                 auto zone = roomba->getCurrentZone();
+                const double cleanRadius = roomba->getCleaningRate() > 0.0 ? roomba->getCleaningRadius() : roomba->getCleaningRadius();
+                const double robotRadius = std::max(8.0, cleanRadius * 0.6);
 
-                if (zone && roomba->isCleaning() && zone->isFullyCleaned()) {
-                    wchar_t msg[256];
-                    swprintf_s(msg, L"Roomba #%d completo %s", roomba->getId(), zone->getName());
-                    EventService::getInstance().publishLog(msg);
-
-                    roomba->setState(Roomba::IDLE);
-                    roomba->setCurrentZone(nullptr);
-                    roomba->resetStuckCounter();
-                    roomba->resetFailedMoves();
-                    roomba->clearPath();
+                if (zone && roomba->isCleaning() && !zoneHasRemainingWork(zone, robotRadius)) {
+                    releaseRoombaFromZone(roomba, zone, L"sin suciedad caminable");
                     zone = nullptr;
                 }
 
@@ -269,6 +344,11 @@ private:
                 if (zone && roomba->isCleaning()) {
                     anyCleaning = true;
                     moveRoomba(roomba, zone);
+
+                    zone = roomba->getCurrentZone();
+                    if (zone && !zoneHasRemainingWork(zone, robotRadius)) {
+                        releaseRoombaFromZone(roomba, zone, L"zona finalizada");
+                    }
                 }
             }
 
@@ -292,11 +372,19 @@ private:
         zone->markClean(x, y, cleanRadius);
         zone->addTrail(x, y, roomba->getId());
 
-        if (zone->isFullyCleaned()) {
+        if (!zoneHasRemainingWork(zone, robotRadius)) {
             roomba->clearPath();
             return;
         }
 
+        if (!zoneHasReachableWork(zone, roomba, robotRadius)) {
+            if (!tryRelocateToDirtyCell(roomba, zone, robotRadius, cleanRadius)) {
+                releaseRoombaFromZone(roomba, zone, L"sin suciedad alcanzable");
+            }
+            return;
+        }
+
+        bool moved = false;
         bool needsRecompute = false;
 
         if (!roomba->hasPath()) {
@@ -310,12 +398,16 @@ private:
         }
 
         if (needsRecompute) {
-            recomputePath(roomba, zone, robotRadius);
+            if (!recomputePath(roomba, zone, robotRadius)) {
+                if (!tryRelocateToDirtyCell(roomba, zone, robotRadius, cleanRadius)) {
+                    releaseRoombaFromZone(roomba, zone, L"ruta imposible");
+                }
+                return;
+            }
+
             roomba->resetStuckCounter();
             roomba->resetFailedMoves();
         }
-
-        bool moved = false;
 
         if (roomba->hasPath()) {
             moved = tryFollowPath(roomba, zone, speed, robotRadius, cleanRadius);
@@ -335,8 +427,26 @@ private:
                     moved = true;
                     roomba->resetStuckCounter();
                     roomba->resetFailedMoves();
+                    roomba->clearPath();
                     break;
                 }
+            }
+        }
+
+        if (!moved && roomba->getFailedMoves() > 8) {
+            if (zoneHasReachableWork(zone, roomba, robotRadius)) {
+                if (!recomputePath(roomba, zone, robotRadius)) {
+                    if (!tryRelocateToDirtyCell(roomba, zone, robotRadius, cleanRadius)) {
+                        releaseRoombaFromZone(roomba, zone, L"atasco persistente");
+                    }
+                    return;
+                }
+            }
+            else {
+                if (!tryRelocateToDirtyCell(roomba, zone, robotRadius, cleanRadius)) {
+                    releaseRoombaFromZone(roomba, zone, L"sin progreso");
+                }
+                return;
             }
         }
 

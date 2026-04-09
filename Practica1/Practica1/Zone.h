@@ -54,7 +54,8 @@ public:
         width_(width),
         cellSize_(10.0),
         cleanedAccessibleCells_(0),
-        totalAccessibleCells_(0) {
+        totalAccessibleCells_(0),
+        navigationClearance_(12.0) {
         name_ = name ? name : L"";
         initGrid();
     }
@@ -65,6 +66,7 @@ public:
     double getWidth() const { return width_; }
     double getArea() const { return length_ * width_; }
     double getCellSize() const { return cellSize_; }
+    double getNavigationClearance() const { return navigationClearance_; }
 
     size_t getRows() const { return rows_; }
     size_t getCols() const { return cols_; }
@@ -97,10 +99,10 @@ public:
     void markClean(double x, double y, double radius) {
         std::lock_guard<std::mutex> lock(mutex_);
 
-        int minCol = std::max(0, (int)((x - radius) / cellSize_));
-        int maxCol = std::min((int)cols_ - 1, (int)((x + radius) / cellSize_));
-        int minRow = std::max(0, (int)((y - radius) / cellSize_));
-        int maxRow = std::min((int)rows_ - 1, (int)((y + radius) / cellSize_));
+        int minCol = std::max(0, static_cast<int>((x - radius) / cellSize_));
+        int maxCol = std::min(static_cast<int>(cols_) - 1, static_cast<int>((x + radius) / cellSize_));
+        int minRow = std::max(0, static_cast<int>((y - radius) / cellSize_));
+        int maxRow = std::min(static_cast<int>(rows_) - 1, static_cast<int>((y + radius) / cellSize_));
 
         for (int r = minRow; r <= maxRow; ++r) {
             for (int c = minCol; c <= maxCol; ++c) {
@@ -126,7 +128,8 @@ public:
 
         if (totalAccessibleCells_ == 0) return 100.0;
 
-        double pct = (double)cleanedAccessibleCells_ * 100.0 / (double)totalAccessibleCells_;
+        double pct = static_cast<double>(cleanedAccessibleCells_) * 100.0 /
+            static_cast<double>(totalAccessibleCells_);
         if (pct < 0.0) pct = 0.0;
         if (pct > 100.0) pct = 100.0;
         return pct;
@@ -157,9 +160,11 @@ public:
     }
 
     bool worldToCell(double x, double y, int& row, int& col) const {
-        col = (int)(x / cellSize_);
-        row = (int)(y / cellSize_);
-        return row >= 0 && col >= 0 && row < (int)rows_ && col < (int)cols_;
+        col = static_cast<int>(x / cellSize_);
+        row = static_cast<int>(y / cellSize_);
+        return row >= 0 && col >= 0 &&
+            row < static_cast<int>(rows_) &&
+            col < static_cast<int>(cols_);
     }
 
     void cellToWorldCenter(int row, int col, double& x, double& y) const {
@@ -174,15 +179,32 @@ public:
 
     bool isCellClean(int row, int col) const {
         std::lock_guard<std::mutex> lock(mutex_);
-        if (row < 0 || col < 0 || row >= (int)rows_ || col >= (int)cols_) return true;
+        if (row < 0 || col < 0 || row >= static_cast<int>(rows_) || col >= static_cast<int>(cols_)) {
+            return true;
+        }
         return cleanedGrid_[row][col];
     }
 
-    bool findNearestDirtyCell(double fromX, double fromY, double robotRadius,
-        double& outX, double& outY) const {
+    bool hasDirtyWalkableCell(double robotRadius) const {
         std::lock_guard<std::mutex> lock(mutex_);
 
-        int startRow, startCol;
+        for (int r = 0; r < static_cast<int>(rows_); ++r) {
+            for (int c = 0; c < static_cast<int>(cols_); ++c) {
+                if (!accessibleGrid_[r][c]) continue;
+                if (cleanedGrid_[r][c]) continue;
+                if (!isCellWalkableLocked(r, c, robotRadius)) continue;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    bool hasReachableDirtyCell(double fromX, double fromY, double robotRadius) const {
+        std::lock_guard<std::mutex> lock(mutex_);
+
+        int startRow = -1;
+        int startCol = -1;
         if (!worldToCell(fromX, fromY, startRow, startCol)) {
             return false;
         }
@@ -197,8 +219,55 @@ public:
         q.push({ startRow, startCol });
         visited[startRow][startCol] = true;
 
-        const int dr[4] = { -1, 1, 0, 0 };
-        const int dc[4] = { 0, 0, -1, 1 };
+        static const int dr[4] = { -1, 1, 0, 0 };
+        static const int dc[4] = { 0, 0, -1, 1 };
+
+        while (!q.empty()) {
+            GridCell cur = q.front();
+            q.pop();
+
+            if (accessibleGrid_[cur.row][cur.col] && !cleanedGrid_[cur.row][cur.col]) {
+                return true;
+            }
+
+            for (int i = 0; i < 4; ++i) {
+                int nr = cur.row + dr[i];
+                int nc = cur.col + dc[i];
+
+                if (nr < 0 || nc < 0 || nr >= static_cast<int>(rows_) || nc >= static_cast<int>(cols_)) continue;
+                if (visited[nr][nc]) continue;
+                if (!isCellWalkableLocked(nr, nc, robotRadius)) continue;
+
+                visited[nr][nc] = true;
+                q.push({ nr, nc });
+            }
+        }
+
+        return false;
+    }
+
+    bool findNearestDirtyCell(double fromX, double fromY, double robotRadius,
+        double& outX, double& outY) const {
+        std::lock_guard<std::mutex> lock(mutex_);
+
+        int startRow = -1;
+        int startCol = -1;
+        if (!worldToCell(fromX, fromY, startRow, startCol)) {
+            return false;
+        }
+
+        if (!isCellWalkableLocked(startRow, startCol, robotRadius)) {
+            return false;
+        }
+
+        std::vector<std::vector<bool>> visited(rows_, std::vector<bool>(cols_, false));
+        std::queue<GridCell> q;
+
+        q.push({ startRow, startCol });
+        visited[startRow][startCol] = true;
+
+        static const int dr[4] = { -1, 1, 0, 0 };
+        static const int dc[4] = { 0, 0, -1, 1 };
 
         while (!q.empty()) {
             GridCell cur = q.front();
@@ -213,7 +282,7 @@ public:
                 int nr = cur.row + dr[i];
                 int nc = cur.col + dc[i];
 
-                if (nr < 0 || nc < 0 || nr >= (int)rows_ || nc >= (int)cols_) continue;
+                if (nr < 0 || nc < 0 || nr >= static_cast<int>(rows_) || nc >= static_cast<int>(cols_)) continue;
                 if (visited[nr][nc]) continue;
                 if (!isCellWalkableLocked(nr, nc, robotRadius)) continue;
 
@@ -228,8 +297,8 @@ public:
     bool findAnyDirtyCell(double robotRadius, double& outX, double& outY) const {
         std::lock_guard<std::mutex> lock(mutex_);
 
-        for (int r = 0; r < (int)rows_; ++r) {
-            for (int c = 0; c < (int)cols_; ++c) {
+        for (int r = 0; r < static_cast<int>(rows_); ++r) {
+            for (int c = 0; c < static_cast<int>(cols_); ++c) {
                 if (!accessibleGrid_[r][c]) continue;
                 if (cleanedGrid_[r][c]) continue;
                 if (!isCellWalkableLocked(r, c, robotRadius)) continue;
@@ -248,7 +317,8 @@ public:
 
         std::lock_guard<std::mutex> lock(mutex_);
 
-        int startRow, startCol;
+        int startRow = -1;
+        int startCol = -1;
         if (!worldToCell(fromX, fromY, startRow, startCol)) {
             return false;
         }
@@ -258,14 +328,17 @@ public:
         }
 
         std::vector<std::vector<bool>> visited(rows_, std::vector<bool>(cols_, false));
-        std::vector<std::vector<GridCell>> parent(rows_, std::vector<GridCell>(cols_, { -1, -1 }));
+        std::vector<std::vector<GridCell>> parent(
+            rows_,
+            std::vector<GridCell>(cols_, { -1, -1 })
+        );
         std::queue<GridCell> q;
 
         q.push({ startRow, startCol });
         visited[startRow][startCol] = true;
 
-        const int dr[4] = { -1, 1, 0, 0 };
-        const int dc[4] = { 0, 0, -1, 1 };
+        static const int dr[4] = { -1, 1, 0, 0 };
+        static const int dc[4] = { 0, 0, -1, 1 };
 
         GridCell target = { -1, -1 };
 
@@ -282,7 +355,7 @@ public:
                 int nr = cur.row + dr[i];
                 int nc = cur.col + dc[i];
 
-                if (nr < 0 || nc < 0 || nr >= (int)rows_ || nc >= (int)cols_) continue;
+                if (nr < 0 || nc < 0 || nr >= static_cast<int>(rows_) || nc >= static_cast<int>(cols_)) continue;
                 if (visited[nr][nc]) continue;
                 if (!isCellWalkableLocked(nr, nc, robotRadius)) continue;
 
@@ -325,6 +398,7 @@ private:
 
     size_t cleanedAccessibleCells_;
     size_t totalAccessibleCells_;
+    double navigationClearance_;
 
     std::vector<std::vector<bool>> accessibleGrid_;
     std::vector<std::vector<bool>> cleanedGrid_;
@@ -332,8 +406,8 @@ private:
     std::vector<std::shared_ptr<Obstacle>> obstacles_;
 
     void initGrid() {
-        cols_ = std::max<size_t>(1, (size_t)std::ceil(length_ / cellSize_));
-        rows_ = std::max<size_t>(1, (size_t)std::ceil(width_ / cellSize_));
+        cols_ = std::max<size_t>(1, static_cast<size_t>(std::ceil(length_ / cellSize_)));
+        rows_ = std::max<size_t>(1, static_cast<size_t>(std::ceil(width_ / cellSize_)));
 
         accessibleGrid_.assign(rows_, std::vector<bool>(cols_, true));
         cleanedGrid_.assign(rows_, std::vector<bool>(cols_, false));
@@ -345,20 +419,21 @@ private:
         totalAccessibleCells_ = 0;
         cleanedAccessibleCells_ = 0;
 
-        for (int r = 0; r < (int)rows_; ++r) {
-            for (int c = 0; c < (int)cols_; ++c) {
-                double x, y;
+        for (int r = 0; r < static_cast<int>(rows_); ++r) {
+            for (int c = 0; c < static_cast<int>(cols_); ++c) {
+                double x = 0.0;
+                double y = 0.0;
                 cellToWorldCenter(r, c, x, y);
 
                 bool accessible = true;
 
-                if (x < cellSize_ * 0.5 || y < cellSize_ * 0.5 ||
-                    x > length_ - cellSize_ * 0.5 || y > width_ - cellSize_ * 0.5) {
+                if (x < navigationClearance_ || y < navigationClearance_ ||
+                    x > length_ - navigationClearance_ || y > width_ - navigationClearance_) {
                     accessible = false;
                 }
 
                 for (const auto& obs : obstacles_) {
-                    if (obs && obs->collidesWith(x, y, 0.5)) {
+                    if (obs && obs->collidesWith(x, y, navigationClearance_)) {
                         accessible = false;
                         break;
                     }
@@ -380,10 +455,15 @@ private:
     }
 
     bool isCellWalkableLocked(int row, int col, double robotRadius) const {
-        if (row < 0 || col < 0 || row >= (int)rows_ || col >= (int)cols_) return false;
-        if (!accessibleGrid_[row][col]) return false;
+        if (row < 0 || col < 0 || row >= static_cast<int>(rows_) || col >= static_cast<int>(cols_)) {
+            return false;
+        }
+        if (!accessibleGrid_[row][col]) {
+            return false;
+        }
 
-        double x, y;
+        double x = 0.0;
+        double y = 0.0;
         cellToWorldCenter(row, col, x, y);
 
         double minX = robotRadius;
