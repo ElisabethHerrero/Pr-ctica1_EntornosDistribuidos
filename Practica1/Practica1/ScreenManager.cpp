@@ -33,6 +33,8 @@
 #define ID_BTN_BACK 2010
 #define ID_BTN_STOP 2011
 #define ID_BTN_MENU 2012
+#define ID_BTN_RESTART 2013
+#define ID_BTN_EXIT_FINISH 2014
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -77,13 +79,12 @@ namespace {
         double robotRadius,
         double cellSize
     ) {
-        const double wallClearance = robotRadius + 6.0;
-        const double obstacleClearance = robotRadius + 6.0;
+        const double wallClearance = robotRadius * 2.2;
+        const double obstacleClearance = robotRadius * 2.2;
 
         if (candidate.x < wallClearance || candidate.y < wallClearance) {
             return false;
         }
-
         if (candidate.x + candidate.w > zoneLength - wallClearance ||
             candidate.y + candidate.h > zoneWidth - wallClearance) {
             return false;
@@ -93,15 +94,14 @@ namespace {
 
         for (const auto& obs : existing) {
             if (!obs) continue;
-
             RectD other{
                 obs->getX(),
                 obs->getY(),
                 obs->getWidth(),
                 obs->getHeight()
             };
-
             RectD expandedOther = inflateRect(other, obstacleClearance);
+
             if (rectsIntersect(expandedCandidate, expandedOther)) {
                 return false;
             }
@@ -127,14 +127,12 @@ namespace {
                 if (walkable) {
                     for (const auto& obs : existing) {
                         if (!obs) continue;
-
                         RectD other{
                             obs->getX(),
                             obs->getY(),
                             obs->getWidth(),
                             obs->getHeight()
                         };
-
                         if (collidesExpanded(px, py, other, robotRadius)) {
                             walkable = false;
                             break;
@@ -174,8 +172,8 @@ namespace {
         std::queue<std::pair<int, int>> q;
         q.push({ startRow, startCol });
         visited[startRow][startCol] = true;
-
         int visitedCount = 0;
+
         const int dr[4] = { -1, 1, 0, 0 };
         const int dc[4] = { 0, 0, -1, 1 };
 
@@ -187,11 +185,9 @@ namespace {
             for (int i = 0; i < 4; ++i) {
                 int nr = cur.first + dr[i];
                 int nc = cur.second + dc[i];
-
                 if (nr < 0 || nc < 0 || nr >= rows || nc >= cols) continue;
                 if (visited[nr][nc]) continue;
                 if (!freeGrid[nr][nc]) continue;
-
                 visited[nr][nc] = true;
                 q.push({ nr, nc });
             }
@@ -293,7 +289,6 @@ void ScreenManager::run() {
 
 void ScreenManager::initializeZones() {
     zones_.clear();
-
     zones_.push_back(std::make_shared<Zone>(1, L"Sala Principal", 500.0, 150.0));
     zones_.push_back(std::make_shared<Zone>(2, L"Pasillo", 480.0, 101.0));
     zones_.push_back(std::make_shared<Zone>(3, L"Comedor", 309.0, 480.0));
@@ -302,7 +297,8 @@ void ScreenManager::initializeZones() {
     std::random_device rd;
     std::mt19937 gen(rd());
 
-    const double maxRobotRadius = 12.0;
+    const double maxRobotRadius = 20.0;
+    const double minClearance = maxRobotRadius * 2.2;
     const double navCellSize = 10.0;
 
     for (size_t i = 0; i < zones_.size(); ++i) {
@@ -312,33 +308,51 @@ void ScreenManager::initializeZones() {
         const double zoneLength = zone->getLength();
         const double zoneWidth = zone->getWidth();
         const double minDimension = std::min(zoneLength, zoneWidth);
+        const double zoneArea = zone->getArea();
 
-        int numObs = (zone->getArea() > 50000.0) ? 2 : 1;
+        int numObs = 1;
 
-        if (minDimension <= 120.0) {
+        if (zoneArea > 100000.0) {
+            numObs = 3;
+        }
+        else if (zoneArea > 50000.0) {
+            numObs = 2;
+        }
+        else {
             numObs = 1;
         }
-        if (minDimension <= 95.0) {
-            numObs = 0;
+
+        double minObsW, maxObsW, minObsH, maxObsH;
+
+        if (minDimension > 300.0) {
+            minObsW = 35.0;
+            maxObsW = 55.0;
+            minObsH = 35.0;
+            maxObsH = 55.0;
         }
-
-        double minObsW = 22.0;
-        double maxObsW = 42.0;
-        double minObsH = 22.0;
-        double maxObsH = 42.0;
-
-        if (minDimension <= 140.0) {
-            minObsW = 16.0;
-            maxObsW = 26.0;
-            minObsH = 16.0;
+        else if (minDimension > 200.0) {
+            minObsW = 25.0;
+            maxObsW = 40.0;
+            minObsH = 25.0;
+            maxObsH = 40.0;
+        }
+        else if (minDimension > 150.0) {
+            minObsW = 20.0;
+            maxObsW = 32.0;
+            minObsH = 20.0;
             maxObsH = 32.0;
         }
-
-        if (minDimension <= 110.0) {
-            minObsW = 14.0;
-            maxObsW = 20.0;
-            minObsH = 14.0;
-            maxObsH = 24.0;
+        else if (minDimension > 100.0) {
+            minObsW = 15.0;
+            maxObsW = 25.0;
+            minObsH = 15.0;
+            maxObsH = 25.0;
+        }
+        else {
+            minObsW = 12.0;
+            maxObsW = 18.0;
+            minObsH = 12.0;
+            maxObsH = 18.0;
         }
 
         std::uniform_real_distribution<double> disW(minObsW, maxObsW);
@@ -346,7 +360,7 @@ void ScreenManager::initializeZones() {
 
         int created = 0;
         int attempts = 0;
-        const int maxAttempts = 250;
+        const int maxAttempts = 500;
 
         while (created < numObs && attempts < maxAttempts) {
             attempts++;
@@ -354,20 +368,26 @@ void ScreenManager::initializeZones() {
             double ow = disW(gen);
             double oh = disH(gen);
 
-            const double wallClearance = maxRobotRadius + 8.0;
+            const double wallClearance = minClearance;
+            const double obstacleClearance = minClearance;
 
             if (zoneLength - ow - wallClearance * 2.0 <= 0.0 ||
                 zoneWidth - oh - wallClearance * 2.0 <= 0.0) {
-                continue;
+                ow = std::min(ow, zoneLength - wallClearance * 2.5);
+                oh = std::min(oh, zoneWidth - wallClearance * 2.5);
+
+                if (ow < 10.0 || oh < 10.0) {
+                    continue;
+                }
             }
 
             std::uniform_real_distribution<double> disX(
                 wallClearance,
-                zoneLength - ow - wallClearance
+                std::max(wallClearance + 1.0, zoneLength - ow - wallClearance)
             );
             std::uniform_real_distribution<double> disY(
                 wallClearance,
-                zoneWidth - oh - wallClearance
+                std::max(wallClearance + 1.0, zoneWidth - oh - wallClearance)
             );
 
             RectD candidate{
@@ -396,13 +416,30 @@ void ScreenManager::initializeZones() {
             ));
             created++;
         }
+
+        if (created == 0 && zoneArea > 20000.0) {
+            double safeW = std::min(18.0, zoneLength * 0.15);
+            double safeH = std::min(18.0, zoneWidth * 0.15);
+            double safeX = (zoneLength - safeW) / 2.0;
+            double safeY = (zoneWidth - safeH) / 2.0;
+
+            zone->addObstacle(std::make_shared<Obstacle>(
+                safeX,
+                safeY,
+                safeW,
+                safeH,
+                Obstacle::FURNITURE
+            ));
+        }
     }
 }
 
 void ScreenManager::resetZones() {
-    for (size_t i = 0; i < zones_.size(); i++) {
-        if (zones_[i]) {
-            zones_[i]->resetCleaning();
+    if (!zones_.empty()) {
+        for (auto& zone : zones_) {
+            if (zone) {
+                zone->resetCleaning();
+            }
         }
     }
 }
@@ -497,6 +534,24 @@ LRESULT ScreenManager::handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) {
 
     case WM_TIMER:
         if (wParam == ID_TIMER_PAINT) {
+            // Detectar si la limpieza terminó
+            if (currentScreen_ == SCREEN_CLEANING &&
+                !cleaningService_->isRunning()) {
+
+                bool allComplete = true;
+                for (const auto& zone : zones_) {
+                    if (zone && !zone->isFullyCleaned()) {
+                        allComplete = false;
+                        break;
+                    }
+                }
+
+                if (allComplete) {
+                    changeScreen(SCREEN_FINISHED);
+                    addLog(L"¡Limpieza finalizada con éxito!");
+                }
+            }
+
             InvalidateRect(hwnd_, nullptr, FALSE);
         }
         return 0;
@@ -538,6 +593,9 @@ void ScreenManager::paintScreen(HDC hdc, RECT& rect) {
     case SCREEN_CLEANING:
         paintCleaningScreen(hdc, rect);
         break;
+    case SCREEN_FINISHED:
+        paintFinishedScreen(hdc, rect);
+        break;
     }
 }
 
@@ -576,7 +634,7 @@ void ScreenManager::paintStartScreen(HDC hdc, RECT& rect) {
     }
 
     drawText(hdc, L"Visualizacion sincronizada con limpieza real", centerX - 170, rect.bottom - 55, COLOR_TEXT_DIM, 14, false);
-    drawText(hdc, L"v2.1", rect.right - 60, rect.bottom - 30, COLOR_TEXT_DIM, 12, false);
+    drawText(hdc, L"v2.2", rect.right - 60, rect.bottom - 30, COLOR_TEXT_DIM, 12, false);
 }
 
 void ScreenManager::paintConfigScreen(HDC hdc, RECT& rect) {
@@ -768,6 +826,77 @@ void ScreenManager::paintCleaningScreen(HDC hdc, RECT& rect) {
     for (size_t i = 0; i < buttons_.size(); i++) {
         drawButton(hdc, buttons_[i]);
     }
+}
+
+void ScreenManager::paintFinishedScreen(HDC hdc, RECT& rect) {
+    int centerX = rect.right / 2;
+    int centerY = rect.bottom / 2;
+
+    drawRoundRect(hdc, centerX - 350, centerY - 300, 700, 600, 20, COLOR_BG_LIGHT, COLOR_SUCCESS);
+
+    drawText(hdc, L"¡LIMPIEZA", centerX - 180, centerY - 240, COLOR_SUCCESS, 48, true);
+    drawText(hdc, L"FINALIZADA!", centerX - 200, centerY - 180, COLOR_SUCCESS, 48, true);
+
+    HBRUSH checkBrush = CreateSolidBrush(COLOR_SUCCESS);
+    HPEN checkPen = CreatePen(PS_SOLID, 4, RGB(255, 255, 255));
+    SelectObject(hdc, checkBrush);
+    SelectObject(hdc, checkPen);
+    Ellipse(hdc, centerX - 60, centerY - 100, centerX + 60, centerY + 20);
+    DeleteObject(checkBrush);
+
+    HPEN whitePen = CreatePen(PS_SOLID, 8, RGB(255, 255, 255));
+    SelectObject(hdc, whitePen);
+    MoveToEx(hdc, centerX - 30, centerY - 40, nullptr);
+    LineTo(hdc, centerX - 10, centerY - 15);
+    LineTo(hdc, centerX + 35, centerY - 70);
+    DeleteObject(whitePen);
+    DeleteObject(checkPen);
+
+    drawText(hdc, L"Estadisticas de limpieza:", centerX - 140, centerY + 50, COLOR_TEXT, 18, true);
+
+    COLORREF zoneColors[] = { COLOR_ZONE1, COLOR_ZONE2, COLOR_ZONE3, COLOR_ZONE4 };
+    int yOffset = centerY + 90;
+
+    for (size_t i = 0; i < zones_.size(); i++) {
+        auto& zone = zones_[i];
+        if (!zone) continue;
+
+        HBRUSH zb = CreateSolidBrush(zoneColors[i]);
+        RECT zr = { centerX - 280, yOffset + 2, centerX - 260, yOffset + 20 };
+        FillRect(hdc, &zr, zb);
+        DeleteObject(zb);
+
+        wchar_t info[128];
+        swprintf_s(info, L"%s - %.1f%% completada",
+            zone->getName(),
+            zone->getCleanedPercentage());
+        drawText(hdc, info, centerX - 250, yOffset, COLOR_TEXT, 14, false);
+
+        yOffset += 30;
+    }
+
+    yOffset += 20;
+    wchar_t roombaInfo[64];
+    swprintf_s(roombaInfo, L"Roombas utilizadas: %d", static_cast<int>(roombas_.size()));
+    drawText(hdc, roombaInfo, centerX - 280, yOffset, COLOR_TEXT_DIM, 14, false);
+
+    yOffset += 25;
+    wchar_t typeInfo[64];
+    if (!roombas_.empty() && roombas_[0]) {
+        swprintf_s(typeInfo, L"Tipo: %s", roombas_[0]->getTypeName());
+        drawText(hdc, typeInfo, centerX - 280, yOffset, COLOR_TEXT_DIM, 14, false);
+    }
+
+    int btnY = centerY + 230;
+    addButton(ID_BTN_RESTART, centerX - 280, btnY, 260, 55, L"VOLVER AL INICIO", COLOR_PRIMARY);
+    addButton(ID_BTN_EXIT_FINISH, centerX + 20, btnY, 260, 55, L"SALIR", COLOR_DANGER);
+
+    for (size_t i = 0; i < buttons_.size(); i++) {
+        drawButton(hdc, buttons_[i]);
+    }
+
+    drawText(hdc, L"Todas las zonas han sido limpiadas exitosamente",
+        centerX - 210, rect.bottom - 60, COLOR_TEXT_DIM, 14, false);
 }
 
 void ScreenManager::drawZoneMiniMap(
@@ -1086,7 +1215,7 @@ void ScreenManager::handleButtonClick(int id) {
         break;
 
     case ID_BTN_PLUS:
-        if (roombaCount_ < 10) {
+        if (roombaCount_ < 4) {
             roombaCount_++;
         }
         break;
@@ -1131,6 +1260,18 @@ void ScreenManager::handleButtonClick(int id) {
         resetZones();
         roombas_.clear();
         changeScreen(SCREEN_START);
+        break;
+
+    case ID_BTN_RESTART:
+        cleaningService_->stopCleaning();
+        resetZones();
+        roombas_.clear();
+        changeScreen(SCREEN_START);
+        break;
+
+    case ID_BTN_EXIT_FINISH:
+        cleaningService_->stopCleaning();
+        DestroyWindow(hwnd_);
         break;
     }
 }
