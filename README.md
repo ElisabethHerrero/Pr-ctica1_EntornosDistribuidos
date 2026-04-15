@@ -1,8 +1,5 @@
 # Práctica1_EntornosDistribuidos
 
-## Asignatura
-**Programación en Entornos Distribuidos**
-
 ## Integrantes del grupo
 - María Rasero  
 - Lara Durán  
