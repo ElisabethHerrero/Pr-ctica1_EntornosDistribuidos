@@ -4,8 +4,8 @@
 #include <vector>
 #include <memory>
 #include <mutex>
-#include <gdiplus.h>
 #include <map>
+#include <gdiplus.h>
 #include "CleaningService.h"
 #include "Zone.h"
 #include "Roomba.h"
@@ -49,7 +49,6 @@ private:
     std::unique_ptr<CleaningService> cleaningService_;
     std::vector<std::shared_ptr<Zone>> zones_;
     std::vector<std::shared_ptr<Roomba>> roombas_;
-    std::map<int, double> lastRoombaAngles_;
 
     int roombaCount_;
     int roombaType_;
@@ -69,15 +68,21 @@ private:
     Gdiplus::Image* nenufar2_;
     Gdiplus::Image* tronco1_;
     Gdiplus::Image* tronco2_;
-    Gdiplus::Font* customFont_;
+
+    std::map<int, double> lastRoombaAngles_;
 
     struct Button {
         int id;
         RECT rect;
         std::wstring text;
         COLORREF color;
+        bool isHovered;
+        RECT originalRect;
     };
     std::vector<Button> buttons_;
+
+    POINT lastMousePos_;
+    bool mouseTracked_;
 
     void initializeZones();
     void resetZones();
@@ -86,7 +91,6 @@ private:
     void addLog(const wchar_t* msg);
 
     bool loadImages();
-    bool loadCustomFont();
     void drawRoombaImage(Gdiplus::Graphics& graphics, double x, double y, double angle,
         COLORREF tintColor, int size, Roomba::Type type);
 
@@ -113,6 +117,7 @@ private:
     void clearButtons();
     int hitTestButton(int x, int y);
     void handleButtonClick(int id);
+    void updateButtonHover(int x, int y);
 
     COLORREF lightenColor(COLORREF color, int amount);
 };

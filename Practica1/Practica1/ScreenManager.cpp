@@ -217,7 +217,8 @@ ScreenManager::ScreenManager()
     nenufar2_(nullptr),
     tronco1_(nullptr),
     tronco2_(nullptr),
-    customFont_(nullptr) {
+    mouseTracked_(false) {
+    lastMousePos_ = { 0, 0 };
 }
 
 ScreenManager::~ScreenManager() {
@@ -235,7 +236,6 @@ ScreenManager::~ScreenManager() {
     if (nenufar2_) delete nenufar2_;
     if (tronco1_) delete tronco1_;
     if (tronco2_) delete tronco2_;
-    if (customFont_) delete customFont_;
 
     if (gdiplusToken_) {
         Gdiplus::GdiplusShutdown(gdiplusToken_);
@@ -255,8 +255,6 @@ bool ScreenManager::initialize() {
         MessageBox(nullptr, L"Error: No se pudieron cargar todas las imagenes\nAsegurate de que esten en la carpeta del ejecutable",
             L"Advertencia", MB_OK | MB_ICONWARNING);
     }
-
-    loadCustomFont();
 
     INITCOMMONCONTROLSEX icex;
     icex.dwSize = sizeof(INITCOMMONCONTROLSEX);
@@ -335,13 +333,14 @@ bool ScreenManager::loadImages() {
 
     bool allLoaded = true;
 
+    // MODIFICADO: Basica = rana3.png, Avanzada = rana.png, Premium = rana2.png
     roombaImageBasic_ = Gdiplus::Image::FromFile((exeDir + L"rana3.png").c_str());
     if (!roombaImageBasic_ || roombaImageBasic_->GetLastStatus() != Gdiplus::Ok) allLoaded = false;
 
-    roombaImageAdvanced_ = Gdiplus::Image::FromFile((exeDir + L"rana2.png").c_str());
+    roombaImageAdvanced_ = Gdiplus::Image::FromFile((exeDir + L"rana.png").c_str());
     if (!roombaImageAdvanced_ || roombaImageAdvanced_->GetLastStatus() != Gdiplus::Ok) allLoaded = false;
 
-    roombaImagePremium_ = Gdiplus::Image::FromFile((exeDir + L"rana.png").c_str());
+    roombaImagePremium_ = Gdiplus::Image::FromFile((exeDir + L"rana2.png").c_str());
     if (!roombaImagePremium_ || roombaImagePremium_->GetLastStatus() != Gdiplus::Ok) allLoaded = false;
 
     dirtImage1_ = Gdiplus::Image::FromFile((exeDir + L"suciedad.png").c_str());
@@ -369,33 +368,6 @@ bool ScreenManager::loadImages() {
     if (!tronco2_ || tronco2_->GetLastStatus() != Gdiplus::Ok) allLoaded = false;
 
     return allLoaded;
-}
-
-bool ScreenManager::loadCustomFont() {
-    wchar_t exePath[MAX_PATH];
-    GetModuleFileName(nullptr, exePath, MAX_PATH);
-
-    std::wstring exeDir = exePath;
-    size_t pos = exeDir.find_last_of(L"\\/");
-    if (pos != std::wstring::npos) {
-        exeDir = exeDir.substr(0, pos + 1);
-    }
-
-    std::wstring fontPath = exeDir + L"Beelova.otf";
-
-    Gdiplus::PrivateFontCollection fontCollection;
-    if (fontCollection.AddFontFile(fontPath.c_str()) == Gdiplus::Ok) {
-        Gdiplus::FontFamily fontFamily;
-        INT found = 0;
-        fontCollection.GetFamilies(1, &fontFamily, &found);
-
-        if (found > 0) {
-            customFont_ = new Gdiplus::Font(&fontFamily, 16, Gdiplus::FontStyleRegular, Gdiplus::UnitPixel);
-            return true;
-        }
-    }
-
-    return false;
 }
 
 void ScreenManager::drawRoombaImage(Gdiplus::Graphics& graphics, double x, double y,
@@ -498,34 +470,34 @@ void ScreenManager::initializeZones() {
         double minObsW, maxObsW, minObsH, maxObsH;
 
         if (minDimension > 300.0) {
-            minObsW = 40.0;
-            maxObsW = 60.0;
-            minObsH = 40.0;
-            maxObsH = 60.0;
+            minObsW = 35.0;
+            maxObsW = 55.0;
+            minObsH = 35.0;
+            maxObsH = 55.0;
         }
         else if (minDimension > 200.0) {
-            minObsW = 30.0;
-            maxObsW = 50.0;
-            minObsH = 30.0;
-            maxObsH = 50.0;
+            minObsW = 25.0;
+            maxObsW = 45.0;
+            minObsH = 25.0;
+            maxObsH = 45.0;
         }
         else if (minDimension > 150.0) {
-            minObsW = 25.0;
-            maxObsW = 40.0;
-            minObsH = 25.0;
-            maxObsH = 40.0;
-        }
-        else if (minDimension > 100.0) {
             minObsW = 20.0;
             maxObsW = 35.0;
             minObsH = 20.0;
             maxObsH = 35.0;
         }
+        else if (minDimension > 100.0) {
+            minObsW = 18.0;
+            maxObsW = 30.0;
+            minObsH = 18.0;
+            maxObsH = 30.0;
+        }
         else {
             minObsW = 15.0;
-            maxObsW = 25.0;
+            maxObsW = 22.0;
             minObsH = 15.0;
-            maxObsH = 25.0;
+            maxObsH = 22.0;
         }
 
         std::uniform_real_distribution<double> disW(minObsW, maxObsW);
@@ -550,8 +522,8 @@ void ScreenManager::initializeZones() {
                 imageType = (gen() % 2 == 0) ? 0 : 1;
             }
             else {
-                ow = disW(gen) * 0.7;
-                oh = disH(gen) * 1.8;
+                ow = disW(gen) * 0.5;
+                oh = disH(gen) * 1.6;
                 imageType = (gen() % 2 == 0) ? 2 : 3;
             }
 
@@ -746,6 +718,30 @@ LRESULT ScreenManager::handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) {
         }
         return 0;
 
+    case WM_MOUSEMOVE: {
+        int x = GET_X_LPARAM(lParam);
+        int y = GET_Y_LPARAM(lParam);
+
+        if (!mouseTracked_) {
+            TRACKMOUSEEVENT tme = { sizeof(TRACKMOUSEEVENT) };
+            tme.dwFlags = TME_LEAVE;
+            tme.hwndTrack = hwnd_;
+            TrackMouseEvent(&tme);
+            mouseTracked_ = true;
+        }
+
+        updateButtonHover(x, y);
+        return 0;
+    }
+
+    case WM_MOUSELEAVE:
+        mouseTracked_ = false;
+        for (auto& btn : buttons_) {
+            btn.isHovered = false;
+        }
+        InvalidateRect(hwnd_, nullptr, FALSE);
+        return 0;
+
     case WM_LBUTTONDOWN: {
         int x = GET_X_LPARAM(lParam);
         int y = GET_Y_LPARAM(lParam);
@@ -860,24 +856,48 @@ void ScreenManager::paintConfigScreen(HDC hdc, RECT& rect) {
 
     addButton(ID_BTN_PLUS, centerX + 38, 155, 52, 52, L"+", COLOR_SUCCESS);
 
-    drawText(hdc, L"Tipo de Roomba:", centerX - 295, 245, COLOR_TEXT, 18, true);
+    // MODIFICADO: Texto más arriba
+    drawText(hdc, L"Tipo de Roomba:", centerX - 295, 215, COLOR_TEXT, 18, true);
 
     COLORREF c1 = (roombaType_ == Roomba::BASIC) ? COLOR_PRIMARY : RGB(0xD0, 0xD0, 0xC0);
     COLORREF c2 = (roombaType_ == Roomba::ADVANCED) ? COLOR_SUCCESS : RGB(0xD0, 0xD0, 0xC0);
     COLORREF c3 = (roombaType_ == Roomba::PREMIUM) ? COLOR_DANGER : RGB(0xD0, 0xD0, 0xC0);
 
-    addButton(ID_BTN_BASIC, centerX - 295, 285, 190, 65, L"BASICA", c1);
-    addButton(ID_BTN_ADVANCED, centerX - 95, 285, 190, 65, L"AVANZADA", c2);
-    addButton(ID_BTN_PREMIUM, centerX + 105, 285, 190, 65, L"PREMIUM", c3);
+    Gdiplus::Graphics graphics(hdc);
+    graphics.SetInterpolationMode(Gdiplus::InterpolationModeHighQualityBicubic);
+    graphics.SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias);
 
-    drawText(hdc, L"Zonas disponibles:", centerX - 295, 390, COLOR_TEXT, 16, true);
+    int imgSize = 50;
+    int imgY = 255;  // MODIFICADO: Imágenes más abajo
+
+    if (roombaImageBasic_) {
+        int imgX1 = centerX - 295 + (190 - imgSize) / 2;
+        graphics.DrawImage(roombaImageBasic_, imgX1, imgY, imgSize, imgSize);
+    }
+
+    if (roombaImageAdvanced_) {
+        int imgX2 = centerX - 95 + (190 - imgSize) / 2;
+        graphics.DrawImage(roombaImageAdvanced_, imgX2, imgY, imgSize, imgSize);
+    }
+
+    if (roombaImagePremium_) {
+        int imgX3 = centerX + 105 + (190 - imgSize) / 2;
+        graphics.DrawImage(roombaImagePremium_, imgX3, imgY, imgSize, imgSize);
+    }
+
+    // MODIFICADO: Botones más abajo
+    addButton(ID_BTN_BASIC, centerX - 295, 320, 190, 65, L"BASICA", c1);
+    addButton(ID_BTN_ADVANCED, centerX - 95, 320, 190, 65, L"AVANZADA", c2);
+    addButton(ID_BTN_PREMIUM, centerX + 105, 320, 190, 65, L"PREMIUM", c3);
+
+    drawText(hdc, L"Zonas disponibles:", centerX - 295, 425, COLOR_TEXT, 16, true);
 
     COLORREF zoneColors[] = { COLOR_ZONE1, COLOR_ZONE2, COLOR_ZONE3, COLOR_ZONE4 };
     for (size_t i = 0; i < zones_.size(); i++) {
         auto& zone = zones_[i];
         if (!zone) continue;
 
-        int zy = 425 + static_cast<int>(i) * 28;
+        int zy = 460 + static_cast<int>(i) * 28;
 
         HBRUSH zb = CreateSolidBrush(zoneColors[i]);
         RECT zr = { centerX - 295, zy + 2, centerX - 278, zy + 19 };
@@ -890,8 +910,8 @@ void ScreenManager::paintConfigScreen(HDC hdc, RECT& rect) {
         drawText(hdc, info, centerX - 270, zy, COLOR_TEXT, 12, false);
     }
 
-    addButton(ID_BTN_BACK, centerX - 295, 548, 190, 46, L"VOLVER", COLOR_TEXT_DIM);
-    addButton(ID_BTN_BEGIN, centerX + 105, 548, 190, 46, L"COMENZAR", COLOR_SUCCESS);
+    addButton(ID_BTN_BACK, centerX - 295, 580, 190, 46, L"VOLVER", COLOR_TEXT_DIM);
+    addButton(ID_BTN_BEGIN, centerX + 105, 580, 190, 46, L"COMENZAR", COLOR_SUCCESS);
 
     for (size_t i = 0; i < buttons_.size(); i++) {
         drawButton(hdc, buttons_[i]);
@@ -961,7 +981,7 @@ void ScreenManager::paintCleaningScreen(HDC hdc, RECT& rect) {
     }
 
     drawText(hdc, L"Progreso Total:", panelX + 15, panelY + 50, COLOR_TEXT, 14, false);
-    drawProgressBar(hdc, panelX + 15, panelY + 72, panelW - 30, 22, totalProg, COLOR_SUCCESS);
+    drawProgressBar(hdc, panelX + 15, panelY + 72, panelW - 30, 22, totalProg, COLOR_DANGER);
 
     wchar_t progStr[24];
     swprintf_s(progStr, L"%.1f%%", totalProg);
@@ -1182,11 +1202,12 @@ void ScreenManager::drawZoneMiniMap(
     double scaleX = innerW / zone->getLength();
     double scaleY = innerH / zone->getWidth();
 
+    // MODIFICADO: Dibujar área limpia COMO CAPA SUPERIOR con transparencia
     auto cleanedGrid = zone->getGrid();
     double cellSize = zone->getCellSize();
 
-    // CORREGIDO: Usar Gdiplus::REAL (float)
-    Gdiplus::SolidBrush cleanBrush(Gdiplus::Color(180, 0xCE, 0xE7, 0xCA));
+    // Crear superficie de limpieza como capa superior semi-transparente
+    Gdiplus::SolidBrush cleanBrush(Gdiplus::Color(200, 0xCE, 0xE7, 0xCA));
 
     for (size_t row = 0; row < cleanedGrid.size(); ++row) {
         for (size_t col = 0; col < cleanedGrid[row].size(); ++col) {
@@ -1194,25 +1215,35 @@ void ScreenManager::drawZoneMiniMap(
 
             Gdiplus::REAL cx = static_cast<Gdiplus::REAL>(innerX + (col + 0.5) * cellSize * scaleX);
             Gdiplus::REAL cy = static_cast<Gdiplus::REAL>(innerY + (row + 0.5) * cellSize * scaleY);
-            Gdiplus::REAL radius = static_cast<Gdiplus::REAL>(cellSize * std::min(scaleX, scaleY) * 0.6);
+            Gdiplus::REAL radius = static_cast<Gdiplus::REAL>(cellSize * std::min(scaleX, scaleY) * 0.7);
 
             graphics.FillEllipse(&cleanBrush, cx - radius, cy - radius, radius * 2.0f, radius * 2.0f);
         }
     }
 
+    // MODIFICADO: Trazo continuo grueso SOBRE la suciedad
     auto trail = zone->getTrail();
-    size_t start = (trail.size() > 1500) ? trail.size() - 1500 : 0;
+    if (trail.size() > 1) {
+        size_t start = (trail.size() > 1500) ? trail.size() - 1500 : 0;
 
-    // CORREGIDO: Usar Gdiplus::REAL (float)
-    Gdiplus::SolidBrush trailBrush(Gdiplus::Color(150, 0xCE, 0xE7, 0xCA));
+        Gdiplus::Pen trailPen(Gdiplus::Color(220, 0xCE, 0xE7, 0xCA), 10.0f);
+        trailPen.SetLineCap(Gdiplus::LineCapRound, Gdiplus::LineCapRound, Gdiplus::DashCapRound);
+        trailPen.SetLineJoin(Gdiplus::LineJoinRound);
 
-    for (size_t j = start; j < trail.size(); j++) {
-        auto& pt = trail[j];
-        Gdiplus::REAL px = static_cast<Gdiplus::REAL>(innerX + pt.x * scaleX);
-        Gdiplus::REAL py = static_cast<Gdiplus::REAL>(innerY + pt.y * scaleY);
-        graphics.FillEllipse(&trailBrush, px - 3.0f, py - 3.0f, 6.0f, 6.0f);
+        for (size_t j = start + 1; j < trail.size(); j++) {
+            auto& pt1 = trail[j - 1];
+            auto& pt2 = trail[j];
+
+            Gdiplus::REAL x1 = static_cast<Gdiplus::REAL>(innerX + pt1.x * scaleX);
+            Gdiplus::REAL y1 = static_cast<Gdiplus::REAL>(innerY + pt1.y * scaleY);
+            Gdiplus::REAL x2 = static_cast<Gdiplus::REAL>(innerX + pt2.x * scaleX);
+            Gdiplus::REAL y2 = static_cast<Gdiplus::REAL>(innerY + pt2.y * scaleY);
+
+            graphics.DrawLine(&trailPen, x1, y1, x2, y2);
+        }
     }
 
+    // Obstáculos (se dibujan sobre la limpieza)
     for (size_t oi = 0; oi < zone->getObstacles().size(); oi++) {
         auto& obs = zone->getObstacles()[oi];
         if (!obs) continue;
@@ -1394,10 +1425,22 @@ void ScreenManager::drawText(HDC hdc, const wchar_t* text, int x, int y, COLORRE
 }
 
 void ScreenManager::drawButton(HDC hdc, const Button& btn) {
-    int w = btn.rect.right - btn.rect.left;
-    int h = btn.rect.bottom - btn.rect.top;
+    RECT drawRect = btn.rect;
 
-    drawRoundRect(hdc, btn.rect.left, btn.rect.top, w, h, 8, btn.color, btn.color);
+    // Efecto hover: aumentar tamaño ligeramente
+    if (btn.isHovered) {
+        int expandX = (drawRect.right - drawRect.left) / 20;
+        int expandY = (drawRect.bottom - drawRect.top) / 20;
+        drawRect.left -= expandX;
+        drawRect.right += expandX;
+        drawRect.top -= expandY;
+        drawRect.bottom += expandY;
+    }
+
+    int w = drawRect.right - drawRect.left;
+    int h = drawRect.bottom - drawRect.top;
+
+    drawRoundRect(hdc, drawRect.left, drawRect.top, w, h, 8, btn.color, btn.color);
 
     COLORREF textColor = COLOR_BG_DARK;
     int brightness = GetRValue(btn.color) + GetGValue(btn.color) + GetBValue(btn.color);
@@ -1406,8 +1449,8 @@ void ScreenManager::drawButton(HDC hdc, const Button& btn) {
     }
 
     int textLen = static_cast<int>(btn.text.length());
-    int textX = btn.rect.left + w / 2 - textLen * 4;
-    int textY = btn.rect.top + h / 2 - 8;
+    int textX = drawRect.left + w / 2 - textLen * 4;
+    int textY = drawRect.top + h / 2 - 8;
     drawText(hdc, btn.text.c_str(), textX, textY, textColor, 16, true);
 }
 
@@ -1444,8 +1487,10 @@ void ScreenManager::addButton(int id, int x, int y, int w, int h, const wchar_t*
     btn.rect.top = y;
     btn.rect.right = x + w;
     btn.rect.bottom = y + h;
+    btn.originalRect = btn.rect;
     btn.text = text ? text : L"";
     btn.color = color;
+    btn.isHovered = false;
     buttons_.push_back(btn);
 }
 
@@ -1455,12 +1500,27 @@ void ScreenManager::clearButtons() {
 
 int ScreenManager::hitTestButton(int x, int y) {
     for (size_t i = 0; i < buttons_.size(); i++) {
-        if (x >= buttons_[i].rect.left && x <= buttons_[i].rect.right &&
-            y >= buttons_[i].rect.top && y <= buttons_[i].rect.bottom) {
+        if (x >= buttons_[i].originalRect.left && x <= buttons_[i].originalRect.right &&
+            y >= buttons_[i].originalRect.top && y <= buttons_[i].originalRect.bottom) {
             return buttons_[i].id;
         }
     }
     return 0;
+}
+
+void ScreenManager::updateButtonHover(int x, int y) {
+    bool changed = false;
+    for (auto& btn : buttons_) {
+        bool wasHovered = btn.isHovered;
+        btn.isHovered = (x >= btn.originalRect.left && x <= btn.originalRect.right &&
+            y >= btn.originalRect.top && y <= btn.originalRect.bottom);
+        if (wasHovered != btn.isHovered) {
+            changed = true;
+        }
+    }
+    if (changed) {
+        InvalidateRect(hwnd_, nullptr, FALSE);
+    }
 }
 
 void ScreenManager::handleButtonClick(int id) {
