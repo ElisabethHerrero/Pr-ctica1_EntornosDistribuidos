@@ -16,6 +16,7 @@
 #include <algorithm>
 #include <cwchar>
 #include <queue>
+#include <map>
 
 #pragma comment(lib, "comctl32.lib")
 #pragma comment(lib, "msimg32.lib")
@@ -334,7 +335,6 @@ bool ScreenManager::loadImages() {
 
     bool allLoaded = true;
 
-    // Cargar roombas
     roombaImageBasic_ = Gdiplus::Image::FromFile((exeDir + L"rana3.png").c_str());
     if (!roombaImageBasic_ || roombaImageBasic_->GetLastStatus() != Gdiplus::Ok) allLoaded = false;
 
@@ -344,7 +344,6 @@ bool ScreenManager::loadImages() {
     roombaImagePremium_ = Gdiplus::Image::FromFile((exeDir + L"rana.png").c_str());
     if (!roombaImagePremium_ || roombaImagePremium_->GetLastStatus() != Gdiplus::Ok) allLoaded = false;
 
-    // Cargar fondos de suciedad
     dirtImage1_ = Gdiplus::Image::FromFile((exeDir + L"suciedad.png").c_str());
     if (!dirtImage1_ || dirtImage1_->GetLastStatus() != Gdiplus::Ok) allLoaded = false;
 
@@ -357,7 +356,6 @@ bool ScreenManager::loadImages() {
     dirtImage4_ = Gdiplus::Image::FromFile((exeDir + L"suciedad4.png").c_str());
     if (!dirtImage4_ || dirtImage4_->GetLastStatus() != Gdiplus::Ok) allLoaded = false;
 
-    // Cargar obstáculos
     nenufar1_ = Gdiplus::Image::FromFile((exeDir + L"nenufar.png").c_str());
     if (!nenufar1_ || nenufar1_->GetLastStatus() != Gdiplus::Ok) allLoaded = false;
 
@@ -500,34 +498,34 @@ void ScreenManager::initializeZones() {
         double minObsW, maxObsW, minObsH, maxObsH;
 
         if (minDimension > 300.0) {
-            minObsW = 35.0;
-            maxObsW = 55.0;
-            minObsH = 35.0;
-            maxObsH = 55.0;
+            minObsW = 40.0;
+            maxObsW = 60.0;
+            minObsH = 40.0;
+            maxObsH = 60.0;
         }
         else if (minDimension > 200.0) {
+            minObsW = 30.0;
+            maxObsW = 50.0;
+            minObsH = 30.0;
+            maxObsH = 50.0;
+        }
+        else if (minDimension > 150.0) {
             minObsW = 25.0;
             maxObsW = 40.0;
             minObsH = 25.0;
             maxObsH = 40.0;
         }
-        else if (minDimension > 150.0) {
-            minObsW = 20.0;
-            maxObsW = 32.0;
-            minObsH = 20.0;
-            maxObsH = 32.0;
-        }
         else if (minDimension > 100.0) {
+            minObsW = 20.0;
+            maxObsW = 35.0;
+            minObsH = 20.0;
+            maxObsH = 35.0;
+        }
+        else {
             minObsW = 15.0;
             maxObsW = 25.0;
             minObsH = 15.0;
             maxObsH = 25.0;
-        }
-        else {
-            minObsW = 12.0;
-            maxObsW = 18.0;
-            minObsH = 12.0;
-            maxObsH = 18.0;
         }
 
         std::uniform_real_distribution<double> disW(minObsW, maxObsW);
@@ -543,15 +541,18 @@ void ScreenManager::initializeZones() {
 
             bool isSquare = (obsTypeDist(gen) == 0);
             double ow, oh;
+            int imageType;
 
             if (isSquare) {
                 double size = (disW(gen) + disH(gen)) / 2.0;
                 ow = size;
                 oh = size;
+                imageType = (gen() % 2 == 0) ? 0 : 1;
             }
             else {
-                ow = disW(gen) * 0.4;
-                oh = disH(gen) * 2.5;
+                ow = disW(gen) * 0.7;
+                oh = disH(gen) * 1.8;
+                imageType = (gen() % 2 == 0) ? 2 : 3;
             }
 
             const double wallClearance = minClearance;
@@ -598,14 +599,15 @@ void ScreenManager::initializeZones() {
                 candidate.y,
                 candidate.w,
                 candidate.h,
-                Obstacle::FURNITURE
+                Obstacle::FURNITURE,
+                imageType
             ));
             created++;
         }
 
         if (created == 0 && zoneArea > 20000.0) {
-            double safeW = std::min(18.0, zoneLength * 0.15);
-            double safeH = std::min(18.0, zoneWidth * 0.15);
+            double safeW = std::min(25.0, zoneLength * 0.15);
+            double safeH = std::min(25.0, zoneWidth * 0.15);
             double safeX = (zoneLength - safeW) / 2.0;
             double safeY = (zoneWidth - safeH) / 2.0;
 
@@ -614,7 +616,8 @@ void ScreenManager::initializeZones() {
                 safeY,
                 safeW,
                 safeH,
-                Obstacle::FURNITURE
+                Obstacle::FURNITURE,
+                0
             ));
         }
     }
@@ -634,6 +637,7 @@ void ScreenManager::initializeRoombas() {
     cleaningService_->stopCleaning();
     roombas_.clear();
     resetZones();
+    lastRoombaAngles_.clear();
 
     for (int i = 1; i <= roombaCount_; i++) {
         auto roomba = std::make_shared<Roomba>(i, static_cast<Roomba::Type>(roombaType_));
@@ -642,6 +646,7 @@ void ScreenManager::initializeRoombas() {
         roomba->setPosition(10.0, 10.0);
         roomba->setAngle(0.0);
         roombas_.push_back(roomba);
+        lastRoombaAngles_[i] = 0.0;
     }
 
     wchar_t msg[128];
@@ -788,9 +793,36 @@ void ScreenManager::paintStartScreen(HDC hdc, RECT& rect) {
     int centerX = rect.right / 2;
     int centerY = rect.bottom / 2;
 
-    drawText(hdc, L"SISTEMA DISTRIBUIDO", centerX - 200, centerY - 150, COLOR_TEXT, 34, true);
-    drawText(hdc, L"ROOMBA", centerX - 95, centerY - 85, COLOR_PRIMARY, 54, true);
-    drawText(hdc, L"Programacion en Entornos Distribuidos", centerX - 190, centerY - 20, COLOR_TEXT_DIM, 16, false);
+    SIZE textSize;
+    HFONT font1 = CreateFont(34, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE,
+        DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+        CLEARTYPE_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Segoe UI");
+    HFONT oldFont = (HFONT)SelectObject(hdc, font1);
+    GetTextExtentPoint32(hdc, L"SISTEMA DISTRIBUIDO", 19, &textSize);
+    SelectObject(hdc, oldFont);
+    DeleteObject(font1);
+
+    drawText(hdc, L"SISTEMA DISTRIBUIDO", centerX - textSize.cx / 2, centerY - 150, COLOR_TEXT, 34, true);
+
+    HFONT font2 = CreateFont(54, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE,
+        DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+        CLEARTYPE_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Segoe UI");
+    oldFont = (HFONT)SelectObject(hdc, font2);
+    GetTextExtentPoint32(hdc, L"ROOMBA", 6, &textSize);
+    SelectObject(hdc, oldFont);
+    DeleteObject(font2);
+
+    drawText(hdc, L"ROOMBA", centerX - textSize.cx / 2, centerY - 85, COLOR_PRIMARY, 54, true);
+
+    HFONT font3 = CreateFont(16, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE,
+        DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+        CLEARTYPE_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Segoe UI");
+    oldFont = (HFONT)SelectObject(hdc, font3);
+    GetTextExtentPoint32(hdc, L"Programacion en Entornos Distribuidos", 38, &textSize);
+    SelectObject(hdc, oldFont);
+    DeleteObject(font3);
+
+    drawText(hdc, L"Programacion en Entornos Distribuidos", centerX - textSize.cx / 2, centerY - 20, COLOR_TEXT_DIM, 16, false);
 
     int btnY = centerY + 50;
     addButton(ID_BTN_START, centerX - 150, btnY, 300, 58, L"INICIAR", COLOR_SUCCESS);
@@ -801,7 +833,15 @@ void ScreenManager::paintStartScreen(HDC hdc, RECT& rect) {
         drawButton(hdc, buttons_[i]);
     }
 
-    drawText(hdc, L"Visualizacion sincronizada con limpieza real", centerX - 170, rect.bottom - 55, COLOR_TEXT_DIM, 14, false);
+    HFONT font4 = CreateFont(14, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE,
+        DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+        CLEARTYPE_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Segoe UI");
+    oldFont = (HFONT)SelectObject(hdc, font4);
+    GetTextExtentPoint32(hdc, L"Visualizacion sincronizada con limpieza real", 45, &textSize);
+    SelectObject(hdc, oldFont);
+    DeleteObject(font4);
+
+    drawText(hdc, L"Visualizacion sincronizada con limpieza real", centerX - textSize.cx / 2, rect.bottom - 55, COLOR_TEXT_DIM, 14, false);
     drawText(hdc, L"v3.0", rect.right - 60, rect.bottom - 30, COLOR_TEXT_DIM, 12, false);
 }
 
@@ -1002,8 +1042,26 @@ void ScreenManager::paintFinishedScreen(HDC hdc, RECT& rect) {
 
     drawRoundRect(hdc, centerX - 350, centerY - 300, 700, 600, 20, COLOR_BG_LIGHT, COLOR_SUCCESS);
 
-    drawText(hdc, L"¡LIMPIEZA", centerX - 180, centerY - 240, COLOR_SUCCESS, 48, true);
-    drawText(hdc, L"FINALIZADA!", centerX - 200, centerY - 180, COLOR_SUCCESS, 48, true);
+    SIZE textSize;
+    HFONT font1 = CreateFont(48, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE,
+        DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+        CLEARTYPE_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Segoe UI");
+    HFONT oldFont = (HFONT)SelectObject(hdc, font1);
+    GetTextExtentPoint32(hdc, L"¡LIMPIEZA", 9, &textSize);
+    SelectObject(hdc, oldFont);
+    DeleteObject(font1);
+
+    drawText(hdc, L"¡LIMPIEZA", centerX - textSize.cx / 2, centerY - 240, COLOR_SUCCESS, 48, true);
+
+    font1 = CreateFont(48, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE,
+        DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+        CLEARTYPE_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Segoe UI");
+    oldFont = (HFONT)SelectObject(hdc, font1);
+    GetTextExtentPoint32(hdc, L"FINALIZADA!", 11, &textSize);
+    SelectObject(hdc, oldFont);
+    DeleteObject(font1);
+
+    drawText(hdc, L"FINALIZADA!", centerX - textSize.cx / 2, centerY - 180, COLOR_SUCCESS, 48, true);
 
     HBRUSH checkBrush = CreateSolidBrush(COLOR_SUCCESS);
     HPEN checkPen = CreatePen(PS_SOLID, 4, RGB(255, 255, 255));
@@ -1020,7 +1078,15 @@ void ScreenManager::paintFinishedScreen(HDC hdc, RECT& rect) {
     DeleteObject(whitePen);
     DeleteObject(checkPen);
 
-    drawText(hdc, L"Estadisticas de limpieza:", centerX - 140, centerY + 50, COLOR_TEXT, 18, true);
+    HFONT font2 = CreateFont(18, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE,
+        DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+        CLEARTYPE_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Segoe UI");
+    oldFont = (HFONT)SelectObject(hdc, font2);
+    GetTextExtentPoint32(hdc, L"Estadisticas de limpieza:", 25, &textSize);
+    SelectObject(hdc, oldFont);
+    DeleteObject(font2);
+
+    drawText(hdc, L"Estadisticas de limpieza:", centerX - textSize.cx / 2, centerY + 50, COLOR_TEXT, 18, true);
 
     COLORREF zoneColors[] = { COLOR_ZONE1, COLOR_ZONE2, COLOR_ZONE3, COLOR_ZONE4 };
     int yOffset = centerY + 90;
@@ -1063,8 +1129,16 @@ void ScreenManager::paintFinishedScreen(HDC hdc, RECT& rect) {
         drawButton(hdc, buttons_[i]);
     }
 
+    HFONT font3 = CreateFont(14, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE,
+        DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+        CLEARTYPE_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Segoe UI");
+    oldFont = (HFONT)SelectObject(hdc, font3);
+    GetTextExtentPoint32(hdc, L"Todas las zonas han sido limpiadas exitosamente", 48, &textSize);
+    SelectObject(hdc, oldFont);
+    DeleteObject(font3);
+
     drawText(hdc, L"Todas las zonas han sido limpiadas exitosamente",
-        centerX - 210, rect.bottom - 60, COLOR_TEXT_DIM, 14, false);
+        centerX - textSize.cx / 2, rect.bottom - 60, COLOR_TEXT_DIM, 14, false);
 }
 
 void ScreenManager::drawZoneMiniMap(
@@ -1085,6 +1159,7 @@ void ScreenManager::drawZoneMiniMap(
     int innerH = h - 40;
 
     Gdiplus::Graphics graphics(hdc);
+    graphics.SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias);
 
     Gdiplus::Image* dirtImg = nullptr;
     switch (zoneIndex) {
@@ -1104,40 +1179,39 @@ void ScreenManager::drawZoneMiniMap(
         DeleteObject(floorBrush);
     }
 
-    HPEN borderPen = CreatePen(PS_SOLID, 3, COLOR_TEXT);
-    SelectObject(hdc, borderPen);
-    SelectObject(hdc, GetStockObject(NULL_BRUSH));
-    RoundRect(hdc, x, y, x + w, y + h, 10, 10);
-    DeleteObject(borderPen);
-
-    drawText(hdc, zone->getName(), x + 12, y + 8, COLOR_TEXT, 13, true);
-
-    wchar_t pct[20];
-    swprintf_s(pct, L"%.1f%%", zone->getCleanedPercentage());
-    drawText(hdc, pct, x + w - 58, y + 8, COLOR_TEXT, 13, true);
-
     double scaleX = innerW / zone->getLength();
     double scaleY = innerH / zone->getWidth();
 
+    auto cleanedGrid = zone->getGrid();
+    double cellSize = zone->getCellSize();
+
+    // CORREGIDO: Usar Gdiplus::REAL (float)
+    Gdiplus::SolidBrush cleanBrush(Gdiplus::Color(180, 0xCE, 0xE7, 0xCA));
+
+    for (size_t row = 0; row < cleanedGrid.size(); ++row) {
+        for (size_t col = 0; col < cleanedGrid[row].size(); ++col) {
+            if (!cleanedGrid[row][col]) continue;
+
+            Gdiplus::REAL cx = static_cast<Gdiplus::REAL>(innerX + (col + 0.5) * cellSize * scaleX);
+            Gdiplus::REAL cy = static_cast<Gdiplus::REAL>(innerY + (row + 0.5) * cellSize * scaleY);
+            Gdiplus::REAL radius = static_cast<Gdiplus::REAL>(cellSize * std::min(scaleX, scaleY) * 0.6);
+
+            graphics.FillEllipse(&cleanBrush, cx - radius, cy - radius, radius * 2.0f, radius * 2.0f);
+        }
+    }
+
     auto trail = zone->getTrail();
-    size_t start = (trail.size() > 700) ? trail.size() - 700 : 0;
+    size_t start = (trail.size() > 1500) ? trail.size() - 1500 : 0;
+
+    // CORREGIDO: Usar Gdiplus::REAL (float)
+    Gdiplus::SolidBrush trailBrush(Gdiplus::Color(150, 0xCE, 0xE7, 0xCA));
 
     for (size_t j = start; j < trail.size(); j++) {
         auto& pt = trail[j];
-
-        int px = innerX + static_cast<int>(pt.x * scaleX);
-        int py = innerY + static_cast<int>(pt.y * scaleY);
-
-        HBRUSH tb = CreateSolidBrush(COLOR_TRAIL);
-        SelectObject(hdc, tb);
-        SelectObject(hdc, GetStockObject(NULL_PEN));
-        Ellipse(hdc, px - 4, py - 4, px + 4, py + 4);
-        DeleteObject(tb);
+        Gdiplus::REAL px = static_cast<Gdiplus::REAL>(innerX + pt.x * scaleX);
+        Gdiplus::REAL py = static_cast<Gdiplus::REAL>(innerY + pt.y * scaleY);
+        graphics.FillEllipse(&trailBrush, px - 3.0f, py - 3.0f, 6.0f, 6.0f);
     }
-
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<int> imgDist(0, 3);
 
     for (size_t oi = 0; oi < zone->getObstacles().size(); oi++) {
         auto& obs = zone->getObstacles()[oi];
@@ -1145,19 +1219,17 @@ void ScreenManager::drawZoneMiniMap(
 
         int ox = innerX + static_cast<int>(obs->getX() * scaleX);
         int oy = innerY + static_cast<int>(obs->getY() * scaleY);
-        int ow = std::max(6, static_cast<int>(obs->getWidth() * scaleX));
-        int oh = std::max(6, static_cast<int>(obs->getHeight() * scaleY));
-
-        bool isSquare = (std::abs(obs->getWidth() - obs->getHeight()) < 5.0);
+        int ow = std::max(10, static_cast<int>(obs->getWidth() * scaleX));
+        int oh = std::max(10, static_cast<int>(obs->getHeight() * scaleY));
 
         Gdiplus::Image* obsImg = nullptr;
-        int imgChoice = imgDist(gen);
+        int imgType = obs->getImageType();
 
-        if (isSquare) {
-            obsImg = (imgChoice < 2) ? nenufar1_ : nenufar2_;
-        }
-        else {
-            obsImg = (imgChoice < 2) ? tronco1_ : tronco2_;
+        switch (imgType) {
+        case 0: obsImg = nenufar1_; break;
+        case 1: obsImg = nenufar2_; break;
+        case 2: obsImg = tronco1_; break;
+        case 3: obsImg = tronco2_; break;
         }
 
         if (obsImg) {
@@ -1173,6 +1245,18 @@ void ScreenManager::drawZoneMiniMap(
             DeleteObject(obsPen);
         }
     }
+
+    HPEN borderPen = CreatePen(PS_SOLID, 3, COLOR_TEXT);
+    SelectObject(hdc, borderPen);
+    SelectObject(hdc, GetStockObject(NULL_BRUSH));
+    RoundRect(hdc, x, y, x + w, y + h, 10, 10);
+    DeleteObject(borderPen);
+
+    drawText(hdc, zone->getName(), x + 12, y + 8, COLOR_TEXT, 13, true);
+
+    wchar_t pct[20];
+    swprintf_s(pct, L"%.1f%%", zone->getCleanedPercentage());
+    drawText(hdc, pct, x + w - 58, y + 8, COLOR_TEXT, 13, true);
 
     HPEN framePen = CreatePen(PS_SOLID, 1, COLOR_TEXT);
     SelectObject(hdc, framePen);
@@ -1211,7 +1295,21 @@ void ScreenManager::drawRoombaOnZone(
 
     int imageSize = 30;
 
-    double ang = roomba->getAngle();
+    double targetAngle = roomba->getAngle();
+    double currentAngle = targetAngle;
+
+    int roombaId = roomba->getId();
+    if (lastRoombaAngles_.find(roombaId) != lastRoombaAngles_.end()) {
+        double lastAngle = lastRoombaAngles_[roombaId];
+        double angleDiff = targetAngle - lastAngle;
+
+        while (angleDiff > M_PI) angleDiff -= 2 * M_PI;
+        while (angleDiff < -M_PI) angleDiff += 2 * M_PI;
+
+        currentAngle = lastAngle + angleDiff * 0.3;
+    }
+    lastRoombaAngles_[roombaId] = currentAngle;
+
     COLORREF bodyColor = roomba->getColor();
     if (roomba->getStuckCounter() > 10) {
         bodyColor = RGB(255, 140, 0);
@@ -1220,7 +1318,7 @@ void ScreenManager::drawRoombaOnZone(
     bool hasImage = (roombaImageBasic_ && roombaImageAdvanced_ && roombaImagePremium_);
 
     if (hasImage) {
-        drawRoombaImage(graphics, rx, ry, ang, bodyColor, imageSize, roomba->getType());
+        drawRoombaImage(graphics, rx, ry, currentAngle, bodyColor, imageSize, roomba->getType());
     }
     else {
         HBRUSH shadow = CreateSolidBrush(RGB(15, 16, 20));
@@ -1251,23 +1349,9 @@ void ScreenManager::drawRoombaOnZone(
         HPEN dirPen = CreatePen(PS_SOLID, 2, RGB(255, 255, 255));
         SelectObject(hdc, dirPen);
         MoveToEx(hdc, rx, ry, nullptr);
-        LineTo(hdc, rx + static_cast<int>(std::cos(ang) * 11),
-            ry + static_cast<int>(std::sin(ang) * 11));
+        LineTo(hdc, rx + static_cast<int>(std::cos(currentAngle) * 11),
+            ry + static_cast<int>(std::sin(currentAngle) * 11));
         DeleteObject(dirPen);
-
-        wchar_t idStr[8];
-        swprintf_s(idStr, L"%d", roomba->getId());
-
-        int textW = 14;
-        int textH = 14;
-        HBRUSH textBg = CreateSolidBrush(RGB(0, 0, 0));
-        RECT textRect = { rx - textW / 2, ry - imageSize / 2 - 18,
-                          rx + textW / 2, ry - imageSize / 2 - 4 };
-        FillRect(hdc, &textRect, textBg);
-        DeleteObject(textBg);
-
-        drawText(hdc, idStr, rx - 4, ry - imageSize / 2 - 16,
-            RGB(255, 255, 255), 10, true);
     }
 }
 

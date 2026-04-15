@@ -3017,3 +3017,42 @@ Roomba #1 asignada a Laguna
 Roomba #2 asignada a Arroyo
 Roomba #3 asignada a Lago
 Limpieza detenida
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas de tipo Avanzada
+Iniciando limpieza...
+Roomba #1 asignada a Laguna
+Roomba #2 asignada a Arroyo
+Roomba #3 asignada a Lago
+Configuradas 3 Roombas de tipo Avanzada
+Iniciando limpieza...
+Roomba #1 asignada a Laguna
+Roomba #2 asignada a Arroyo
+Roomba #3 asignada a Lago
+Roomba #2 completa Arroyo (zona finalizada)
+Roomba #2 asignada a Charca
+Roomba #2 completa Charca (zona finalizada)
+Roomba #1 completa Laguna (zona finalizada)
+Limpieza detenida
+Configuradas 3 Roombas de tipo Premium
+Iniciando limpieza...
+Roomba #1 asignada a Laguna
+Roomba #2 asignada a Arroyo
+Roomba #3 asignada a Lago
+Limpieza detenida
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas de tipo Avanzada
+Iniciando limpieza...
+Roomba #1 asignada a Laguna
+Roomba #2 asignada a Arroyo
+Roomba #3 asignada a Lago
+Roomba #2 completa Arroyo (zona finalizada)
+Roomba #2 asignada a Charca
+Roomba #2 completa Charca (zona finalizada)
+Roomba #1 completa Laguna (zona finalizada)
+Roomba #3 completa Lago (zona finalizada)
+Todas las zonas completadas
+¡Limpieza finalizada con éxito!

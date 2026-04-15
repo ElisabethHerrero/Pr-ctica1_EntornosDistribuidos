@@ -5,6 +5,7 @@
 #include <memory>
 #include <mutex>
 #include <gdiplus.h>
+#include <map>
 #include "CleaningService.h"
 #include "Zone.h"
 #include "Roomba.h"
@@ -48,6 +49,7 @@ private:
     std::unique_ptr<CleaningService> cleaningService_;
     std::vector<std::shared_ptr<Zone>> zones_;
     std::vector<std::shared_ptr<Roomba>> roombas_;
+    std::map<int, double> lastRoombaAngles_;
 
     int roombaCount_;
     int roombaType_;
