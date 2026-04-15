@@ -1,7 +1,6 @@
 #ifndef NOMINMAX
 #define NOMINMAX
 #endif
-//Comentarios de prueba.22
 #include "ScreenManager.h"
 #include "CleaningService.h"
 #include "Zone.h"
@@ -217,6 +216,8 @@ ScreenManager::ScreenManager()
     nenufar2_(nullptr),
     tronco1_(nullptr),
     tronco2_(nullptr),
+    logoImage_(nullptr),
+    logo2Image_(nullptr),
     mouseTracked_(false) {
     lastMousePos_ = { 0, 0 };
 }
@@ -236,6 +237,8 @@ ScreenManager::~ScreenManager() {
     if (nenufar2_) delete nenufar2_;
     if (tronco1_) delete tronco1_;
     if (tronco2_) delete tronco2_;
+    if (logoImage_) delete logoImage_;
+    if (logo2Image_) delete logo2Image_;
 
     if (gdiplusToken_) {
         Gdiplus::GdiplusShutdown(gdiplusToken_);
@@ -365,6 +368,12 @@ bool ScreenManager::loadImages() {
 
     tronco2_ = Gdiplus::Image::FromFile((exeDir + L"tronco2.png").c_str());
     if (!tronco2_ || tronco2_->GetLastStatus() != Gdiplus::Ok) allLoaded = false;
+
+    logoImage_ = Gdiplus::Image::FromFile((exeDir + L"logo.png").c_str());
+    if (!logoImage_ || logoImage_->GetLastStatus() != Gdiplus::Ok) allLoaded = false;
+
+    logo2Image_ = Gdiplus::Image::FromFile((exeDir + L"logo2.png").c_str());
+    if (!logo2Image_ || logo2Image_->GetLastStatus() != Gdiplus::Ok) allLoaded = false;
 
     return allLoaded;
 }
@@ -800,7 +809,7 @@ void ScreenManager::paintStartScreen(HDC hdc, RECT& rect) {
     GetTextExtentPoint32(hdc, L"SISTEMA DISTRIBUIDO", 19, &textSize);
     SelectObject(hdc, oldFont);
     DeleteObject(font1);
-    drawText(hdc, L"SISTEMA DISTRIBUIDO", centerX - textSize.cx / 2, centerY - 180, COLOR_TEXT, 34, true);
+    drawText(hdc, L"SISTEMA DISTRIBUIDO", centerX - textSize.cx / 2, centerY - 350, COLOR_TEXT, 34, true);
 
     // "FROOMBA"
     HFONT font2 = CreateFont(60, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE,
@@ -810,7 +819,20 @@ void ScreenManager::paintStartScreen(HDC hdc, RECT& rect) {
     GetTextExtentPoint32(hdc, L"FROOMBA", 7, &textSize);
     SelectObject(hdc, oldFont);
     DeleteObject(font2);
-    drawText(hdc, L"FROOMBA", centerX - textSize.cx / 2, centerY - 100, COLOR_PRIMARY, 60, true);
+    drawText(hdc, L"FROOMBA", centerX - textSize.cx / 2, centerY - 280, COLOR_PRIMARY, 60, true);
+
+    // LOGO (ajustado a 200x200 para que encaje bien)
+    if (logoImage_) {
+        Gdiplus::Graphics graphics(hdc);
+        graphics.SetInterpolationMode(Gdiplus::InterpolationModeHighQualityBicubic);
+        graphics.SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias);
+
+        int logoSize = 200;  // Tamaño reducido desde 650x650
+        int logoX = centerX - logoSize / 2;
+        int logoY = centerY - 190;  // Posicionado debajo del título
+
+        graphics.DrawImage(logoImage_, logoX, logoY, logoSize, logoSize);
+    }
 
     // "Convertimos tu charca en un estanque"
     HFONT font3 = CreateFont(18, 0, 0, 0, FW_NORMAL, TRUE, FALSE, FALSE,
@@ -820,7 +842,7 @@ void ScreenManager::paintStartScreen(HDC hdc, RECT& rect) {
     GetTextExtentPoint32(hdc, L"Convertimos tu charca en un estanque", 36, &textSize);
     SelectObject(hdc, oldFont);
     DeleteObject(font3);
-    drawText(hdc, L"Convertimos tu charca en un estanque", centerX - textSize.cx / 2, centerY - 30, COLOR_SUCCESS, 18, false);
+    drawText(hdc, L"Convertimos tu charca en un estanque", centerX - textSize.cx / 2, centerY + 35, COLOR_SUCCESS, 18, false);
 
     // Subtítulo
     HFONT font4 = CreateFont(14, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE,
@@ -830,9 +852,9 @@ void ScreenManager::paintStartScreen(HDC hdc, RECT& rect) {
     GetTextExtentPoint32(hdc, L"Programacion en Entornos Distribuidos", 38, &textSize);
     SelectObject(hdc, oldFont);
     DeleteObject(font4);
-    drawText(hdc, L"Programacion en Entornos Distribuidos", centerX - textSize.cx / 2, centerY + 5, COLOR_TEXT_DIM, 14, false);
+    drawText(hdc, L"Programacion en Entornos Distribuidos", centerX - textSize.cx / 2, centerY + 65, COLOR_TEXT_DIM, 14, false);
 
-    int btnY = centerY + 60;
+    int btnY = centerY + 110;
     addButton(ID_BTN_START, centerX - 150, btnY, 300, 58, L"INICIAR LIMPIEZA", COLOR_SUCCESS);
     addButton(ID_BTN_CONFIG, centerX - 150, btnY + 72, 300, 58, L"CONFIGURAR EQUIPO", COLOR_PRIMARY);
     addButton(ID_BTN_EXIT, centerX - 150, btnY + 144, 300, 58, L"SALIR", COLOR_DANGER);
@@ -1137,20 +1159,18 @@ void ScreenManager::paintFinishedScreen(HDC hdc, RECT& rect) {
     DeleteObject(font1);
     drawText(hdc, L"CRISTALINOS!", centerX - textSize.cx / 2, centerY - 180, COLOR_SUCCESS, 48, true);
 
-    HBRUSH checkBrush = CreateSolidBrush(COLOR_SUCCESS);
-    HPEN checkPen = CreatePen(PS_SOLID, 4, RGB(255, 255, 255));
-    SelectObject(hdc, checkBrush);
-    SelectObject(hdc, checkPen);
-    Ellipse(hdc, centerX - 60, centerY - 100, centerX + 60, centerY + 20);
-    DeleteObject(checkBrush);
+    // LOGO2 en lugar del círculo con tick
+    if (logo2Image_) {
+        Gdiplus::Graphics graphics(hdc);
+        graphics.SetInterpolationMode(Gdiplus::InterpolationModeHighQualityBicubic);
+        graphics.SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias);
 
-    HPEN whitePen = CreatePen(PS_SOLID, 8, RGB(255, 255, 255));
-    SelectObject(hdc, whitePen);
-    MoveToEx(hdc, centerX - 30, centerY - 40, nullptr);
-    LineTo(hdc, centerX - 10, centerY - 15);
-    LineTo(hdc, centerX + 35, centerY - 70);
-    DeleteObject(whitePen);
-    DeleteObject(checkPen);
+        int logoSize = 120;  // Tamaño ajustado del logo
+        int logoX = centerX - logoSize / 2;
+        int logoY = centerY - 100;
+
+        graphics.DrawImage(logo2Image_, logoX, logoY, logoSize, logoSize);
+    }
 
     // "Resumen del servicio:"
     HFONT font2 = CreateFont(18, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE,
@@ -1723,5 +1743,3 @@ COLORREF ScreenManager::lightenColor(COLORREF color, int amount) {
     int b = std::min(255, static_cast<int>(GetBValue(color)) + amount);
     return RGB(r, g, b);
 }
-
-

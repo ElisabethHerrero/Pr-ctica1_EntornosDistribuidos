@@ -3141,3 +3141,33 @@ Roomba #4 asignada a Charca
 Roomba #4 completa Charca (zona finalizada)
 Roomba #2 completa Arroyo (zona finalizada)
 Froombas en descanso
+
+=== Nueva sesion ===
+Sistema de limpieza acuatica iniciado
+Equipo listo: 3 Froombas tipo Rana
+¡Las Froombas comienzan a nadar!
+Roomba #1 asignada a Laguna
+Roomba #2 asignada a Arroyo
+Roomba #3 asignada a Lago
+Roomba #2 completa Arroyo (zona finalizada)
+Roomba #2 asignada a Charca
+Roomba #2 completa Charca (zona finalizada)
+Roomba #1 completa Laguna (zona finalizada)
+Roomba #3 completa Lago (zona finalizada)
+Todas las zonas completadas
+¡Todos los estanques cristalinos!
+
+=== Nueva sesion ===
+Sistema de limpieza acuatica iniciado
+Equipo listo: 4 Froombas tipo Sapo
+¡Las Froombas comienzan a nadar!
+Roomba #1 asignada a Laguna
+Roomba #2 asignada a Arroyo
+Roomba #3 asignada a Lago
+Roomba #4 asignada a Charca
+Roomba #4 completa Charca (zona finalizada)
+Roomba #2 completa Arroyo (zona finalizada)
+Roomba #1 completa Laguna (zona finalizada)
+Roomba #3 completa Lago (zona finalizada)
+Todas las zonas completadas
+¡Todos los estanques cristalinos!

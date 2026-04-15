@@ -68,6 +68,8 @@ private:
     Gdiplus::Image* nenufar2_;
     Gdiplus::Image* tronco1_;
     Gdiplus::Image* tronco2_;
+    Gdiplus::Image* logoImage_;
+    Gdiplus::Image* logo2Image_;
 
     std::map<int, double> lastRoombaAngles_;
 
@@ -121,5 +123,3 @@ private:
 
     COLORREF lightenColor(COLORREF color, int amount);
 };
-
-
