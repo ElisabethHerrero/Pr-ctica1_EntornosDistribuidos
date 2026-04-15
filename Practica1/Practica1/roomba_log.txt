@@ -1,0 +1,3199 @@
+
+=== Nueva sesi�n: 2026-04-08 23:25:11 ===
+[2026-04-08 23:25:11] Zonas cargadas: 4 - Area total: 291600 cm2
+[2026-04-08 23:25:11]   > Zona 1 - Sala Principal: 75000 cm2 (3 obstaculos)
+[2026-04-08 23:25:11]   > Zona 2 - Pasillo: 48480 cm2 (2 obstaculos)
+[2026-04-08 23:25:11]   > Zona 3 - Comedor: 148320 cm2 (4 obstaculos)
+[2026-04-08 23:25:11]   > Zona 4 - Entrada: 19800 cm2 (2 obstaculos)
+[2026-04-08 23:25:11] 
+[2026-04-08 23:25:11] ========================================
+[2026-04-08 23:25:11]   SISTEMA DISTRIBUIDO ROOMBA v1.0
+[2026-04-08 23:25:11] ========================================
+[2026-04-08 23:25:11] 
+[2026-04-08 23:25:11] Configure las Roombas y presione Iniciar
+
+=== Nueva sesion: 2026-04-08 23:33:15 ===
+[2026-04-08 23:33:15] Zonas cargadas: 4 - Area total: 291600 cm2
+[2026-04-08 23:33:15]   > Zona 1 - Sala Principal: 75000 cm2 (3 obstaculos)
+[2026-04-08 23:33:15]   > Zona 2 - Pasillo: 48480 cm2 (2 obstaculos)
+[2026-04-08 23:33:15]   > Zona 3 - Comedor: 148320 cm2 (4 obstaculos)
+[2026-04-08 23:33:15]   > Zona 4 - Entrada: 19800 cm2 (2 obstaculos)
+[2026-04-08 23:33:15] 
+[2026-04-08 23:33:15] ========================================
+[2026-04-08 23:33:15]   SISTEMA DISTRIBUIDO ROOMBA v1.0
+[2026-04-08 23:33:15] ========================================
+[2026-04-08 23:33:15] 
+[2026-04-08 23:33:15] Configure las Roombas y presione Iniciar
+[2026-04-08 23:33:24] Configuradas 3 Roombas tipo Avanzada (1200 cm2/s)
+[2026-04-08 23:33:29] Roomba #1 inicio: Zona 1 - Sala Principal
+[2026-04-08 23:33:29] Roomba #2 inicio: Zona 1 - Sala Principal
+[2026-04-08 23:33:29] Roomba #3 inicio: Zona 1 - Sala Principal
+[2026-04-08 23:33:29] 
+[2026-04-08 23:33:29] ========================================
+[2026-04-08 23:33:29]     SESION DE LIMPIEZA INICIADA
+[2026-04-08 23:33:29] ========================================
+[2026-04-08 23:33:29] Roombas activas: 3
+
+=== Nueva sesion: 2026-04-08 23:34:58 ===
+[2026-04-08 23:34:58] Zonas cargadas: 4 - Area total: 291600 cm2
+[2026-04-08 23:34:58]   > Zona 1 - Sala Principal: 75000 cm2 (3 obstaculos)
+[2026-04-08 23:34:58]   > Zona 2 - Pasillo: 48480 cm2 (2 obstaculos)
+[2026-04-08 23:34:58]   > Zona 3 - Comedor: 148320 cm2 (4 obstaculos)
+[2026-04-08 23:34:58]   > Zona 4 - Entrada: 19800 cm2 (2 obstaculos)
+[2026-04-08 23:34:58] 
+[2026-04-08 23:34:58] ========================================
+[2026-04-08 23:34:58]   SISTEMA DISTRIBUIDO ROOMBA v1.0
+[2026-04-08 23:34:58] ========================================
+[2026-04-08 23:34:58] 
+[2026-04-08 23:34:58] Configure las Roombas y presione Iniciar
+
+=== Nueva sesion: 2026-04-08 23:42:52 ===
+[2026-04-08 23:42:58] Configuradas 3 Roombas tipo Avanzada
+[2026-04-08 23:42:58] Iniciando limpieza...
+
+=== Nueva sesion: 2026-04-08 23:53:47 ===
+[2026-04-08 23:53:53] Roombas configuradas: 3
+[2026-04-08 23:53:53] Iniciando limpieza...
+
+=== Nueva sesion: 2026-04-08 23:57:35 ===
+[2026-04-08 23:57:35] Sistema iniciado correctamente
+[2026-04-08 23:57:36] Configuradas 3 Roombas
+[2026-04-08 23:57:36] Iniciando limpieza...
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas
+Iniciando limpieza...
+Configuradas 3 Roombas
+Limpieza reiniciada
+Configuradas 3 Roombas
+Limpieza reiniciada
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas
+Iniciando limpieza...
+Configuradas 3 Roombas
+Limpieza reiniciada
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas de tipo Premium
+Iniciando limpieza...
+Roomba #1 -> Sala Principal
+Roomba #2 -> Pasillo
+Roomba #3 -> Comedor
+Zona completada: Pasillo
+Roomba #2 completo Pasillo
+Roomba #2 -> Entrada
+Zona completada: Entrada
+Limpieza detenida
+Configuradas 3 Roombas de tipo Basica
+Iniciando limpieza...
+Roomba #1 -> Sala Principal
+Roomba #2 -> Pasillo
+Roomba #3 -> Comedor
+Limpieza detenida
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas de tipo Premium
+Iniciando limpieza...
+Limpieza detenida
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas de tipo Avanzada
+Iniciando limpieza...
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas de tipo Avanzada
+Iniciando limpieza...
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas de tipo Avanzada
+Iniciando limpieza...
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Pasillo
+Roomba #3 asignada a Comedor
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Pasillo
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Sala Principal
+Roomba #3 asignada a Sala Principal
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas de tipo Avanzada
+Iniciando limpieza...
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Pasillo
+Roomba #3 asignada a Comedor
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas de tipo Avanzada
+Iniciando limpieza...
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Pasillo
+Roomba #3 asignada a Comedor
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas de tipo Avanzada
+Iniciando limpieza...
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Pasillo
+Roomba #3 asignada a Comedor
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas de tipo Avanzada
+Iniciando limpieza...
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Pasillo
+Roomba #3 asignada a Comedor
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas de tipo Avanzada
+Iniciando limpieza...
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Pasillo
+Roomba #3 asignada a Comedor
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas de tipo Avanzada
+Iniciando limpieza...
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Pasillo
+Roomba #3 asignada a Comedor
+Limpieza detenida
+Configuradas 3 Roombas de tipo Avanzada
+Limpieza reiniciada
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Pasillo
+Roomba #3 asignada a Comedor
+Configuradas 3 Roombas de tipo Premium
+Iniciando limpieza...
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Pasillo
+Roomba #3 asignada a Comedor
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas de tipo Avanzada
+Iniciando limpieza...
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Pasillo
+Roomba #3 asignada a Comedor
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas de tipo Avanzada
+Iniciando limpieza...
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Pasillo
+Roomba #3 asignada a Comedor
+Limpieza detenida
+Configuradas 3 Roombas de tipo Premium
+Iniciando limpieza...
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Pasillo
+Roomba #3 asignada a Comedor
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas de tipo Avanzada
+Iniciando limpieza...
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Pasillo
+Roomba #3 asignada a Comedor
+Limpieza detenida
+Configuradas 3 Roombas de tipo Premium
+Iniciando limpieza...
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Pasillo
+Roomba #3 asignada a Comedor
+Limpieza detenida
+Configuradas 3 Roombas de tipo Premium
+Limpieza reiniciada
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Pasillo
+Roomba #3 asignada a Comedor
+Limpieza detenida
+Configuradas 3 Roombas de tipo Premium
+Limpieza reiniciada
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Pasillo
+Roomba #3 asignada a Comedor
+Limpieza detenida
+Configuradas 3 Roombas de tipo Premium
+Limpieza reiniciada
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Pasillo
+Roomba #3 asignada a Comedor
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas de tipo Avanzada
+Iniciando limpieza...
+Roomba #1 asignada a Sala Principal (741 celdas sucias)
+Roomba #2 asignada a Pasillo (519 celdas sucias)
+Roomba #3 asignada a Comedor (1479 celdas sucias)
+Limpieza detenida
+Configuradas 3 Roombas de tipo Avanzada
+Limpieza reiniciada
+Roomba #1 asignada a Sala Principal (741 celdas sucias)
+Roomba #2 asignada a Pasillo (519 celdas sucias)
+Roomba #3 asignada a Comedor (1479 celdas sucias)
+Limpieza detenida
+Configuradas 3 Roombas de tipo Premium
+Iniciando limpieza...
+Roomba #1 asignada a Sala Principal (737 celdas sucias)
+Roomba #2 asignada a Pasillo (515 celdas sucias)
+Roomba #3 asignada a Comedor (1475 celdas sucias)
+Roomba #2 completo Pasillo (98.2%)
+Roomba #2 asignada a Entrada (185 celdas sucias)
+Roomba #2 completo Entrada (98.2%)
+Roomba #1 completo Sala Principal (98.0%)
+Roomba #3 completo Comedor (98.2%)
+Todas las zonas completadas
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas de tipo Premium
+Iniciando limpieza...
+Roomba #1 -> Sala Principal [13/722 celdas]
+Roomba #2 -> Pasillo [13/464 celdas]
+Roomba #3 -> Comedor [13/1412 celdas]
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas de tipo Premium
+Iniciando limpieza...
+Roomba #1 -> Sala Principal [13/564 celdas]
+Roomba #2 -> Pasillo [13/343 celdas]
+Roomba #3 -> Comedor [13/1268 celdas]
+Roomba #1 COMPLETO Sala Principal [695/564 = 123.2%]
+Roomba #1 -> Entrada [13/110 celdas]
+Roomba #1 COMPLETO Entrada [174/110 = 158.2%]
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas de tipo Premium
+Iniciando limpieza...
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Pasillo
+Roomba #3 asignada a Comedor
+Roomba #2 completo Pasillo
+Roomba #2 asignada a Entrada
+Roomba #2 completo Entrada
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas de tipo Premium
+Iniciando limpieza...
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Pasillo
+Roomba #3 asignada a Comedor
+Roomba #2 completo Pasillo
+Roomba #2 asignada a Entrada
+Roomba #2 completo Entrada
+Roomba #3 completo Comedor
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas de tipo Premium
+Iniciando limpieza...
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Pasillo
+Roomba #3 asignada a Comedor
+Limpieza detenida
+Configuradas 3 Roombas de tipo Avanzada
+Iniciando limpieza...
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Pasillo
+Roomba #3 asignada a Comedor
+Limpieza detenida
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas de tipo Premium
+Iniciando limpieza...
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Pasillo
+Roomba #3 asignada a Comedor
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas de tipo Premium
+Iniciando limpieza...
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Pasillo
+Roomba #3 asignada a Comedor
+Roomba #2 completo Pasillo
+Roomba #2 asignada a Entrada
+Roomba #1 completo Sala Principal
+Roomba #3 completo Comedor
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas de tipo Premium
+Iniciando limpieza...
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Pasillo
+Roomba #3 asignada a Comedor
+Roomba #1 completo Sala Principal
+Roomba #1 asignada a Entrada
+Roomba #1 completo Entrada
+Roomba #3 completo Comedor
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas de tipo Premium
+Iniciando limpieza...
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Pasillo
+Roomba #3 asignada a Comedor
+Roomba #1 completa Sala Principal (zona finalizada)
+Roomba #1 asignada a Entrada
+Roomba #3 completa Comedor (zona finalizada)
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas de tipo Premium
+Iniciando limpieza...
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Pasillo
+Roomba #3 asignada a Comedor
+Roomba #2 completa Pasillo (zona finalizada)
+Roomba #2 asignada a Entrada
+Roomba #2 completa Entrada (zona finalizada)
+Roomba #3 completa Comedor (zona finalizada)
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas de tipo Premium
+Iniciando limpieza...
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Pasillo
+Roomba #3 asignada a Comedor
+Roomba #2 recolocada en Pasillo por recuperacion de ruta
+Roomba #2 completa Pasillo (zona finalizada)
+Roomba #2 asignada a Entrada
+Roomba #2 completa Entrada (zona finalizada)
+Roomba #1 completa Sala Principal (zona finalizada)
+Roomba #3 completa Comedor (zona finalizada)
+Todas las zonas completadas
+Configuradas 3 Roombas de tipo Premium
+Limpieza reiniciada
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Pasillo
+Roomba #3 asignada a Comedor
+Configuradas 3 Roombas de tipo Avanzada
+Iniciando limpieza...
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Pasillo
+Roomba #3 asignada a Comedor
+Roomba #2 completa Pasillo (zona finalizada)
+Roomba #2 asignada a Entrada
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas de tipo Premium
+Iniciando limpieza...
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Pasillo
+Roomba #3 asignada a Comedor
+Roomba #2 completa Pasillo (zona finalizada)
+Roomba #2 asignada a Entrada
+Roomba #2 completa Entrada (zona finalizada)
+Roomba #1 completa Sala Principal (zona finalizada)
+Roomba #3 completa Comedor (zona finalizada)
+Todas las zonas completadas
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas de tipo Premium
+Iniciando limpieza...
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Pasillo
+Roomba #3 asignada a Comedor
+Roomba #2 completa Pasillo (zona finalizada)
+Roomba #2 asignada a Entrada
+Roomba #2 completa Entrada (zona finalizada)
+Roomba #1 recolocada en Sala Principal por recuperacion de ruta
+Roomba #1 completa Sala Principal (zona finalizada)
+Roomba #3 completa Comedor (zona finalizada)
+Todas las zonas completadas
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas de tipo Avanzada
+Iniciando limpieza...
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Pasillo
+Roomba #3 asignada a Comedor
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas de tipo Avanzada
+Iniciando limpieza...
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Pasillo
+Roomba #3 asignada a Comedor
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas de tipo Avanzada
+Iniciando limpieza...
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Pasillo
+Roomba #3 asignada a Comedor
+Roomba #2 completa Pasillo (zona finalizada)
+Roomba #2 asignada a Entrada
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas de tipo Avanzada
+Iniciando limpieza...
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Pasillo
+Roomba #3 asignada a Comedor
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas de tipo Avanzada
+Iniciando limpieza...
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Pasillo
+Roomba #3 asignada a Comedor
+Limpieza detenida
+Configuradas 3 Roombas de tipo Premium
+Iniciando limpieza...
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Pasillo
+Roomba #3 asignada a Comedor
+Roomba #2 completa Pasillo (zona finalizada)
+Roomba #2 asignada a Entrada
+Roomba #2 completa Entrada (zona finalizada)
+Roomba #1 completa Sala Principal (zona finalizada)
+Roomba #3 completa Comedor (zona finalizada)
+Todas las zonas completadas
+¡Limpieza finalizada con éxito!
+
+=== Nueva sesion ===
+Sistema iniciado
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas de tipo Avanzada
+Iniciando limpieza...
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Pasillo
+Roomba #3 asignada a Comedor
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas de tipo Avanzada
+Iniciando limpieza...
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Pasillo
+Roomba #3 asignada a Comedor
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas de tipo Avanzada
+Iniciando limpieza...
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Pasillo
+Roomba #3 asignada a Comedor
+Roomba #2 completa Pasillo (zona finalizada)
+Roomba #2 asignada a Entrada
+Roomba #2 completa Entrada (zona finalizada)
+Roomba #1 completa Sala Principal (zona finalizada)
+Roomba #3 completa Comedor (zona finalizada)
+Todas las zonas completadas
+¡Limpieza finalizada con éxito!
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas de tipo Avanzada
+Iniciando limpieza...
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Pasillo
+Roomba #3 asignada a Comedor
+Roomba #2 completa Pasillo (zona finalizada)
+Roomba #2 asignada a Entrada
+Roomba #2 completa Entrada (zona finalizada)
+Roomba #1 completa Sala Principal (zona finalizada)
+Limpieza detenida
+Configuradas 3 Roombas de tipo Avanzada
+Iniciando limpieza...
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Pasillo
+Roomba #3 asignada a Comedor
+Limpieza detenida
+Configuradas 3 Roombas de tipo Avanzada
+Limpieza reiniciada
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Pasillo
+Roomba #3 asignada a Comedor
+Configuradas 3 Roombas de tipo Avanzada
+Iniciando limpieza...
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Pasillo
+Roomba #3 asignada a Comedor
+Limpieza detenida
+Configuradas 3 Roombas de tipo Avanzada
+Iniciando limpieza...
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Pasillo
+Roomba #3 asignada a Comedor
+Limpieza detenida
+Configuradas 3 Roombas de tipo Avanzada
+Limpieza reiniciada
+Roomba #1 asignada a Sala Principal
+Roomba #2 asignada a Pasillo
+Roomba #3 asignada a Comedor
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas de tipo Avanzada
+Iniciando limpieza...
+Roomba #1 asignada a Laguna
+Roomba #2 asignada a Arroyo
+Roomba #3 asignada a Lago
+Roomba #2 completa Arroyo (zona finalizada)
+Roomba #2 asignada a Charca
+Roomba #2 completa Charca (zona finalizada)
+Roomba #1 completa Laguna (zona finalizada)
+Roomba #3 completa Lago (zona finalizada)
+Todas las zonas completadas
+¡Limpieza finalizada con éxito!
+Configuradas 3 Roombas de tipo Premium
+Iniciando limpieza...
+Roomba #1 asignada a Laguna
+Roomba #2 asignada a Arroyo
+Roomba #3 asignada a Lago
+Limpieza detenida
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas de tipo Avanzada
+Iniciando limpieza...
+Roomba #1 asignada a Laguna
+Roomba #2 asignada a Arroyo
+Roomba #3 asignada a Lago
+Limpieza detenida
+Configuradas 3 Roombas de tipo Avanzada
+Limpieza reiniciada
+Roomba #1 asignada a Laguna
+Roomba #2 asignada a Arroyo
+Roomba #3 asignada a Lago
+Roomba #2 completa Arroyo (zona finalizada)
+Roomba #2 asignada a Charca
+Configuradas 3 Roombas de tipo Avanzada
+Iniciando limpieza...
+Roomba #1 asignada a Laguna
+Roomba #2 asignada a Arroyo
+Roomba #3 asignada a Lago
+Roomba #2 completa Arroyo (zona finalizada)
+Roomba #2 asignada a Charca
+Roomba #2 completa Charca (zona finalizada)
+Roomba #1 completa Laguna (zona finalizada)
+Limpieza detenida
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas de tipo Avanzada
+Iniciando limpieza...
+Roomba #1 asignada a Laguna
+Roomba #2 asignada a Arroyo
+Roomba #3 asignada a Lago
+Limpieza detenida
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas de tipo Avanzada
+Iniciando limpieza...
+Roomba #1 asignada a Laguna
+Roomba #2 asignada a Arroyo
+Roomba #3 asignada a Lago
+Configuradas 3 Roombas de tipo Avanzada
+Iniciando limpieza...
+Roomba #1 asignada a Laguna
+Roomba #2 asignada a Arroyo
+Roomba #3 asignada a Lago
+Roomba #2 completa Arroyo (zona finalizada)
+Roomba #2 asignada a Charca
+Roomba #2 completa Charca (zona finalizada)
+Roomba #1 completa Laguna (zona finalizada)
+Limpieza detenida
+Configuradas 3 Roombas de tipo Premium
+Iniciando limpieza...
+Roomba #1 asignada a Laguna
+Roomba #2 asignada a Arroyo
+Roomba #3 asignada a Lago
+Limpieza detenida
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas de tipo Avanzada
+Iniciando limpieza...
+Roomba #1 asignada a Laguna
+Roomba #2 asignada a Arroyo
+Roomba #3 asignada a Lago
+Roomba #2 completa Arroyo (zona finalizada)
+Roomba #2 asignada a Charca
+Roomba #2 completa Charca (zona finalizada)
+Roomba #1 completa Laguna (zona finalizada)
+Roomba #3 completa Lago (zona finalizada)
+Todas las zonas completadas
+¡Limpieza finalizada con éxito!
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas de tipo Avanzada
+Iniciando limpieza...
+Roomba #1 asignada a Laguna
+Roomba #2 asignada a Arroyo
+Roomba #3 asignada a Lago
+Roomba #2 completa Arroyo (zona finalizada)
+Roomba #2 asignada a Charca
+Roomba #2 completa Charca (zona finalizada)
+Roomba #1 completa Laguna (zona finalizada)
+Roomba #3 completa Lago (zona finalizada)
+Todas las zonas completadas
+¡Limpieza finalizada con éxito!
+
+=== Nueva sesion ===
+Sistema iniciado
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas de tipo Avanzada
+Iniciando limpieza...
+Roomba #1 asignada a Laguna
+Roomba #2 asignada a Arroyo
+Roomba #3 asignada a Lago
+Roomba #2 completa Arroyo (zona finalizada)
+Roomba #2 asignada a Charca
+Roomba #2 completa Charca (zona finalizada)
+Roomba #1 completa Laguna (zona finalizada)
+Limpieza detenida
+Configuradas 3 Roombas de tipo Avanzada
+Iniciando limpieza...
+Roomba #1 asignada a Laguna
+Roomba #2 asignada a Arroyo
+Roomba #3 asignada a Lago
+Roomba #2 completa Arroyo (zona finalizada)
+Roomba #2 asignada a Charca
+Limpieza detenida
+
+=== Nueva sesion ===
+Sistema iniciado
+Roombas configuradas
+Roomba #1 asignada a Laguna
+Roomba #2 asignada a Arroyo
+Roomba #3 asignada a Lago
+Roomba #2 completa Arroyo (zona finalizada)
+Roomba #2 asignada a Charca
+Roomba #2 completa Charca (zona finalizada)
+Roomba #1 completa Laguna (zona finalizada)
+Roomba #3 completa Lago (zona finalizada)
+Todas las zonas completadas
+¡Limpieza finalizada!
+
+=== Nueva sesion ===
+Sistema iniciado
+Configuradas 3 Roombas de tipo Avanzada
+Iniciando limpieza...
+Roomba #1 asignada a Laguna
+Roomba #2 asignada a Arroyo
+Roomba #3 asignada a Lago
+Roomba #2 completa Arroyo (zona finalizada)
+Roomba #2 asignada a Charca
+Limpieza detenida
+
+=== Nueva sesion ===
+Sistema iniciado
+
+=== Nueva sesion ===
+Sistema de limpieza acuatica iniciado
+
+=== Nueva sesion ===
+Sistema de limpieza acuatica iniciado
+
+=== Nueva sesion ===
+Sistema de limpieza acuatica iniciado
+Equipo listo: 4 Froombas tipo Sapo
+¡Las Froombas comienzan a nadar!
+Roomba #1 asignada a Laguna
+Roomba #2 asignada a Arroyo
+Roomba #3 asignada a Lago
+Roomba #4 asignada a Charca
+Roomba #4 completa Charca (zona finalizada)
+Roomba #2 completa Arroyo (zona finalizada)
+Froombas en descanso
+
+=== Nueva sesion ===
+Sistema de limpieza acuatica iniciado
+Equipo listo: 3 Froombas tipo Rana
+¡Las Froombas comienzan a nadar!
+Roomba #1 asignada a Laguna
+Roomba #2 asignada a Arroyo
+Roomba #3 asignada a Lago
+Roomba #2 completa Arroyo (zona finalizada)
+Roomba #2 asignada a Charca
+Roomba #2 completa Charca (zona finalizada)
+Roomba #1 completa Laguna (zona finalizada)
+Roomba #3 completa Lago (zona finalizada)
+Todas las zonas completadas
+¡Todos los estanques cristalinos!
+
+=== Nueva sesion ===
+Sistema de limpieza acuatica iniciado
+Equipo listo: 4 Froombas tipo Sapo
+¡Las Froombas comienzan a nadar!
+Roomba #1 asignada a Laguna
+Roomba #2 asignada a Arroyo
+Roomba #3 asignada a Lago
+Roomba #4 asignada a Charca
+Roomba #4 completa Charca (zona finalizada)
+Roomba #2 completa Arroyo (zona finalizada)
+Roomba #1 completa Laguna (zona finalizada)
+Roomba #3 completa Lago (zona finalizada)
+Todas las zonas completadas
+¡Todos los estanques cristalinos!
+
+=== Nueva sesion ===
+Sistema de limpieza acuatica iniciado
+
+=== Nueva sesion ===
+Sistema de limpieza acuatica iniciado
+Equipo listo: 4 Froombas tipo Rana
+¡Las Froombas comienzan a nadar!
+Roomba #1 asignada a Laguna
+Roomba #2 asignada a Arroyo
+Roomba #3 asignada a Lago
+Roomba #4 asignada a Charca
+Roomba #4 completa Charca (zona finalizada)
+Roomba #2 recolocada en Arroyo por recuperacion de ruta
+Roomba #2 completa Arroyo (zona finalizada)
+Roomba #1 completa Laguna (zona finalizada)
+Roomba #3 completa Lago (zona finalizada)
+Todas las zonas completadas
+¡Todos los estanques cristalinos!
+Equipo listo: 1 Froombas tipo Renacuajo
+¡Las Froombas comienzan a nadar!
+Roomba #1 asignada a Laguna
+Froombas en descanso
+Equipo listo: 1 Froombas tipo Renacuajo
+Froombas de vuelta al trabajo
+Roomba #1 asignada a Laguna
