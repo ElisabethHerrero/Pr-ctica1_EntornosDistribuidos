@@ -57,7 +57,7 @@ public:
         cellSize_(10.0),
         cleanedAccessibleCells_(0),
         totalAccessibleCells_(0),
-        navigationClearance_(12.0) {
+        navigationClearance_(18.0) {
         name_ = name ? name : L"";
         initGrid();
     }
@@ -456,3 +456,5 @@ private:
         return true;
     }
 };
+
+

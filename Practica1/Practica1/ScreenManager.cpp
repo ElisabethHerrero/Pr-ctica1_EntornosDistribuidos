@@ -1,3 +1,5 @@
+
+
 #ifndef NOMINMAX
 #define NOMINMAX
 #endif
@@ -79,8 +81,8 @@ namespace {
         double robotRadius,
         double cellSize
     ) {
-        const double wallClearance = robotRadius * 2.2;
-        const double obstacleClearance = robotRadius * 2.2;
+        const double wallClearance = robotRadius * 2.8;
+        const double obstacleClearance = robotRadius * 2.8;
 
         if (candidate.x < wallClearance || candidate.y < wallClearance) {
             return false;
@@ -451,7 +453,7 @@ void ScreenManager::initializeZones() {
     std::mt19937 gen(rd());
 
     const double maxRobotRadius = 20.0;
-    const double minClearance = maxRobotRadius * 2.2;
+    const double minClearance = maxRobotRadius * 2.8;
     const double navCellSize = 10.0;
 
     for (size_t i = 0; i < zones_.size(); ++i) {
@@ -821,15 +823,15 @@ void ScreenManager::paintStartScreen(HDC hdc, RECT& rect) {
     DeleteObject(font2);
     drawText(hdc, L"FROOMBA", centerX - textSize.cx / 2, centerY - 280, COLOR_PRIMARY, 60, true);
 
-    // LOGO (ajustado a 200x200 para que encaje bien)
+    // LOGO ajustado
     if (logoImage_) {
         Gdiplus::Graphics graphics(hdc);
         graphics.SetInterpolationMode(Gdiplus::InterpolationModeHighQualityBicubic);
         graphics.SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias);
 
-        int logoSize = 200;  // Tamaño reducido desde 650x650
+        int logoSize = 200;  
         int logoX = centerX - logoSize / 2;
-        int logoY = centerY - 190;  // Posicionado debajo del título
+        int logoY = centerY - 190;  
 
         graphics.DrawImage(logoImage_, logoX, logoY, logoSize, logoSize);
     }
@@ -1262,8 +1264,11 @@ void ScreenManager::drawZoneMiniMap(
     graphics.SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias);
     graphics.SetInterpolationMode(Gdiplus::InterpolationModeHighQualityBicubic);
 
-    // PASO 1: FONDO DE SUCIEDAD (CAPA INFERIOR)
+    //====================================================
+    // PASO 1: FONDO DE SUCIEDAD
+    //====================================================
     Gdiplus::Image* dirtImg = nullptr;
+
     switch (zoneIndex) {
     case 0: dirtImg = dirtImage1_; break;
     case 1: dirtImg = dirtImage2_; break;
@@ -1272,7 +1277,46 @@ void ScreenManager::drawZoneMiniMap(
     }
 
     if (dirtImg) {
-        graphics.DrawImage(dirtImg, innerX, innerY, innerW, innerH);
+        int dirtX = innerX;
+        int dirtY = innerY;
+        int dirtW = innerW;
+        int dirtH = innerH;
+
+        // Ajustes más marcados de suciedad según la zona
+        switch (zoneIndex) {
+        case 0: // Laguna: un poco más contenida
+            dirtX += 4;
+            dirtY += 3;
+            dirtW = std::max(20, innerW - 8);
+            dirtH = std::max(20, innerH - 2);
+            break;
+
+        case 1: // Arroyo
+            dirtY += 16;   // antes 12
+            dirtH = std::max(16, innerH - 35);
+            dirtX += 3;
+            dirtW = std::max(20, innerW - 4);
+            break;
+
+        case 2: // Lago: un poco más ajustada
+            dirtX += 6;
+            dirtY += 4;
+            dirtW = std::max(20, innerW - 11);
+            dirtH = std::max(20, innerH - 6);
+            break;
+
+        case 3: // Charca
+            dirtX += 42;   // antes 23
+            dirtW = std::max(14, innerW - 85);
+            dirtY += 4;
+            dirtH = std::max(18, innerH - 8);
+            break;
+
+        default:
+            break;
+        }
+
+        graphics.DrawImage(dirtImg, dirtX, dirtY, dirtW, dirtH);
     }
     else {
         HBRUSH floorBrush = CreateSolidBrush(RGB(0xE8, 0xE3, 0xCC));
@@ -1281,16 +1325,57 @@ void ScreenManager::drawZoneMiniMap(
         DeleteObject(floorBrush);
     }
 
-    double scaleX = innerW / zone->getLength();
-    double scaleY = innerH / zone->getWidth();
+    double scaleX = static_cast<double>(innerW) / zone->getLength();
+    double scaleY = static_cast<double>(innerH) / zone->getWidth();
 
-    // PASO 2: TRAZO CONTINUO CON CÍRCULOS INTERPOLADOS (OPACO)
+    //====================================================
+    // PASO 2: CELDAS LIMPIAS
+    //====================================================
+    auto cleanedGrid = zone->getGrid();
+    double cellSize = zone->getCellSize();
+
+    const BYTE cleanR = 0xCE;
+    const BYTE cleanG = 0xE7;
+    const BYTE cleanB = 0xCA;
+
+    Gdiplus::SolidBrush cellBrush(Gdiplus::Color(255, cleanR, cleanG, cleanB));
+
+    for (size_t row = 0; row < cleanedGrid.size(); ++row) {
+        for (size_t col = 0; col < cleanedGrid[row].size(); ++col) {
+            if (!cleanedGrid[row][col]) continue;
+
+            Gdiplus::REAL cx =
+                static_cast<Gdiplus::REAL>(innerX + (col + 0.5) * cellSize * scaleX);
+
+            Gdiplus::REAL cy =
+                static_cast<Gdiplus::REAL>(innerY + (row + 0.5) * cellSize * scaleY);
+
+            Gdiplus::REAL radiusX =
+                static_cast<Gdiplus::REAL>(cellSize * scaleX * 1.32);
+
+            Gdiplus::REAL radiusY =
+                static_cast<Gdiplus::REAL>(cellSize * scaleY * 1.32);
+
+            graphics.FillEllipse(
+                &cellBrush,
+                cx - radiusX,
+                cy - radiusY,
+                radiusX * 2.0f,
+                radiusY * 2.0f
+            );
+        }
+    }
+
+    //====================================================
+    // PASO 3: TRAZO CONTINUO DE LIMPIEZA
+    //====================================================
     auto trail = zone->getTrail();
 
     if (!trail.empty()) {
-        Gdiplus::SolidBrush cleanBrush(Gdiplus::Color(255, 0xCE, 0xE7, 0xCA));
-        const float circleRadius = 8.0f;
-        size_t start = (trail.size() > 2000) ? trail.size() - 2000 : 0;
+        Gdiplus::SolidBrush cleanBrush(Gdiplus::Color(255, cleanR, cleanG, cleanB));
+        const float circleRadius = 10.5f;
+
+        size_t start = (trail.size() > 2200) ? trail.size() - 2200 : 0;
 
         for (size_t j = start; j < trail.size(); j++) {
             auto& pt = trail[j];
@@ -1298,11 +1383,13 @@ void ScreenManager::drawZoneMiniMap(
             Gdiplus::REAL cx = static_cast<Gdiplus::REAL>(innerX + pt.x * scaleX);
             Gdiplus::REAL cy = static_cast<Gdiplus::REAL>(innerY + pt.y * scaleY);
 
-            graphics.FillEllipse(&cleanBrush,
+            graphics.FillEllipse(
+                &cleanBrush,
                 cx - circleRadius,
                 cy - circleRadius,
                 circleRadius * 2.0f,
-                circleRadius * 2.0f);
+                circleRadius * 2.0f
+            );
 
             if (j > start) {
                 auto& prevPt = trail[j - 1];
@@ -1314,7 +1401,7 @@ void ScreenManager::drawZoneMiniMap(
                 float dy = cy - prevY;
                 float dist = std::sqrt(dx * dx + dy * dy);
 
-                const float stepSize = 3.0f;
+                const float stepSize = 2.0f;
                 int numSteps = static_cast<int>(dist / stepSize);
 
                 for (int step = 1; step < numSteps; ++step) {
@@ -1322,40 +1409,66 @@ void ScreenManager::drawZoneMiniMap(
                     float interpX = prevX + dx * t;
                     float interpY = prevY + dy * t;
 
-                    graphics.FillEllipse(&cleanBrush,
+                    graphics.FillEllipse(
+                        &cleanBrush,
                         interpX - circleRadius,
                         interpY - circleRadius,
                         circleRadius * 2.0f,
-                        circleRadius * 2.0f);
+                        circleRadius * 2.0f
+                    );
                 }
             }
         }
     }
 
-    // PASO 3: ÁREA LIMPIA DE CELDAS (OPACO)
-    auto cleanedGrid = zone->getGrid();
-    double cellSize = zone->getCellSize();
-    Gdiplus::SolidBrush cellBrush(Gdiplus::Color(255, 0xCE, 0xE7, 0xCA));
+    //====================================================
+    // PASO 4: BASES DECORATIVAS BAJO OBSTÁCULOS
+    //====================================================
+    for (size_t oi = 0; oi < zone->getObstacles().size(); oi++) {
+        auto& obs = zone->getObstacles()[oi];
+        if (!obs) continue;
 
-    for (size_t row = 0; row < cleanedGrid.size(); ++row) {
-        for (size_t col = 0; col < cleanedGrid[row].size(); ++col) {
-            if (!cleanedGrid[row][col]) continue;
+        int ox = innerX + static_cast<int>(obs->getX() * scaleX);
+        int oy = innerY + static_cast<int>(obs->getY() * scaleY);
+        int ow = std::max(10, static_cast<int>(obs->getWidth() * scaleX));
+        int oh = std::max(10, static_cast<int>(obs->getHeight() * scaleY));
 
-            Gdiplus::REAL cx = static_cast<Gdiplus::REAL>(innerX + (col + 0.5) * cellSize * scaleX);
-            Gdiplus::REAL cy = static_cast<Gdiplus::REAL>(innerY + (row + 0.5) * cellSize * scaleY);
+        // Rectángulos decorativos bastante más grandes
+        int decoPadX = std::max(16, ow / 3);
+        int decoPadY = std::max(16, oh / 3);
 
-            Gdiplus::REAL radiusX = static_cast<Gdiplus::REAL>(cellSize * scaleX * 1.1);
-            Gdiplus::REAL radiusY = static_cast<Gdiplus::REAL>(cellSize * scaleY * 1.1);
+        int decoX = ox - decoPadX;
+        int decoY = oy - decoPadY;
+        int decoW = ow + decoPadX * 2;
+        int decoH = oh + decoPadY * 2;
 
-            graphics.FillEllipse(&cellBrush,
-                cx - radiusX,
-                cy - radiusY,
-                radiusX * 2.0f,
-                radiusY * 2.0f);
+        if (decoX < innerX) decoX = innerX;
+        if (decoY < innerY) decoY = innerY;
+        if (decoX + decoW > innerX + innerW) decoW = (innerX + innerW) - decoX;
+        if (decoY + decoH > innerY + innerH) decoH = (innerY + innerH) - decoY;
+
+        {
+            COLORREF decoColor = RGB(cleanR, cleanG, cleanB);
+
+            HBRUSH decoBrush = CreateSolidBrush(decoColor);
+            HPEN decoPen = CreatePen(PS_SOLID, 1, decoColor);
+
+            HGDIOBJ oldBrush = SelectObject(hdc, decoBrush);
+            HGDIOBJ oldPen = SelectObject(hdc, decoPen);
+
+            RoundRect(hdc, decoX, decoY, decoX + decoW, decoY + decoH, 14, 14);
+
+            SelectObject(hdc, oldBrush);
+            SelectObject(hdc, oldPen);
+
+            DeleteObject(decoBrush);
+            DeleteObject(decoPen);
         }
     }
 
-    // PASO 4: OBSTÁCULOS (ENCIMA DE TODO)
+    //====================================================
+    // PASO 5: OBSTÁCULOS
+    //====================================================
     for (size_t oi = 0; oi < zone->getObstacles().size(); oi++) {
         auto& obs = zone->getObstacles()[oi];
         if (!obs) continue;
@@ -1366,9 +1479,8 @@ void ScreenManager::drawZoneMiniMap(
         int oh = std::max(10, static_cast<int>(obs->getHeight() * scaleY));
 
         Gdiplus::Image* obsImg = nullptr;
-        int imgType = obs->getImageType();
 
-        switch (imgType) {
+        switch (obs->getImageType()) {
         case 0: obsImg = nenufar1_; break;
         case 1: obsImg = nenufar2_; break;
         case 2: obsImg = tronco1_; break;
@@ -1381,39 +1493,59 @@ void ScreenManager::drawZoneMiniMap(
         else {
             HBRUSH obsBr = CreateSolidBrush(RGB(0x90, 0x70, 0x50));
             HPEN obsPen = CreatePen(PS_SOLID, 1, RGB(0x70, 0x50, 0x30));
-            SelectObject(hdc, obsBr);
-            SelectObject(hdc, obsPen);
+
+            HGDIOBJ oldBrush = SelectObject(hdc, obsBr);
+            HGDIOBJ oldPen = SelectObject(hdc, obsPen);
+
             RoundRect(hdc, ox, oy, ox + ow, oy + oh, 6, 6);
+
+            SelectObject(hdc, oldBrush);
+            SelectObject(hdc, oldPen);
+
             DeleteObject(obsBr);
             DeleteObject(obsPen);
         }
     }
 
-    // PASO 5: BORDES Y DECORACIÓN
+    //====================================================
+    // PASO 6: BORDES Y TEXTO
+    //====================================================
     HPEN borderPen = CreatePen(PS_SOLID, 3, COLOR_TEXT);
-    SelectObject(hdc, borderPen);
-    SelectObject(hdc, GetStockObject(NULL_BRUSH));
+    HGDIOBJ oldPen = SelectObject(hdc, borderPen);
+    HGDIOBJ oldBrush = SelectObject(hdc, GetStockObject(NULL_BRUSH));
+
     RoundRect(hdc, x, y, x + w, y + h, 10, 10);
+
+    SelectObject(hdc, oldPen);
+    SelectObject(hdc, oldBrush);
     DeleteObject(borderPen);
 
     drawText(hdc, zone->getName(), x + 12, y + 8, COLOR_TEXT, 13, true);
 
     wchar_t pct[20];
     swprintf_s(pct, L"%.1f%%", zone->getCleanedPercentage());
+
     SIZE pctSize;
-    HFONT fontPct = CreateFont(13, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE,
+    HFONT fontPct = CreateFont(
+        13, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE,
         DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-        CLEARTYPE_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Segoe UI");
+        CLEARTYPE_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Segoe UI"
+    );
     HFONT oldFont = (HFONT)SelectObject(hdc, fontPct);
     GetTextExtentPoint32(hdc, pct, static_cast<int>(wcslen(pct)), &pctSize);
     SelectObject(hdc, oldFont);
     DeleteObject(fontPct);
+
     drawText(hdc, pct, x + w - pctSize.cx - 12, y + 8, COLOR_TEXT, 13, true);
 
     HPEN framePen = CreatePen(PS_SOLID, 1, COLOR_TEXT);
-    SelectObject(hdc, framePen);
-    SelectObject(hdc, GetStockObject(NULL_BRUSH));
+    oldPen = SelectObject(hdc, framePen);
+    oldBrush = SelectObject(hdc, GetStockObject(NULL_BRUSH));
+
     Rectangle(hdc, innerX, innerY, innerX + innerW, innerY + innerH);
+
+    SelectObject(hdc, oldPen);
+    SelectObject(hdc, oldBrush);
     DeleteObject(framePen);
 
     wchar_t info[96];
@@ -1743,3 +1875,4 @@ COLORREF ScreenManager::lightenColor(COLORREF color, int amount) {
     int b = std::min(255, static_cast<int>(GetBValue(color)) + amount);
     return RGB(r, g, b);
 }
+

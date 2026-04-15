@@ -436,16 +436,12 @@ private:
         if (!moved && roomba->getFailedMoves() > 8) {
             if (zoneHasReachableWork(zone, roomba, robotRadius)) {
                 if (!recomputePath(roomba, zone, robotRadius)) {
-                    if (!tryRelocateToDirtyCell(roomba, zone, robotRadius, cleanRadius)) {
-                        releaseRoombaFromZone(roomba, zone, L"atasco persistente");
-                    }
+                    releaseRoombaFromZone(roomba, zone, L"zona bloqueada");
                     return;
                 }
             }
             else {
-                if (!tryRelocateToDirtyCell(roomba, zone, robotRadius, cleanRadius)) {
-                    releaseRoombaFromZone(roomba, zone, L"sin progreso");
-                }
+                releaseRoombaFromZone(roomba, zone, L"sin acceso suficiente");
                 return;
             }
         }
@@ -458,3 +454,5 @@ private:
         }
     }
 };
+
+
