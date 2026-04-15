@@ -1,7 +1,7 @@
 #ifndef NOMINMAX
 #define NOMINMAX
 #endif
-//Comentarios de prueba.
+//Comentarios de prueba.2
 #include "ScreenManager.h"
 #include "CleaningService.h"
 #include "Zone.h"
