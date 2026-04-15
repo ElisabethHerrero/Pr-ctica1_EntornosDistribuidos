@@ -67,9 +67,9 @@ public:
 
     const wchar_t* getTypeName() const {
         switch (type_) {
-        case BASIC: return L"Basica";
-        case ADVANCED: return L"Avanzada";
-        case PREMIUM: return L"Premium";
+        case BASIC: return L"Renacuajo";
+        case ADVANCED: return L"Rana";
+        case PREMIUM: return L"Sapo";
         default: return L"Desconocida";
         }
     }
@@ -187,3 +187,5 @@ private:
     mutable std::mutex pathMutex_;
     std::vector<PathCell> path_;
 };
+
+

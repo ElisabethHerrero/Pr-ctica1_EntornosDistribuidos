@@ -261,7 +261,7 @@ bool ScreenManager::initialize() {
     icex.dwICC = ICC_STANDARD_CLASSES;
     InitCommonControlsEx(&icex);
 
-    const wchar_t CLASS_NAME[] = L"RoombaScreenClass";
+    const wchar_t CLASS_NAME[] = L"FroombaScreenClass";
 
     WNDCLASSEX wc = { 0 };
     wc.cbSize = sizeof(WNDCLASSEX);
@@ -283,7 +283,7 @@ bool ScreenManager::initialize() {
     hwnd_ = CreateWindowEx(
         0,
         CLASS_NAME,
-        L"Sistema Distribuido Roomba",
+        L"Sistema Distribuido Froomba - Limpieza de Estanques",
         WS_OVERLAPPEDWINDOW,
         (screenW - winW) / 2,
         (screenH - winH) / 2,
@@ -316,7 +316,7 @@ bool ScreenManager::initialize() {
     ShowWindow(hwnd_, SW_SHOW);
     UpdateWindow(hwnd_);
 
-    addLog(L"Sistema iniciado");
+    addLog(L"Sistema de limpieza acuatica iniciado");
 
     return true;
 }
@@ -333,7 +333,6 @@ bool ScreenManager::loadImages() {
 
     bool allLoaded = true;
 
-    // MODIFICADO: Basica = rana3.png, Avanzada = rana.png, Premium = rana2.png
     roombaImageBasic_ = Gdiplus::Image::FromFile((exeDir + L"rana3.png").c_str());
     if (!roombaImageBasic_ || roombaImageBasic_->GetLastStatus() != Gdiplus::Ok) allLoaded = false;
 
@@ -622,12 +621,14 @@ void ScreenManager::initializeRoombas() {
     }
 
     wchar_t msg[128];
-    swprintf_s(
-        msg,
-        L"Configuradas %d Roombas de tipo %s",
-        roombaCount_,
-        roombas_.empty() ? L"N/A" : roombas_[0]->getTypeName()
-    );
+    const wchar_t* typeName = L"";
+    switch (roombaType_) {
+    case Roomba::BASIC: typeName = L"Renacuajo"; break;
+    case Roomba::ADVANCED: typeName = L"Rana"; break;
+    case Roomba::PREMIUM: typeName = L"Sapo"; break;
+    }
+
+    swprintf_s(msg, L"Equipo listo: %d Froombas tipo %s", roombaCount_, typeName);
     addLog(msg);
 }
 
@@ -710,7 +711,7 @@ LRESULT ScreenManager::handleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) {
 
                 if (allComplete) {
                     changeScreen(SCREEN_FINISHED);
-                    addLog(L"¡Limpieza finalizada con éxito!");
+                    addLog(L"¡Todos los estanques cristalinos!");
                 }
             }
 
@@ -790,6 +791,8 @@ void ScreenManager::paintStartScreen(HDC hdc, RECT& rect) {
     int centerY = rect.bottom / 2;
 
     SIZE textSize;
+
+    // "SISTEMA DISTRIBUIDO"
     HFONT font1 = CreateFont(34, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE,
         DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
         CLEARTYPE_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Segoe UI");
@@ -797,67 +800,93 @@ void ScreenManager::paintStartScreen(HDC hdc, RECT& rect) {
     GetTextExtentPoint32(hdc, L"SISTEMA DISTRIBUIDO", 19, &textSize);
     SelectObject(hdc, oldFont);
     DeleteObject(font1);
+    drawText(hdc, L"SISTEMA DISTRIBUIDO", centerX - textSize.cx / 2, centerY - 180, COLOR_TEXT, 34, true);
 
-    drawText(hdc, L"SISTEMA DISTRIBUIDO", centerX - textSize.cx / 2, centerY - 150, COLOR_TEXT, 34, true);
-
-    HFONT font2 = CreateFont(54, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE,
+    // "FROOMBA"
+    HFONT font2 = CreateFont(60, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE,
         DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
         CLEARTYPE_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Segoe UI");
     oldFont = (HFONT)SelectObject(hdc, font2);
-    GetTextExtentPoint32(hdc, L"ROOMBA", 6, &textSize);
+    GetTextExtentPoint32(hdc, L"FROOMBA", 7, &textSize);
     SelectObject(hdc, oldFont);
     DeleteObject(font2);
+    drawText(hdc, L"FROOMBA", centerX - textSize.cx / 2, centerY - 100, COLOR_PRIMARY, 60, true);
 
-    drawText(hdc, L"ROOMBA", centerX - textSize.cx / 2, centerY - 85, COLOR_PRIMARY, 54, true);
-
-    HFONT font3 = CreateFont(16, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE,
+    // "Convertimos tu charca en un estanque"
+    HFONT font3 = CreateFont(18, 0, 0, 0, FW_NORMAL, TRUE, FALSE, FALSE,
         DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
         CLEARTYPE_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Segoe UI");
     oldFont = (HFONT)SelectObject(hdc, font3);
-    GetTextExtentPoint32(hdc, L"Programacion en Entornos Distribuidos", 38, &textSize);
+    GetTextExtentPoint32(hdc, L"Convertimos tu charca en un estanque", 36, &textSize);
     SelectObject(hdc, oldFont);
     DeleteObject(font3);
+    drawText(hdc, L"Convertimos tu charca en un estanque", centerX - textSize.cx / 2, centerY - 30, COLOR_SUCCESS, 18, false);
 
-    drawText(hdc, L"Programacion en Entornos Distribuidos", centerX - textSize.cx / 2, centerY - 20, COLOR_TEXT_DIM, 16, false);
+    // Subtítulo
+    HFONT font4 = CreateFont(14, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE,
+        DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+        CLEARTYPE_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Segoe UI");
+    oldFont = (HFONT)SelectObject(hdc, font4);
+    GetTextExtentPoint32(hdc, L"Programacion en Entornos Distribuidos", 38, &textSize);
+    SelectObject(hdc, oldFont);
+    DeleteObject(font4);
+    drawText(hdc, L"Programacion en Entornos Distribuidos", centerX - textSize.cx / 2, centerY + 5, COLOR_TEXT_DIM, 14, false);
 
-    int btnY = centerY + 50;
-    addButton(ID_BTN_START, centerX - 150, btnY, 300, 58, L"INICIAR", COLOR_SUCCESS);
-    addButton(ID_BTN_CONFIG, centerX - 150, btnY + 72, 300, 58, L"CONFIGURAR", COLOR_PRIMARY);
+    int btnY = centerY + 60;
+    addButton(ID_BTN_START, centerX - 150, btnY, 300, 58, L"INICIAR LIMPIEZA", COLOR_SUCCESS);
+    addButton(ID_BTN_CONFIG, centerX - 150, btnY + 72, 300, 58, L"CONFIGURAR EQUIPO", COLOR_PRIMARY);
     addButton(ID_BTN_EXIT, centerX - 150, btnY + 144, 300, 58, L"SALIR", COLOR_DANGER);
 
     for (size_t i = 0; i < buttons_.size(); i++) {
         drawButton(hdc, buttons_[i]);
     }
 
-    HFONT font4 = CreateFont(14, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE,
+    HFONT font5 = CreateFont(13, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE,
         DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
         CLEARTYPE_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Segoe UI");
-    oldFont = (HFONT)SelectObject(hdc, font4);
-    GetTextExtentPoint32(hdc, L"Visualizacion sincronizada con limpieza real", 45, &textSize);
+    oldFont = (HFONT)SelectObject(hdc, font5);
+    GetTextExtentPoint32(hdc, L"Nuestras ranas trabajadoras mantienen tu ecosistema acuatico impecable", 70, &textSize);
     SelectObject(hdc, oldFont);
-    DeleteObject(font4);
+    DeleteObject(font5);
+    drawText(hdc, L"Nuestras ranas trabajadoras mantienen tu ecosistema acuatico impecable",
+        centerX - textSize.cx / 2, rect.bottom - 55, COLOR_TEXT_DIM, 13, false);
 
-    drawText(hdc, L"Visualizacion sincronizada con limpieza real", centerX - textSize.cx / 2, rect.bottom - 55, COLOR_TEXT_DIM, 14, false);
     drawText(hdc, L"v3.0", rect.right - 60, rect.bottom - 30, COLOR_TEXT_DIM, 12, false);
 }
 
 void ScreenManager::paintConfigScreen(HDC hdc, RECT& rect) {
     int centerX = rect.right / 2;
 
-    drawText(hdc, L"CONFIGURACION", centerX - 115, 30, COLOR_TEXT, 28, true);
+    SIZE textSize;
+    HFONT fontTitle = CreateFont(28, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE,
+        DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+        CLEARTYPE_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Segoe UI");
+    HFONT oldFont = (HFONT)SelectObject(hdc, fontTitle);
+    GetTextExtentPoint32(hdc, L"CONFIGURACION DEL EQUIPO", 24, &textSize);
+    SelectObject(hdc, oldFont);
+    DeleteObject(fontTitle);
+    drawText(hdc, L"CONFIGURACION DEL EQUIPO", centerX - textSize.cx / 2, 30, COLOR_TEXT, 28, true);
+
     drawRoundRect(hdc, centerX - 340, 80, 680, 530, 16, COLOR_BG_LIGHT, COLOR_TEXT);
 
-    drawText(hdc, L"Numero de Roombas:", centerX - 295, 120, COLOR_TEXT, 18, true);
+    drawText(hdc, L"Numero de Froombas:", centerX - 295, 120, COLOR_TEXT, 18, true);
     addButton(ID_BTN_MINUS, centerX - 90, 155, 52, 52, L"-", COLOR_DANGER);
 
     wchar_t countStr[8];
     swprintf_s(countStr, L"%d", roombaCount_);
-    drawText(hdc, countStr, centerX - 8, 168, COLOR_PRIMARY, 28, true);
+    SIZE numSize;
+    HFONT fontNum = CreateFont(28, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE,
+        DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+        CLEARTYPE_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Segoe UI");
+    oldFont = (HFONT)SelectObject(hdc, fontNum);
+    GetTextExtentPoint32(hdc, countStr, static_cast<int>(wcslen(countStr)), &numSize);
+    SelectObject(hdc, oldFont);
+    DeleteObject(fontNum);
+    drawText(hdc, countStr, centerX - numSize.cx / 2, 168, COLOR_PRIMARY, 28, true);
 
     addButton(ID_BTN_PLUS, centerX + 38, 155, 52, 52, L"+", COLOR_SUCCESS);
 
-    // MODIFICADO: Texto más arriba
-    drawText(hdc, L"Tipo de Roomba:", centerX - 295, 215, COLOR_TEXT, 18, true);
+    drawText(hdc, L"Tipo de Froomba:", centerX - 295, 230, COLOR_TEXT, 18, true);
 
     COLORREF c1 = (roombaType_ == Roomba::BASIC) ? COLOR_PRIMARY : RGB(0xD0, 0xD0, 0xC0);
     COLORREF c2 = (roombaType_ == Roomba::ADVANCED) ? COLOR_SUCCESS : RGB(0xD0, 0xD0, 0xC0);
@@ -868,7 +897,7 @@ void ScreenManager::paintConfigScreen(HDC hdc, RECT& rect) {
     graphics.SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias);
 
     int imgSize = 50;
-    int imgY = 255;  // MODIFICADO: Imágenes más abajo
+    int imgY = 270;
 
     if (roombaImageBasic_) {
         int imgX1 = centerX - 295 + (190 - imgSize) / 2;
@@ -885,12 +914,11 @@ void ScreenManager::paintConfigScreen(HDC hdc, RECT& rect) {
         graphics.DrawImage(roombaImagePremium_, imgX3, imgY, imgSize, imgSize);
     }
 
-    // MODIFICADO: Botones más abajo
-    addButton(ID_BTN_BASIC, centerX - 295, 320, 190, 65, L"BASICA", c1);
-    addButton(ID_BTN_ADVANCED, centerX - 95, 320, 190, 65, L"AVANZADA", c2);
-    addButton(ID_BTN_PREMIUM, centerX + 105, 320, 190, 65, L"PREMIUM", c3);
+    addButton(ID_BTN_BASIC, centerX - 295, 335, 190, 65, L"RENACUAJO", c1);
+    addButton(ID_BTN_ADVANCED, centerX - 95, 335, 190, 65, L"RANA", c2);
+    addButton(ID_BTN_PREMIUM, centerX + 105, 335, 190, 65, L"SAPO", c3);
 
-    drawText(hdc, L"Zonas disponibles:", centerX - 295, 425, COLOR_TEXT, 16, true);
+    drawText(hdc, L"Estanques disponibles:", centerX - 295, 430, COLOR_TEXT, 16, true);
 
     COLORREF zoneColors[] = { COLOR_ZONE1, COLOR_ZONE2, COLOR_ZONE3, COLOR_ZONE4 };
     for (size_t i = 0; i < zones_.size(); i++) {
@@ -911,7 +939,7 @@ void ScreenManager::paintConfigScreen(HDC hdc, RECT& rect) {
     }
 
     addButton(ID_BTN_BACK, centerX - 295, 580, 190, 46, L"VOLVER", COLOR_TEXT_DIM);
-    addButton(ID_BTN_BEGIN, centerX + 105, 580, 190, 46, L"COMENZAR", COLOR_SUCCESS);
+    addButton(ID_BTN_BEGIN, centerX + 105, 580, 190, 46, L"¡AL AGUA!", COLOR_SUCCESS);
 
     for (size_t i = 0; i < buttons_.size(); i++) {
         drawButton(hdc, buttons_[i]);
@@ -919,7 +947,15 @@ void ScreenManager::paintConfigScreen(HDC hdc, RECT& rect) {
 }
 
 void ScreenManager::paintCleaningScreen(HDC hdc, RECT& rect) {
-    drawText(hdc, L"LIMPIEZA EN PROGRESO", 20, 12, COLOR_TEXT, 22, true);
+    SIZE textSize;
+    HFONT fontTitle = CreateFont(22, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE,
+        DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+        CLEARTYPE_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Segoe UI");
+    HFONT oldFont = (HFONT)SelectObject(hdc, fontTitle);
+    GetTextExtentPoint32(hdc, L"LIMPIEZA EN PROGRESO", 20, &textSize);
+    SelectObject(hdc, oldFont);
+    DeleteObject(fontTitle);
+    drawText(hdc, L"LIMPIEZA EN PROGRESO", (rect.right - textSize.cx) / 2, 12, COLOR_TEXT, 22, true);
 
     int zoneW = 400;
     int zoneH = 280;
@@ -960,7 +996,7 @@ void ScreenManager::paintCleaningScreen(HDC hdc, RECT& rect) {
     drawText(hdc, L"Estado:", panelX + 15, panelY + 15, COLOR_TEXT, 16, true);
     drawText(
         hdc,
-        isRunning ? L"LIMPIANDO" : L"DETENIDO",
+        isRunning ? L"NADANDO" : L"EN REPOSO",
         panelX + 92,
         panelY + 15,
         isRunning ? COLOR_SUCCESS : COLOR_WARNING,
@@ -985,9 +1021,17 @@ void ScreenManager::paintCleaningScreen(HDC hdc, RECT& rect) {
 
     wchar_t progStr[24];
     swprintf_s(progStr, L"%.1f%%", totalProg);
-    drawText(hdc, progStr, panelX + panelW / 2 - 24, panelY + 74, COLOR_BG_DARK, 12, true);
+    SIZE progSize;
+    HFONT fontProg = CreateFont(12, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE,
+        DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+        CLEARTYPE_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Segoe UI");
+    oldFont = (HFONT)SelectObject(hdc, fontProg);
+    GetTextExtentPoint32(hdc, progStr, static_cast<int>(wcslen(progStr)), &progSize);
+    SelectObject(hdc, oldFont);
+    DeleteObject(fontProg);
+    drawText(hdc, progStr, panelX + (panelW - progSize.cx) / 2, panelY + 76, COLOR_BG_DARK, 12, true);
 
-    drawText(hdc, L"Por Zona:", panelX + 15, panelY + 112, COLOR_TEXT, 14, true);
+    drawText(hdc, L"Por Estanque:", panelX + 15, panelY + 112, COLOR_TEXT, 14, true);
     for (size_t i = 0; i < zones_.size(); i++) {
         auto& z = zones_[i];
         if (!z) continue;
@@ -1001,7 +1045,7 @@ void ScreenManager::paintCleaningScreen(HDC hdc, RECT& rect) {
         drawText(hdc, pctStr, panelX + panelW - 58, zy - 1, zoneColors[i], 12, true);
     }
 
-    drawText(hdc, L"Roombas:", panelX + 15, panelY + 320, COLOR_TEXT, 14, true);
+    drawText(hdc, L"Equipo Froomba:", panelX + 15, panelY + 320, COLOR_TEXT, 14, true);
     for (size_t i = 0; i < roombas_.size(); i++) {
         auto& r = roombas_[i];
         if (!r) continue;
@@ -1021,16 +1065,25 @@ void ScreenManager::paintCleaningScreen(HDC hdc, RECT& rect) {
 
         wchar_t info[128];
         auto zone = r->getCurrentZone();
+
+        const wchar_t* stateName = L"Inactiva";
+        switch (r->getState()) {
+        case Roomba::IDLE: stateName = L"Descansando"; break;
+        case Roomba::CLEANING: stateName = L"Limpiando"; break;
+        case Roomba::MOVING: stateName = L"Nadando"; break;
+        case Roomba::FINISHED: stateName = L"Finalizada"; break;
+        }
+
         if (zone) {
-            swprintf_s(info, L"#%d - %s - %s", r->getId(), r->getStateName(), zone->getName());
+            swprintf_s(info, L"#%d - %s - %s", r->getId(), stateName, zone->getName());
         }
         else {
-            swprintf_s(info, L"#%d - %s", r->getId(), r->getStateName());
+            swprintf_s(info, L"#%d - %s", r->getId(), stateName);
         }
         drawText(hdc, info, panelX + 38, ry, COLOR_TEXT, 11, false);
     }
 
-    drawText(hdc, L"Log:", panelX + 15, panelY + 470, COLOR_TEXT, 14, true);
+    drawText(hdc, L"Registro de actividad:", panelX + 15, panelY + 470, COLOR_TEXT, 14, true);
     {
         std::lock_guard<std::mutex> lock(logMutex_);
         int logY = panelY + 498;
@@ -1046,7 +1099,7 @@ void ScreenManager::paintCleaningScreen(HDC hdc, RECT& rect) {
         panelY + 580,
         160,
         40,
-        isRunning ? L"DETENER" : L"REINICIAR",
+        isRunning ? L"DETENER" : L"REANUDAR",
         isRunning ? COLOR_DANGER : COLOR_SUCCESS
     );
     addButton(ID_BTN_MENU, panelX + panelW - 175, panelY + 580, 160, 40, L"MENU", COLOR_TEXT_DIM);
@@ -1063,25 +1116,26 @@ void ScreenManager::paintFinishedScreen(HDC hdc, RECT& rect) {
     drawRoundRect(hdc, centerX - 350, centerY - 300, 700, 600, 20, COLOR_BG_LIGHT, COLOR_SUCCESS);
 
     SIZE textSize;
+
+    // "¡ESTANQUES"
     HFONT font1 = CreateFont(48, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE,
         DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
         CLEARTYPE_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Segoe UI");
     HFONT oldFont = (HFONT)SelectObject(hdc, font1);
-    GetTextExtentPoint32(hdc, L"¡LIMPIEZA", 9, &textSize);
+    GetTextExtentPoint32(hdc, L"¡ESTANQUES", 10, &textSize);
     SelectObject(hdc, oldFont);
     DeleteObject(font1);
+    drawText(hdc, L"¡ESTANQUES", centerX - textSize.cx / 2, centerY - 240, COLOR_SUCCESS, 48, true);
 
-    drawText(hdc, L"¡LIMPIEZA", centerX - textSize.cx / 2, centerY - 240, COLOR_SUCCESS, 48, true);
-
+    // "CRISTALINOS!"
     font1 = CreateFont(48, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE,
         DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
         CLEARTYPE_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Segoe UI");
     oldFont = (HFONT)SelectObject(hdc, font1);
-    GetTextExtentPoint32(hdc, L"FINALIZADA!", 11, &textSize);
+    GetTextExtentPoint32(hdc, L"CRISTALINOS!", 12, &textSize);
     SelectObject(hdc, oldFont);
     DeleteObject(font1);
-
-    drawText(hdc, L"FINALIZADA!", centerX - textSize.cx / 2, centerY - 180, COLOR_SUCCESS, 48, true);
+    drawText(hdc, L"CRISTALINOS!", centerX - textSize.cx / 2, centerY - 180, COLOR_SUCCESS, 48, true);
 
     HBRUSH checkBrush = CreateSolidBrush(COLOR_SUCCESS);
     HPEN checkPen = CreatePen(PS_SOLID, 4, RGB(255, 255, 255));
@@ -1098,15 +1152,15 @@ void ScreenManager::paintFinishedScreen(HDC hdc, RECT& rect) {
     DeleteObject(whitePen);
     DeleteObject(checkPen);
 
+    // "Resumen del servicio:"
     HFONT font2 = CreateFont(18, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE,
         DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
         CLEARTYPE_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Segoe UI");
     oldFont = (HFONT)SelectObject(hdc, font2);
-    GetTextExtentPoint32(hdc, L"Estadisticas de limpieza:", 25, &textSize);
+    GetTextExtentPoint32(hdc, L"Resumen del servicio:", 21, &textSize);
     SelectObject(hdc, oldFont);
     DeleteObject(font2);
-
-    drawText(hdc, L"Estadisticas de limpieza:", centerX - textSize.cx / 2, centerY + 50, COLOR_TEXT, 18, true);
+    drawText(hdc, L"Resumen del servicio:", centerX - textSize.cx / 2, centerY + 50, COLOR_TEXT, 18, true);
 
     COLORREF zoneColors[] = { COLOR_ZONE1, COLOR_ZONE2, COLOR_ZONE3, COLOR_ZONE4 };
     int yOffset = centerY + 90;
@@ -1121,7 +1175,7 @@ void ScreenManager::paintFinishedScreen(HDC hdc, RECT& rect) {
         DeleteObject(zb);
 
         wchar_t info[128];
-        swprintf_s(info, L"%s - %.1f%% completada",
+        swprintf_s(info, L"%s - %.1f%% purificada",
             zone->getName(),
             zone->getCleanedPercentage());
         drawText(hdc, info, centerX - 250, yOffset, COLOR_TEXT, 14, false);
@@ -1131,33 +1185,39 @@ void ScreenManager::paintFinishedScreen(HDC hdc, RECT& rect) {
 
     yOffset += 20;
     wchar_t roombaInfo[64];
-    swprintf_s(roombaInfo, L"Roombas utilizadas: %d", static_cast<int>(roombas_.size()));
+    swprintf_s(roombaInfo, L"Froombas trabajadoras: %d", static_cast<int>(roombas_.size()));
     drawText(hdc, roombaInfo, centerX - 280, yOffset, COLOR_TEXT_DIM, 14, false);
 
     yOffset += 25;
     wchar_t typeInfo[64];
     if (!roombas_.empty() && roombas_[0]) {
-        swprintf_s(typeInfo, L"Tipo: %s", roombas_[0]->getTypeName());
+        const wchar_t* typeName = L"";
+        switch (roombas_[0]->getType()) {
+        case Roomba::BASIC: typeName = L"Renacuajo"; break;
+        case Roomba::ADVANCED: typeName = L"Rana"; break;
+        case Roomba::PREMIUM: typeName = L"Sapo"; break;
+        }
+        swprintf_s(typeInfo, L"Tipo: %s", typeName);
         drawText(hdc, typeInfo, centerX - 280, yOffset, COLOR_TEXT_DIM, 14, false);
     }
 
     int btnY = centerY + 230;
-    addButton(ID_BTN_RESTART, centerX - 280, btnY, 260, 55, L"VOLVER AL INICIO", COLOR_PRIMARY);
+    addButton(ID_BTN_RESTART, centerX - 280, btnY, 260, 55, L"NUEVO SERVICIO", COLOR_PRIMARY);
     addButton(ID_BTN_EXIT_FINISH, centerX + 20, btnY, 260, 55, L"SALIR", COLOR_DANGER);
 
     for (size_t i = 0; i < buttons_.size(); i++) {
         drawButton(hdc, buttons_[i]);
     }
 
-    HFONT font3 = CreateFont(14, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE,
+    // Mensaje final creativo
+    HFONT font3 = CreateFont(14, 0, 0, 0, FW_NORMAL, TRUE, FALSE, FALSE,
         DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
         CLEARTYPE_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Segoe UI");
     oldFont = (HFONT)SelectObject(hdc, font3);
-    GetTextExtentPoint32(hdc, L"Todas las zonas han sido limpiadas exitosamente", 48, &textSize);
+    GetTextExtentPoint32(hdc, L"Tu ecosistema acuatico brilla como el agua de manantial", 56, &textSize);
     SelectObject(hdc, oldFont);
     DeleteObject(font3);
-
-    drawText(hdc, L"Todas las zonas han sido limpiadas exitosamente",
+    drawText(hdc, L"Tu ecosistema acuatico brilla como el agua de manantial",
         centerX - textSize.cx / 2, rect.bottom - 60, COLOR_TEXT_DIM, 14, false);
 }
 
@@ -1180,7 +1240,9 @@ void ScreenManager::drawZoneMiniMap(
 
     Gdiplus::Graphics graphics(hdc);
     graphics.SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias);
+    graphics.SetInterpolationMode(Gdiplus::InterpolationModeHighQualityBicubic);
 
+    // PASO 1: FONDO DE SUCIEDAD (CAPA INFERIOR)
     Gdiplus::Image* dirtImg = nullptr;
     switch (zoneIndex) {
     case 0: dirtImg = dirtImage1_; break;
@@ -1202,12 +1264,58 @@ void ScreenManager::drawZoneMiniMap(
     double scaleX = innerW / zone->getLength();
     double scaleY = innerH / zone->getWidth();
 
-    // MODIFICADO: Dibujar área limpia COMO CAPA SUPERIOR con transparencia
+    // PASO 2: TRAZO CONTINUO CON CÍRCULOS INTERPOLADOS (OPACO)
+    auto trail = zone->getTrail();
+
+    if (!trail.empty()) {
+        Gdiplus::SolidBrush cleanBrush(Gdiplus::Color(255, 0xCE, 0xE7, 0xCA));
+        const float circleRadius = 8.0f;
+        size_t start = (trail.size() > 2000) ? trail.size() - 2000 : 0;
+
+        for (size_t j = start; j < trail.size(); j++) {
+            auto& pt = trail[j];
+
+            Gdiplus::REAL cx = static_cast<Gdiplus::REAL>(innerX + pt.x * scaleX);
+            Gdiplus::REAL cy = static_cast<Gdiplus::REAL>(innerY + pt.y * scaleY);
+
+            graphics.FillEllipse(&cleanBrush,
+                cx - circleRadius,
+                cy - circleRadius,
+                circleRadius * 2.0f,
+                circleRadius * 2.0f);
+
+            if (j > start) {
+                auto& prevPt = trail[j - 1];
+
+                Gdiplus::REAL prevX = static_cast<Gdiplus::REAL>(innerX + prevPt.x * scaleX);
+                Gdiplus::REAL prevY = static_cast<Gdiplus::REAL>(innerY + prevPt.y * scaleY);
+
+                float dx = cx - prevX;
+                float dy = cy - prevY;
+                float dist = std::sqrt(dx * dx + dy * dy);
+
+                const float stepSize = 3.0f;
+                int numSteps = static_cast<int>(dist / stepSize);
+
+                for (int step = 1; step < numSteps; ++step) {
+                    float t = static_cast<float>(step) / numSteps;
+                    float interpX = prevX + dx * t;
+                    float interpY = prevY + dy * t;
+
+                    graphics.FillEllipse(&cleanBrush,
+                        interpX - circleRadius,
+                        interpY - circleRadius,
+                        circleRadius * 2.0f,
+                        circleRadius * 2.0f);
+                }
+            }
+        }
+    }
+
+    // PASO 3: ÁREA LIMPIA DE CELDAS (OPACO)
     auto cleanedGrid = zone->getGrid();
     double cellSize = zone->getCellSize();
-
-    // Crear superficie de limpieza como capa superior semi-transparente
-    Gdiplus::SolidBrush cleanBrush(Gdiplus::Color(200, 0xCE, 0xE7, 0xCA));
+    Gdiplus::SolidBrush cellBrush(Gdiplus::Color(255, 0xCE, 0xE7, 0xCA));
 
     for (size_t row = 0; row < cleanedGrid.size(); ++row) {
         for (size_t col = 0; col < cleanedGrid[row].size(); ++col) {
@@ -1215,35 +1323,19 @@ void ScreenManager::drawZoneMiniMap(
 
             Gdiplus::REAL cx = static_cast<Gdiplus::REAL>(innerX + (col + 0.5) * cellSize * scaleX);
             Gdiplus::REAL cy = static_cast<Gdiplus::REAL>(innerY + (row + 0.5) * cellSize * scaleY);
-            Gdiplus::REAL radius = static_cast<Gdiplus::REAL>(cellSize * std::min(scaleX, scaleY) * 0.7);
 
-            graphics.FillEllipse(&cleanBrush, cx - radius, cy - radius, radius * 2.0f, radius * 2.0f);
+            Gdiplus::REAL radiusX = static_cast<Gdiplus::REAL>(cellSize * scaleX * 1.1);
+            Gdiplus::REAL radiusY = static_cast<Gdiplus::REAL>(cellSize * scaleY * 1.1);
+
+            graphics.FillEllipse(&cellBrush,
+                cx - radiusX,
+                cy - radiusY,
+                radiusX * 2.0f,
+                radiusY * 2.0f);
         }
     }
 
-    // MODIFICADO: Trazo continuo grueso SOBRE la suciedad
-    auto trail = zone->getTrail();
-    if (trail.size() > 1) {
-        size_t start = (trail.size() > 1500) ? trail.size() - 1500 : 0;
-
-        Gdiplus::Pen trailPen(Gdiplus::Color(220, 0xCE, 0xE7, 0xCA), 10.0f);
-        trailPen.SetLineCap(Gdiplus::LineCapRound, Gdiplus::LineCapRound, Gdiplus::DashCapRound);
-        trailPen.SetLineJoin(Gdiplus::LineJoinRound);
-
-        for (size_t j = start + 1; j < trail.size(); j++) {
-            auto& pt1 = trail[j - 1];
-            auto& pt2 = trail[j];
-
-            Gdiplus::REAL x1 = static_cast<Gdiplus::REAL>(innerX + pt1.x * scaleX);
-            Gdiplus::REAL y1 = static_cast<Gdiplus::REAL>(innerY + pt1.y * scaleY);
-            Gdiplus::REAL x2 = static_cast<Gdiplus::REAL>(innerX + pt2.x * scaleX);
-            Gdiplus::REAL y2 = static_cast<Gdiplus::REAL>(innerY + pt2.y * scaleY);
-
-            graphics.DrawLine(&trailPen, x1, y1, x2, y2);
-        }
-    }
-
-    // Obstáculos (se dibujan sobre la limpieza)
+    // PASO 4: OBSTÁCULOS (ENCIMA DE TODO)
     for (size_t oi = 0; oi < zone->getObstacles().size(); oi++) {
         auto& obs = zone->getObstacles()[oi];
         if (!obs) continue;
@@ -1277,6 +1369,7 @@ void ScreenManager::drawZoneMiniMap(
         }
     }
 
+    // PASO 5: BORDES Y DECORACIÓN
     HPEN borderPen = CreatePen(PS_SOLID, 3, COLOR_TEXT);
     SelectObject(hdc, borderPen);
     SelectObject(hdc, GetStockObject(NULL_BRUSH));
@@ -1287,7 +1380,15 @@ void ScreenManager::drawZoneMiniMap(
 
     wchar_t pct[20];
     swprintf_s(pct, L"%.1f%%", zone->getCleanedPercentage());
-    drawText(hdc, pct, x + w - 58, y + 8, COLOR_TEXT, 13, true);
+    SIZE pctSize;
+    HFONT fontPct = CreateFont(13, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE,
+        DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+        CLEARTYPE_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Segoe UI");
+    HFONT oldFont = (HFONT)SelectObject(hdc, fontPct);
+    GetTextExtentPoint32(hdc, pct, static_cast<int>(wcslen(pct)), &pctSize);
+    SelectObject(hdc, oldFont);
+    DeleteObject(fontPct);
+    drawText(hdc, pct, x + w - pctSize.cx - 12, y + 8, COLOR_TEXT, 13, true);
 
     HPEN framePen = CreatePen(PS_SOLID, 1, COLOR_TEXT);
     SelectObject(hdc, framePen);
@@ -1427,7 +1528,6 @@ void ScreenManager::drawText(HDC hdc, const wchar_t* text, int x, int y, COLORRE
 void ScreenManager::drawButton(HDC hdc, const Button& btn) {
     RECT drawRect = btn.rect;
 
-    // Efecto hover: aumentar tamaño ligeramente
     if (btn.isHovered) {
         int expandX = (drawRect.right - drawRect.left) / 20;
         int expandY = (drawRect.bottom - drawRect.top) / 20;
@@ -1448,9 +1548,17 @@ void ScreenManager::drawButton(HDC hdc, const Button& btn) {
         textColor = COLOR_TEXT;
     }
 
-    int textLen = static_cast<int>(btn.text.length());
-    int textX = drawRect.left + w / 2 - textLen * 4;
-    int textY = drawRect.top + h / 2 - 8;
+    SIZE textSize;
+    HFONT font = CreateFont(16, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE,
+        DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+        CLEARTYPE_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Segoe UI");
+    HFONT oldFont = (HFONT)SelectObject(hdc, font);
+    GetTextExtentPoint32(hdc, btn.text.c_str(), static_cast<int>(btn.text.length()), &textSize);
+    SelectObject(hdc, oldFont);
+    DeleteObject(font);
+
+    int textX = drawRect.left + (w - textSize.cx) / 2;
+    int textY = drawRect.top + (h - textSize.cy) / 2;
     drawText(hdc, btn.text.c_str(), textX, textY, textColor, 16, true);
 }
 
@@ -1527,7 +1635,7 @@ void ScreenManager::handleButtonClick(int id) {
     switch (id) {
     case ID_BTN_START:
         initializeRoombas();
-        addLog(L"Iniciando limpieza...");
+        addLog(L"Las Froombas saltan al agua...");
         cleaningService_->startCleaning();
         changeScreen(SCREEN_CLEANING);
         break;
@@ -1571,7 +1679,7 @@ void ScreenManager::handleButtonClick(int id) {
 
     case ID_BTN_BEGIN:
         initializeRoombas();
-        addLog(L"Iniciando limpieza...");
+        addLog(L"¡Las Froombas comienzan a nadar!");
         cleaningService_->startCleaning();
         changeScreen(SCREEN_CLEANING);
         break;
@@ -1579,12 +1687,12 @@ void ScreenManager::handleButtonClick(int id) {
     case ID_BTN_STOP:
         if (cleaningService_->isRunning()) {
             cleaningService_->stopCleaning();
-            addLog(L"Limpieza detenida");
+            addLog(L"Froombas en descanso");
         }
         else {
             initializeRoombas();
             cleaningService_->startCleaning();
-            addLog(L"Limpieza reiniciada");
+            addLog(L"Froombas de vuelta al trabajo");
         }
         break;
 
@@ -1615,3 +1723,5 @@ COLORREF ScreenManager::lightenColor(COLORREF color, int amount) {
     int b = std::min(255, static_cast<int>(GetBValue(color)) + amount);
     return RGB(r, g, b);
 }
+
+

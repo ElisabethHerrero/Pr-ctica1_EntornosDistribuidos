@@ -121,3 +121,5 @@ private:
 
     COLORREF lightenColor(COLORREF color, int amount);
 };
+
+
